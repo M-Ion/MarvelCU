@@ -9,10 +9,13 @@ namespace MarvelCU.API.Models.Movie
     {
         [Required]
         public StringBuilder Descritpion { get; set; }
+
         [Required]
         public sbyte McuPhase { get; set; }
+
         [Required]
         public Sagas McuSaga { get; set; }
+
         List<GetActorDto> Actors { get; set; }
     }
 }
