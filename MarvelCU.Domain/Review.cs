@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MarvelCU.Domain;
 
@@ -7,6 +8,9 @@ public record class Review
     public int Id { get; init; }
 
     public DateTime Posted { get; init; }
+
+    [ForeignKey(nameof(UserId))]
+    public int UserId { get; set; }
 
     public User Author { get; init; }
 

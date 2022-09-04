@@ -1,4 +1,4 @@
-﻿using MarvelCU.API.Models.Movie;
+﻿using MarvelCU.Common.Dtos.Movie;
 
 namespace MarvelCU.Common.Dtos.Actor;
 

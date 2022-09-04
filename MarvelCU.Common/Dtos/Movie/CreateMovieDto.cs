@@ -1,5 +1,6 @@
-﻿using MarvelCU.API.Data;
-using MarvelCU.API.Models.Actor;
+﻿using MarvelCU.Common.Dtos.Actor;
+using MarvelCU.Common.Dtos.Movie;
+using MarvelCU.Domain;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
