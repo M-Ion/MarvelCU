@@ -1,11 +1,23 @@
-﻿namespace MarvelCU.Domain;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-public class Actor
+namespace MarvelCU.Domain;
+
+public class Actor : BaseEntity
 {
-    public int Id { get; set; }
+    [Required]
+    [MaxLength(25)]
+    public string FirstName { get; set; }
 
-    public string FullName { get; set; }
+    [MaxLength(25)]
+    public string MiddleName { get; set; }
 
-    public List<Movie> Movies { get; set; }
+    [MaxLength(25)]
+    public string LastName { get; set; }
+
+    [Column(TypeName = "image")]
+    public byte[] Image { get; set; }
+
+    public ICollection<Movie> Movies { get; set; }
 }
 

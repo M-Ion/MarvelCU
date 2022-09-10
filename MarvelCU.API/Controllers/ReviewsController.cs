@@ -5,7 +5,7 @@ namespace MarvelCU.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class MovieController : ControllerBase
+public class ReviewsController : ControllerBase
 {
 }
 

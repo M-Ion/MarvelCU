@@ -2,8 +2,12 @@
 
 public class GetActorDto
 {
-    public int Id { get; init; }
+    public string FirstName { get; set; }
 
-    public string FullName { get; init; }
+    public string MiddleName { get; set; }
+
+    public string LastName { get; set; }
+
+    public byte[] Image { get; set; }
 }
 

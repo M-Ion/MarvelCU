@@ -1,15 +1,18 @@
-﻿using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text;
 
 namespace MarvelCU.Domain;
 
-public class News
+public class News : BaseEntity
 {
-    public int Id { get; set; }
-
+    [Required]
     public string Title { get; set; }
 
-    public DateTime Posted { get; init; }
+    [Required]
+    public DateTime Posted { get; set; }
 
-    public StringBuilder Content { get; set; }
+    public DateTime Updated { get; set; }
+
+    public string Content { get; set; }
 }
 

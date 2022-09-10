@@ -3,21 +3,24 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MarvelCU.Domain;
 
-public record class Review
+public class Review : BaseEntity
 {
-    public int Id { get; init; }
+    [Required]
+    public DateTime Posted { get; set; }
 
-    public DateTime Posted { get; init; }
+    public DateTime Updated { get; set; }
 
-    [ForeignKey(nameof(UserId))]
-    public int UserId { get; set; }
+    [Required]
+    public User User { get; set; }
 
-    public User Author { get; init; }
+    [Required]
+    public Movie Movie { get; set; }
 
+    [Required]
     [StringLength(100)]
-    public string Opinion { get; init; }
+    public string Opinion { get; set; }
 
     [Range(1, 5)]
-    public int Rating { get; init; }
+    public int Rating { get; set; }
 }
 

@@ -9,6 +9,6 @@ public class CreateNewsDto
     public string Title { get; set; }
 
     [Required]
-    public StringBuilder Content { get; set; }
+    public string Content { get; set; }
 }
 

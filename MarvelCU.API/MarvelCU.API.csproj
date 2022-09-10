@@ -18,6 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MarvelCU.Bll\MarvelCU.Bll.csproj" />
+    <ProjectReference Include="..\MarvelCU.Common\MarvelCU.Common.csproj" />
     <ProjectReference Include="..\MarvelCU.Dal\MarvelCU.Dal.csproj" />
   </ItemGroup>
 

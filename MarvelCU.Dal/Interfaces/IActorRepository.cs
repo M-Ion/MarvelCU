@@ -2,7 +2,8 @@
 
 namespace MarvelCU.Dal.Interfaces;
 
-internal interface IActorRepository : IRepository<Actor>
+public interface IActorRepository : IRepository<Actor>
 {
+    Task<Actor> GetActorDetails(int id);
 }
 

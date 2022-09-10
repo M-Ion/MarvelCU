@@ -6,4 +6,10 @@
     <Nullable>disable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MarvelCU.Common\MarvelCU.Common.csproj" />
+    <ProjectReference Include="..\MarvelCU.Dal\MarvelCU.Dal.csproj" />
+    <ProjectReference Include="..\MarvelCU.Domain\MarvelCU.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

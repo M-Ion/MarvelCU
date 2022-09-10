@@ -1,27 +1,33 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace MarvelCU.Domain;
 
-public class Movie
+public class Movie : BaseEntity
 {
-    public int Id { get; set; }
-
+    [Required]
+    [MaxLength(50)]
     public string Name { get; set; }
 
-    public StringBuilder Descritpion { get; set; }
+    public string Descritpion { get; set; }
 
     public DateTime Premiere { get; set; }
 
-    List<Actor> Actors { get; set; }
+    [Column(TypeName = "image")]
+    public byte[] Image { get; set; }
+
+    public ICollection<Actor> Actors { get; set; }
 
     [Range(1, 5)]
     public sbyte Rating { get; set; }
 
+    [Required]
     public sbyte McuPhase { get; set; }
 
+    [Required]
     public Sagas McuSaga { get; set; }
 
-    public List<Review> Reviews { get; set; }
+    public ICollection<Review> Reviews { get; set; }
 }
 
