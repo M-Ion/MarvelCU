@@ -39,6 +39,7 @@ builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<INewsRepository, NewsRepository>();
 builder.Services.AddScoped<INewsService, NewsService>();
 builder.Services.AddScoped<IHeroRepository, HeroRepository>();
+builder.Services.AddScoped<IHeroService, HeroService>();
 
 var app = builder.Build();
 

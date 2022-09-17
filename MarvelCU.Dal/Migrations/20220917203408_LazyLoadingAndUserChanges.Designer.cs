@@ -4,6 +4,7 @@ using MarvelCU.Dal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MarvelCU.Dal.Migrations
 {
     [DbContext(typeof(MarvelDbContext))]
-    partial class MarvelDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220917203408_LazyLoadingAndUserChanges")]
+    partial class LazyLoadingAndUserChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,13 +26,13 @@ namespace MarvelCU.Dal.Migrations
 
             modelBuilder.Entity("ActorHero", b =>
                 {
-                    b.Property<int>("ActorsId")
+                    b.Property<int>("ActorId")
                         .HasColumnType("int");
 
                     b.Property<int>("HeroesId")
                         .HasColumnType("int");
 
-                    b.HasKey("ActorsId", "HeroesId");
+                    b.HasKey("ActorId", "HeroesId");
 
                     b.HasIndex("HeroesId");
 
@@ -133,9 +135,6 @@ namespace MarvelCU.Dal.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -474,7 +473,7 @@ namespace MarvelCU.Dal.Migrations
                 {
                     b.HasOne("MarvelCU.Domain.Actor", null)
                         .WithMany()
-                        .HasForeignKey("ActorsId")
+                        .HasForeignKey("ActorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

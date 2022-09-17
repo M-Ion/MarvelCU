@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -6,6 +7,8 @@ namespace MarvelCU.Domain;
 
 public class Movie : BaseEntity
 {
+    private ICollection<User> _users;
+
     [Required]
     [MaxLength(50)]
     public string Name { get; set; }
@@ -32,5 +35,12 @@ public class Movie : BaseEntity
     public virtual ICollection<Review> Reviews { get; set; }
 
     public virtual ICollection<Hero> Heroes { get; set; }
+
+    [BackingField(nameof(_users))]
+    public virtual ICollection<User> Users
+    {
+        get { return _users; }
+        private set { _users = value; }
+    }
 }
 

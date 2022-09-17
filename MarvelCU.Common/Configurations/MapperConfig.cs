@@ -15,7 +15,9 @@ public class MapperConfig : Profile
         CreateMap<Actor, ActorDto>().ReverseMap();
         CreateMap<Actor, GetActorDto>().ReverseMap();
 
+        CreateMap<Hero, HeroDto>().ReverseMap();
         CreateMap<Hero, GetHeroDto>().ReverseMap();
+        CreateMap<Hero, CreateHeroDto>().ReverseMap();
 
         CreateMap<Movie, MovieDto>().ReverseMap();
         CreateMap<Movie, GetMovieDto>().ReverseMap();
