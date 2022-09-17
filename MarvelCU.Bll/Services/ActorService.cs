@@ -1,6 +1,5 @@
 ﻿using MarvelCU.Bll.Interfaces;
 using MarvelCU.Dal.Interfaces;
-using MarvelCU.Domain;
 using AutoMapper;
 using MarvelCU.Common.Dtos.Actor;
 
@@ -8,31 +7,65 @@ namespace MarvelCU.Bll.Services;
 
 public class ActorService : IActorService
 {
-    private readonly IActorRepository _repository;
+    private readonly IActorRepository _actorRepository;
+    private readonly IMovieRepository _movieRepository;
+    private readonly IHeroRepository _heroRepository;
+
     private readonly IMapper _mapper;
 
-    public ActorService(IActorRepository repository, IMapper mapper)
+    public ActorService(
+        IActorRepository repository, 
+        IMovieRepository movieRepository, 
+        IHeroRepository heroRepository,
+        IMapper mapper)
     {
-        _repository = repository;
+        _actorRepository = repository;
+        _movieRepository = movieRepository;
+        _heroRepository = heroRepository;
         _mapper = mapper;
     }
 
-    public async Task<List<Actor>> GetAllActors()
+    public async Task<List<GetActorDto>> GetAllActors()
     {
-        return await _repository.GetAllAsync();
-    }
-
-    public async Task<Actor> GetActor(int id)
-    {
-        return await _repository.GetAsync(id);
+        var actors = await _actorRepository.GetAllAsync();
+        return _mapper.Map<List<GetActorDto>>(actors);
     }
 
     public async Task<ActorDto> GetActorDetails(int id)
     {
-        var actor = await _repository.GetActorDetails(id);
-        var record = _mapper.Map<ActorDto>(actor);
+        if (!(await _actorRepository.Exists(id))) return null;
 
-        return record;
+        var actor = await _actorRepository.GetActorDetails(id);
+
+        return _mapper.Map<ActorDto>(actor);
+    }
+
+    public async Task<ActorDto> AddActorToCast(int actorId, int movieId)
+    {
+        var movie = await _movieRepository.GetAsync(movieId);
+        if (movie is null) return null;
+
+        var actor = await _actorRepository.GetAsync(actorId);
+        if (actor is null) return null;
+
+        actor.Movies.Add(movie);
+        await _actorRepository.UpdateAsync(actor);
+
+        return _mapper.Map<ActorDto>(actor);
+    }
+
+    public async Task<ActorDto> AddActorToHero(int actorId, int heroId)
+    {
+        var hero = await _heroRepository.GetAsync(heroId);
+        if (hero is null) return null;
+
+        var actor = await _actorRepository.GetAsync(actorId);
+        if (actor is null) return null;
+
+        actor.Heroes.Add(hero);
+        await _actorRepository.UpdateAsync(actor);
+
+        return _mapper.Map<ActorDto>(actor);
     }
 }
 

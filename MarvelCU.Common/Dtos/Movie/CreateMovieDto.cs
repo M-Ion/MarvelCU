@@ -1,4 +1,5 @@
 ﻿using MarvelCU.Common.Dtos.Actor;
+using MarvelCU.Common.Dtos.Hero;
 using MarvelCU.Common.Dtos.Movie;
 using MarvelCU.Domain;
 using System.ComponentModel.DataAnnotations;
@@ -9,14 +10,12 @@ namespace MarvelCU.API.Models.Movie
     public class CreateMovieDto : BaseMovieDto
     {
         [Required]
-        public StringBuilder Descritpion { get; set; }
+        public string Descritpion { get; set; }
 
         [Required]
         public sbyte McuPhase { get; set; }
 
         [Required]
         public Sagas McuSaga { get; set; }
-
-        List<GetActorDto> Actors { get; set; }
     }
 }

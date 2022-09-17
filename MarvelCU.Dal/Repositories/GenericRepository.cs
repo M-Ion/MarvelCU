@@ -20,6 +20,11 @@ public class GenericRepository<T> : IRepository<T> where T : class
         return entity;
     }
 
+    public async Task<bool> Exists(int id)
+    {
+        return await GetAsync(id) is not null;
+    }
+
     public async Task<List<T>> GetAllAsync()
     {
         return await _context.Set<T>().ToListAsync();

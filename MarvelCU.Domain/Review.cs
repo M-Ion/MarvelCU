@@ -5,16 +5,19 @@ namespace MarvelCU.Domain;
 
 public class Review : BaseEntity
 {
+    [ForeignKey(nameof(User))]
+    public string UserId { get; set; }
+
     [Required]
     public DateTime Posted { get; set; }
 
     public DateTime Updated { get; set; }
 
     [Required]
-    public User User { get; set; }
+    public virtual User User { get; set; }
 
     [Required]
-    public Movie Movie { get; set; }
+    public virtual Movie Movie { get; set; }
 
     [Required]
     [StringLength(100)]

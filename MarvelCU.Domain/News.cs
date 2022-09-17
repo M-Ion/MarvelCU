@@ -14,5 +14,7 @@ public class News : BaseEntity
     public DateTime Updated { get; set; }
 
     public string Content { get; set; }
+
+    public byte[] RowVersion { get; set; }
 }
 

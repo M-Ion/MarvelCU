@@ -1,3 +1,4 @@
+using MarvelCU.API.Infrastructure.Extensions;
 using MarvelCU.Bll.Interfaces;
 using MarvelCU.Bll.Services;
 using MarvelCU.Common.Configurations;
@@ -15,12 +16,14 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("MarvelDbConnectionString");
 builder.Services.AddDbContext<MarvelDbContext>(options =>
 {
-    options.UseSqlServer(connectionString);
+    options.UseLazyLoadingProxies().UseSqlServer(connectionString);
 });
 
 builder.Services.AddIdentityCore<User>().AddRoles<IdentityRole>().AddEntityFrameworkStores<MarvelDbContext>();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
 
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 
@@ -31,10 +34,15 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IActorRepository, ActorRepository>();
 builder.Services.AddScoped<IActorService, ActorService>();
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<INewsRepository, NewsRepository>();
 builder.Services.AddScoped<INewsService, NewsService>();
+builder.Services.AddScoped<IHeroRepository, HeroRepository>();
 
 var app = builder.Build();
+
+await app.SeedData();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

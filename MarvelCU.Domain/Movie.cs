@@ -12,15 +12,16 @@ public class Movie : BaseEntity
 
     public string Descritpion { get; set; }
 
+    [Column(TypeName = "date")]
     public DateTime Premiere { get; set; }
 
     [Column(TypeName = "image")]
     public byte[] Image { get; set; }
 
-    public ICollection<Actor> Actors { get; set; }
+    public virtual ICollection<Actor> Actors { get; set; }
 
     [Range(1, 5)]
-    public sbyte Rating { get; set; }
+    public sbyte? Rating { get; set; }
 
     [Required]
     public sbyte McuPhase { get; set; }
@@ -28,6 +29,8 @@ public class Movie : BaseEntity
     [Required]
     public Sagas McuSaga { get; set; }
 
-    public ICollection<Review> Reviews { get; set; }
+    public virtual ICollection<Review> Reviews { get; set; }
+
+    public virtual ICollection<Hero> Heroes { get; set; }
 }
 

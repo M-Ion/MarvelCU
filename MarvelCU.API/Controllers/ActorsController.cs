@@ -11,31 +11,48 @@ namespace MarvelCU.API.Controllers;
 public class ActorsController : ControllerBase
 {
     private readonly IActorService _actorService;
-    private readonly IMapper _mapper;
 
-    public ActorsController(IActorService actorService, IMapper mapper)
+    public ActorsController(IActorService actorService)
     {
         _actorService = actorService;
-        _mapper = mapper;
     }
 
     [HttpGet]
     public async Task<ActionResult<List<GetActorDto>>> GetActors()
     {
         var actors = await _actorService.GetAllActors();
-        var record = _mapper.Map<List<GetActorDto>>(actors);
 
-        return Ok(record);
+        return Ok(actors);
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<ActorDto>> GetActor(int id)
     {
-        if (await _actorService.GetActor(id) is null) return NotFound();
+        var actor = await _actorService.GetActorDetails(id);
 
-        var record = await _actorService.GetActorDetails(id);
+        if (actor is null) return NotFound();
 
-        return Ok(record);
+        return Ok(actor);
+    }
+
+    [HttpPut("Movies/{actorId}/{movieId}")]
+    public async Task<ActionResult> UpdateActorMovies(int actorId, int movieId)
+    {
+        var updatedActor = await _actorService.AddActorToCast(actorId, movieId);
+
+        if (updatedActor is null) return NotFound();
+
+        return Ok();
+    }
+
+    [HttpPut("Heroes/{actorId}/{heroId}")]
+    public async Task<ActionResult> UpdateActorHeroes(int actorId, int heroId)
+    {
+        var updatedActor = await _actorService.AddActorToCast(actorId, heroId);
+
+        if (updatedActor is null) return NotFound();
+
+        return Ok();
     }
 }
 

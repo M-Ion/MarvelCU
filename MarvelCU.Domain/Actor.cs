@@ -15,9 +15,11 @@ public class Actor : BaseEntity
     [MaxLength(25)]
     public string LastName { get; set; }
 
+    public virtual ICollection<Hero> Heroes { get; set; }
+
     [Column(TypeName = "image")]
     public byte[] Image { get; set; }
 
-    public ICollection<Movie> Movies { get; set; }
+    public virtual ICollection<Movie> Movies { get; set; }
 }
 

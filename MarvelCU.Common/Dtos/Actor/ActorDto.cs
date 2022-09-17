@@ -1,4 +1,5 @@
-﻿using MarvelCU.Common.Dtos.Movie;
+﻿using MarvelCU.Common.Dtos.Hero;
+using MarvelCU.Common.Dtos.Movie;
 
 namespace MarvelCU.Common.Dtos.Actor;
 
@@ -12,8 +13,8 @@ public class ActorDto
 
     public string LastName { get; set; }
 
-    public byte[] Image { get; set; }
+    public IList<GetMovieDto> Movies { get; set; }
 
-    public IList<MovieDto> Movies { get; set; }
+    public IList<GetHeroDto> Heroes { get; set; }
 }
 

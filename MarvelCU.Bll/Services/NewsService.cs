@@ -1,4 +1,6 @@
-﻿using MarvelCU.Bll.Interfaces;
+﻿using AutoMapper;
+using MarvelCU.Bll.Interfaces;
+using MarvelCU.Common.Dtos.News;
 using MarvelCU.Dal.Interfaces;
 using MarvelCU.Domain;
 
@@ -7,10 +9,12 @@ namespace MarvelCU.Bll.Services;
 public class NewsService : INewsService
 {
     private readonly INewsRepository _repository;
+    private readonly IMapper _mapper;
 
-    public NewsService(INewsRepository repository)
+    public NewsService(INewsRepository repository, IMapper mapper)
     {
         _repository = repository;
+        _mapper = mapper;
     }
 
     public async Task<List<News>> GetAllNews()
@@ -18,9 +22,11 @@ public class NewsService : INewsService
         return await _repository.GetAllAsync();
     }
 
-    public async Task CreateNews(News news)
+    public async Task<News> CreateNews(CreateNewsDto createNewsDto)
     {
-        await _repository.AddAsync(news);
+        var news = _mapper.Map<News>(createNewsDto);
+
+        return await _repository.AddAsync(news); ;
     }
 
     public async Task DeleteNews(News news)
@@ -33,8 +39,11 @@ public class NewsService : INewsService
         return await _repository.GetAsync(id);
     }
 
-    public async Task UpdateNews(News news)
+    public async Task UpdateNews(int id, UpdateNewsDto updateNewsDto)
     {
+        var news = await _repository.GetAsync(id);
+         _mapper.Map(updateNewsDto, news);
+
         await _repository.UpdateAsync(news);
     }
 }

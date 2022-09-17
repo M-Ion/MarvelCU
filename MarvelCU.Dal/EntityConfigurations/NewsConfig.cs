@@ -10,6 +10,7 @@ public class NewsConfig : IEntityTypeConfiguration<News>
     {
         builder.Property(p => p.Posted).HasDefaultValueSql("GetUtcDate()");
         builder.Property(p => p.Updated).ValueGeneratedOnUpdate();
+        builder.Property(p => p.RowVersion).IsRowVersion();
     }
 }
 

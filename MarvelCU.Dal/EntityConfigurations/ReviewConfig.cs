@@ -10,6 +10,11 @@ public class ReviewConfig : IEntityTypeConfiguration<Review>
     {
         builder.Property(p => p.Posted).HasDefaultValueSql("GetUtcDate()");
         builder.Property(p => p.Updated).ValueGeneratedOnUpdate();
+
+        builder.HasOne(r => r.User)
+            .WithMany(u => u.Reviews)
+            .HasForeignKey(r => r.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
 

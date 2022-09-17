@@ -15,6 +15,8 @@ public class MarvelDbContext : IdentityDbContext<User>
 
     public DbSet<Movie> Movies { get; set; }
 
+    public DbSet<Hero> Heores { get; set; }
+
     public DbSet<Review> Reviews { get; set; }
 
     public DbSet<News> News { get; set; }
@@ -23,8 +25,14 @@ public class MarvelDbContext : IdentityDbContext<User>
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.ApplyConfiguration(new HeroConfig());
         modelBuilder.ApplyConfiguration(new NewsConfig());
         modelBuilder.ApplyConfiguration(new ReviewConfig());
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.EnableSensitiveDataLogging();
     }
 }
 

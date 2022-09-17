@@ -4,6 +4,7 @@ using MarvelCU.Dal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,31 +12,17 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MarvelCU.Dal.Migrations
 {
     [DbContext(typeof(MarvelDbContext))]
-    partial class MarvelDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220910193542_Change-Movie")]
+    partial class ChangeMovie
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.9")
+                .HasAnnotation("ProductVersion", "6.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("ActorHero", b =>
-                {
-                    b.Property<int>("ActorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("HeroesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ActorId", "HeroesId");
-
-                    b.HasIndex("HeroesId");
-
-                    b.ToTable("ActorHero");
-                });
 
             modelBuilder.Entity("ActorMovie", b =>
                 {
@@ -50,21 +37,6 @@ namespace MarvelCU.Dal.Migrations
                     b.HasIndex("MoviesId");
 
                     b.ToTable("ActorMovie");
-                });
-
-            modelBuilder.Entity("HeroMovie", b =>
-                {
-                    b.Property<int>("HeroesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MoviesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("HeroesId", "MoviesId");
-
-                    b.HasIndex("MoviesId");
-
-                    b.ToTable("HeroMovie");
                 });
 
             modelBuilder.Entity("MarvelCU.Domain.Actor", b =>
@@ -91,36 +63,9 @@ namespace MarvelCU.Dal.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Actors");
-                });
-
-            modelBuilder.Entity("MarvelCU.Domain.Hero", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Heores");
                 });
 
             modelBuilder.Entity("MarvelCU.Domain.Movie", b =>
@@ -154,12 +99,7 @@ namespace MarvelCU.Dal.Migrations
                     b.Property<short?>("Rating")
                         .HasColumnType("smallint");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Movies");
                 });
@@ -179,11 +119,6 @@ namespace MarvelCU.Dal.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GetUtcDate()");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -437,21 +372,6 @@ namespace MarvelCU.Dal.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("ActorHero", b =>
-                {
-                    b.HasOne("MarvelCU.Domain.Actor", null)
-                        .WithMany()
-                        .HasForeignKey("ActorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MarvelCU.Domain.Hero", null)
-                        .WithMany()
-                        .HasForeignKey("HeroesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("ActorMovie", b =>
                 {
                     b.HasOne("MarvelCU.Domain.Actor", null)
@@ -467,42 +387,6 @@ namespace MarvelCU.Dal.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("HeroMovie", b =>
-                {
-                    b.HasOne("MarvelCU.Domain.Hero", null)
-                        .WithMany()
-                        .HasForeignKey("HeroesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MarvelCU.Domain.Movie", null)
-                        .WithMany()
-                        .HasForeignKey("MoviesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("MarvelCU.Domain.Actor", b =>
-                {
-                    b.HasOne("MarvelCU.Domain.User", null)
-                        .WithMany("FavouriteActors")
-                        .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("MarvelCU.Domain.Hero", b =>
-                {
-                    b.HasOne("MarvelCU.Domain.User", null)
-                        .WithMany("FavouriteHeroes")
-                        .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("MarvelCU.Domain.Movie", b =>
-                {
-                    b.HasOne("MarvelCU.Domain.User", null)
-                        .WithMany("FavouriteMovies")
-                        .HasForeignKey("UserId");
-                });
-
             modelBuilder.Entity("MarvelCU.Domain.Review", b =>
                 {
                     b.HasOne("MarvelCU.Domain.Movie", "Movie")
@@ -512,7 +396,7 @@ namespace MarvelCU.Dal.Migrations
                         .IsRequired();
 
                     b.HasOne("MarvelCU.Domain.User", "User")
-                        .WithMany("Reviews")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -575,17 +459,6 @@ namespace MarvelCU.Dal.Migrations
 
             modelBuilder.Entity("MarvelCU.Domain.Movie", b =>
                 {
-                    b.Navigation("Reviews");
-                });
-
-            modelBuilder.Entity("MarvelCU.Domain.User", b =>
-                {
-                    b.Navigation("FavouriteActors");
-
-                    b.Navigation("FavouriteHeroes");
-
-                    b.Navigation("FavouriteMovies");
-
                     b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618

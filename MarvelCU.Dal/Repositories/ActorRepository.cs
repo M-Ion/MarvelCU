@@ -17,6 +17,7 @@ public class ActorRepository : GenericRepository<Actor>, IActorRepository
     {
         return await _context.Actors
             .Include(q => q.Movies)
+            .Include(q => q.Heroes)
             .FirstOrDefaultAsync(x => x.Id == id);
     }
 }

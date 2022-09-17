@@ -29,38 +29,15 @@ public class NewsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<News>> CreateNews([FromBody] CreateNewsDto createNewsDto)
     {
-        var news = _mapper.Map<News>(createNewsDto);
-
-        await _newsService.CreateNews(news);
-
-        return Ok(news);
+        return Ok(await _newsService.CreateNews(createNewsDto));
     }
 
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateNews(int id, [FromBody] UpdateNewsDto updateNewsDto)
     {
-        var news = await _newsService.GetNews(id);
-
-        if (news is null) return NotFound();
-
-        _mapper.Map(updateNewsDto, news);
-
-        await _newsService.UpdateNews(news);
+        await _newsService.UpdateNews(id, updateNewsDto);
 
         return NoContent();
     }
-
-    [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteNews(int id)
-    {
-        var entity = await _newsService.GetNews(id);
-
-        if (entity is null) return NotFound();
-
-        await _newsService.DeleteNews(entity);
-
-        return NoContent();
-    }
-
 }
 
