@@ -1,4 +1,5 @@
-﻿using MarvelCU.Dal.Interfaces;
+﻿using MarvelCU.Common.Exceptions;
+using MarvelCU.Dal.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace MarvelCU.Dal.Repositories;
@@ -20,9 +21,10 @@ public class GenericRepository<T> : IRepository<T> where T : class
         return entity;
     }
 
-    public async Task<bool> Exists(int id)
+    public async Task<T> Exists(int id)
     {
-        return await GetAsync(id) is not null;
+        var entity = await GetAsync(id);
+        return entity ?? throw new IdNotFoundException($"{typeof(T)} not found with that id!");
     }
 
     public async Task<List<T>> GetAllAsync()

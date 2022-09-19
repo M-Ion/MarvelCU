@@ -25,8 +25,15 @@ public class MovieService : IMovieService
         await _repository.AddAsync(movie);
     }
 
+    public async Task<Movie> Exists(int id)
+    {
+        return await _repository.Exists(id);
+    }
+
     public async Task<MovieDto> GetMovieDetails(int id)
     {
+        await _repository.Exists(id);
+
         var movie = await _repository.GetDetails(id);
         return _mapper.Map<MovieDto>(movie);
     }

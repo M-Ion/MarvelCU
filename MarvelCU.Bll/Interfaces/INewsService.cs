@@ -14,5 +14,7 @@ public interface INewsService
     Task<News> GetNews(int id);
 
     Task UpdateNews(int id, UpdateNewsDto news);
+
+    Task<News> Exists(int id);
 }
 

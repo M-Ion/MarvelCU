@@ -6,6 +6,7 @@ using MarvelCU.Common.Models;
 using MarvelCU.Domain;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 
 namespace MarvelCU.API.Controllers;
 
@@ -21,6 +22,7 @@ public class MoviesController : ControllerBase
     }
 
     [HttpGet]
+    [EnableQuery]
     public async Task<ActionResult<IList<GetMovieDto>>> GetAllMovie()
     {
         return Ok(await _movieService.GetMovies());

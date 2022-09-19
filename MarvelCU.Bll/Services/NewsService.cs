@@ -36,15 +36,20 @@ public class NewsService : INewsService
 
     public async Task<News> GetNews(int id)
     {
-        return await _repository.GetAsync(id);
+        return await _repository.Exists(id);
     }
 
     public async Task UpdateNews(int id, UpdateNewsDto updateNewsDto)
     {
-        var news = await _repository.GetAsync(id);
+        var news = await _repository.Exists(id);
          _mapper.Map(updateNewsDto, news);
 
         await _repository.UpdateAsync(news);
+    }
+
+    public async Task<News> Exists(int id)
+    {
+       return await _repository.Exists(id);
     }
 }
 

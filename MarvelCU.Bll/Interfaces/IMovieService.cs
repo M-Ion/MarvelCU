@@ -15,5 +15,7 @@ public interface IMovieService
 
     Task CreateMovie(CreateMovieDto createMovieDto);
 
+    Task<Movie> Exists(int id);
+
 }
 

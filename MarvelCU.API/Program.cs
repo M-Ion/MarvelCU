@@ -1,4 +1,5 @@
 using MarvelCU.API.Infrastructure.Extensions;
+using MarvelCU.API.Infrastructure.Middlewares;
 using MarvelCU.Bll.Interfaces;
 using MarvelCU.Bll.Services;
 using MarvelCU.Common.Configurations;
@@ -7,6 +8,7 @@ using MarvelCU.Dal.Interfaces;
 using MarvelCU.Dal.Repositories;
 using MarvelCU.Domain;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,7 +25,10 @@ builder.Services.AddIdentityCore<User>().AddRoles<IdentityRole>().AddEntityFrame
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-);
+).AddOData(options =>
+{
+    options.Select().Filter().OrderBy();
+});
 
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 
@@ -51,6 +56,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 

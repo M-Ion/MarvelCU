@@ -12,6 +12,6 @@ public interface IRepository<T> where T : class
 
     Task UpdateAsync(T entity);
 
-    Task<bool> Exists(int id);
+    Task<T> Exists(int id);
 }
 
