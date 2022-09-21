@@ -19,6 +19,7 @@ public static class HostExtension
                 context.Database.Migrate();
 
                 await HeroesSeed.Seed(context);
+                await RolesSeed.Seed(context);
             }
             catch (Exception e)
             {

@@ -1,12 +1,11 @@
-﻿using MarvelCU.Domain;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace MarvelCU.Common.Dtos.Review;
 
 public class CreateReviewDto
 {
     [Required]
-    public User Author { get; set; }
+    public Domain.User Author { get; set; }
 
     [Required]
     [StringLength(100)]

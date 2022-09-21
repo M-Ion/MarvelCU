@@ -4,6 +4,7 @@ using MarvelCU.Common.Dtos.Actor;
 using MarvelCU.Common.Dtos.Hero;
 using MarvelCU.Common.Dtos.Movie;
 using MarvelCU.Common.Dtos.News;
+using MarvelCU.Common.Dtos.User;
 using MarvelCU.Domain;
 
 namespace MarvelCU.Common.Configurations;
@@ -27,6 +28,8 @@ public class MapperConfig : Profile
         CreateMap<News, UpdateNewsDto>()
             .ReverseMap()
             .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember != null));
+
+        CreateMap<RegisterUserDto, User>().ReverseMap();
     }
 }
 
