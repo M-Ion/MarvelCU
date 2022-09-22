@@ -21,18 +21,21 @@ public class NewsController : ControllerBase
     }
 
     [HttpGet]
+    //[Authorize(Roles = "Administrator")]
     public async Task<ActionResult<List<News>>> GetNews()
     {
         return Ok(await _newsService.GetAllNews());
     }
 
     [HttpPost]
+    //[Authorize(Roles = "Administrator")]
     public async Task<ActionResult<News>> CreateNews([FromBody] CreateNewsDto createNewsDto)
     {
         return Ok(await _newsService.CreateNews(createNewsDto));
     }
 
     [HttpPut("{id}")]
+    //[Authorize(Roles = "Administrator")]
     public async Task<ActionResult> UpdateNews(int id, [FromBody] UpdateNewsDto updateNewsDto)
     {
         await _newsService.UpdateNews(id, updateNewsDto);

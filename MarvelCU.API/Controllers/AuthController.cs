@@ -34,9 +34,11 @@ public class AuthController : ControllerBase
     [Route("Login")]
     public async Task<ActionResult> Login([FromBody] LoginUserDto loginUserDto)
     {
-        var valid = await _authService.Login(loginUserDto);
+        AuthResponseDto authResponse = await _authService.Login(loginUserDto);
 
-        return valid ? Ok() : Unauthorized();
+        if (authResponse is null) return Unauthorized();
+
+        return Ok(authResponse);
     }
 }
 

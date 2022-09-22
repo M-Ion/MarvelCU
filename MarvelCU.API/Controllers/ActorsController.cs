@@ -36,6 +36,7 @@ public class ActorsController : ControllerBase
     }
 
     [HttpPut("Movies/{actorId}/{movieId}")]
+    //[Authorize(Roles = "Administrator")]
     public async Task<ActionResult> UpdateActorMovies(int actorId, int movieId)
     {
         var updatedActor = await _actorService.AddActorToCast(actorId, movieId);
@@ -46,6 +47,7 @@ public class ActorsController : ControllerBase
     }
 
     [HttpPut("Heroes/{actorId}/{heroId}")]
+    //[Authorize(Roles = "Administrator")]
     public async Task<ActionResult> UpdateActorHeroes(int actorId, int heroId)
     {
         var updatedActor = await _actorService.AddActorToCast(actorId, heroId);

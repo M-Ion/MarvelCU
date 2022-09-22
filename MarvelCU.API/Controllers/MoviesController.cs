@@ -4,6 +4,7 @@ using MarvelCU.Bll.Interfaces;
 using MarvelCU.Common.Dtos.Movie;
 using MarvelCU.Common.Models;
 using MarvelCU.Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
@@ -29,6 +30,7 @@ public class MoviesController : ControllerBase
     }
 
     [HttpPost]
+    //[Authorize(Roles = "Administrator")]
     public async Task<ActionResult> CreateMovie([FromBody] CreateMovieDto createMovieDto)
     {
         await _movieService.CreateMovie(createMovieDto);

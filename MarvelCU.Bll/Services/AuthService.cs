@@ -25,9 +25,16 @@ public class AuthService : IAuthService
         _configuration = configuration;
     }
 
-    public Task<bool> Login(LoginUserDto loginUserDto)
+    public async Task<AuthResponseDto> Login(LoginUserDto loginUserDto)
     {
-        return _authRepository.Login(loginUserDto);
+        User user = await _authRepository.Login(loginUserDto);
+
+        if (user is not null)
+        {
+            string token = await GenerateToken(user);
+            return new AuthResponseDto { UserId = user.Id, Token = token };
+        }
+        else return null;
     }
 
     public async Task<IEnumerable<IdentityError>> Register(RegisterUserDto registerUserDto)
@@ -58,7 +65,11 @@ public class AuthService : IAuthService
         .Union(userClaims).Union(roleClaims);
 
         var token = new JwtSecurityToken(
-
+            issuer: _configuration["JwtConfig:Issuer"],
+            audience: _configuration["JwtConfig:Audience"],
+            claims: claims,
+            expires: DateTime.Now.AddDays(Convert.ToInt32(_configuration["JwtConfig:DurationInMinutes"])),
+            signingCredentials: credentials
             );
 
         return new JwtSecurityTokenHandler().WriteToken(token);

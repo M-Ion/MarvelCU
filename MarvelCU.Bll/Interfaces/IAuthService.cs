@@ -7,7 +7,7 @@ public interface IAuthService
 {
     Task<IEnumerable<IdentityError>> Register(RegisterUserDto registerUserDto);
 
-    Task<bool> Login(LoginUserDto loginUserDto);
+    Task<AuthResponseDto> Login(LoginUserDto loginUserDto);
 
 }
 

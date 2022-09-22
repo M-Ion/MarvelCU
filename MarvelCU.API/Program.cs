@@ -26,13 +26,6 @@ builder.Services.AddDbContext<MarvelDbContext>(options =>
 
 builder.Services.AddIdentityCore<User>().AddRoles<IdentityRole>().AddEntityFrameworkStores<MarvelDbContext>();
 
-builder.Services.AddControllers().AddNewtonsoftJson(options =>
-    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-).AddOData(options =>
-{
-    options.Select().Filter().OrderBy();
-});
-
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -57,7 +50,7 @@ builder.Services.AddAuthentication(options =>
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
-    options.TokenValidationParameters = new TokenValidationParameters
+    options.TokenValidationParameters = new TokenValidationParameters()
     {
         ValidateIssuerSigningKey = true,
         ValidateIssuer = true,
@@ -67,6 +60,13 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = builder.Configuration["JwtConfig:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtConfig:Key"])),
     };
+});
+
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+).AddOData(options =>
+{
+    options.Select().Filter().OrderBy();
 });
 
 var app = builder.Build();
@@ -84,6 +84,7 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

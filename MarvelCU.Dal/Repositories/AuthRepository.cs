@@ -25,15 +25,15 @@ public class AuthRepository : IAuthRepository
         return await _userManager.GetRolesAsync(user);
     }
 
-    public async Task<bool> Login(LoginUserDto loginUserDto)
+    public async Task<User> Login(LoginUserDto loginUserDto)
     {
         var user = await _userManager.FindByEmailAsync(loginUserDto.Email);
 
-        if (user is null) return false;
+        if (user is null) return null;
 
         bool valid = await _userManager.CheckPasswordAsync(user, loginUserDto.Password);
 
-        return valid;
+        return valid ? user : null;
     }
 
     public async Task<IEnumerable<IdentityError>> Register(User user, string password)

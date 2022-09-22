@@ -29,6 +29,7 @@ namespace MarvelCU.API.Controllers
         }
 
         [HttpPost]
+        //[Authorize(Roles = "Administrator")]
         public async Task<ActionResult> CreateHero([FromBody] CreateHeroDto createHeroDto)
         {
             await _heroService.CreateHero(createHeroDto);

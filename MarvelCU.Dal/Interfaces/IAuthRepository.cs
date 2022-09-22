@@ -9,7 +9,7 @@ public interface IAuthRepository
 {
     Task<IEnumerable<IdentityError>> Register(User user, string password);
 
-    Task<bool> Login(LoginUserDto loginUserDto);
+    Task<User> Login(LoginUserDto loginUserDto);
 
     Task<IList<string>> GetUserRole(User user);
 
