@@ -1,7 +1,9 @@
 ﻿using MarvelCU.Common.Dtos.User;
+using MarvelCU.Common.Exceptions;
 using MarvelCU.Dal.Interfaces;
 using MarvelCU.Domain;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -18,8 +20,8 @@ public class TokenRepository : GenericRepository<RefreshToken>, ITokenRepository
     private readonly TokenValidationParameters _tokenValidationParameters;
 
     public TokenRepository(
-        MarvelDbContext context, 
-        UserManager<User> userManager, 
+        MarvelDbContext context,
+        UserManager<User> userManager,
         IConfiguration configuration,
         TokenValidationParameters tokenValidationParameters
         ) : base(context)
@@ -35,12 +37,85 @@ public class TokenRepository : GenericRepository<RefreshToken>, ITokenRepository
         var token = await GenerateToken(user);
         var refreshToken = await GenerateRefreshToken(user, token);
 
-        return new AuthResponseDto() 
+        return new AuthResponseDto()
+        {
+            UserId = user.Id,
+            Token = new JwtSecurityTokenHandler().WriteToken(token),
+            RefreshToken = refreshToken
+        };
+    }
+
+    public async Task<AuthResponseDto> RefreshToken(TokenRequestDto tokenRequestDto)
+    {
+        ClaimsPrincipal tokenVerification;
+        SecurityToken validatedToken;
+
+        try
+        {
+            // Validate jwt
+            _tokenValidationParameters.ValidateLifetime = false;
+
+            tokenVerification = new JwtSecurityTokenHandler()
+                .ValidateToken(tokenRequestDto.Token, _tokenValidationParameters, out validatedToken);
+        }
+        catch (Exception e)
+        {
+            throw new InvalidJwtException(e.Message);
+        }
+
+        if (!ValidateJwt(tokenVerification, validatedToken)) throw new InvalidJwtException("Invalid jwt!");
+
+        var storedRefreshToken = await _context.RefreshTokens.FirstOrDefaultAsync(t => t.Token == tokenRequestDto.RefreshToken);
+
+        if (!ValidateRefreshToken(storedRefreshToken, tokenVerification)) throw new InvalidRefreshTokenException("Invalid refresh token!");
+
+        var user = await _userManager.FindByIdAsync(storedRefreshToken.UserId);
+
+        _tokenValidationParameters.ValidateLifetime = true;
+
+        var token = await GenerateToken(user);
+        storedRefreshToken.Token = await _userManager.GenerateUserTokenAsync(user, "MarvelCUAPI", "RefreshToken");
+        storedRefreshToken.JwtId = token.Id;
+
+        await _context.SaveChangesAsync();
+
+        return new AuthResponseDto 
         { 
             UserId = user.Id, 
             Token = new JwtSecurityTokenHandler().WriteToken(token), 
-            RefreshToken = refreshToken 
+            RefreshToken = storedRefreshToken.Token 
         };
+    }
+
+    private bool ValidateJwt(ClaimsPrincipal tokenVerification, SecurityToken validatedToken)
+    {
+        if (validatedToken is JwtSecurityToken jwtSecurity)
+        {
+            if (!jwtSecurity.Header.Alg.Equals(SecurityAlgorithms.HmacSha256)) return false;
+        }
+
+        long expiryDate = long.Parse(tokenVerification.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Exp).Value);
+
+        // Verify jwt expiry time
+        if (expiryDate > ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds())
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private bool ValidateRefreshToken(RefreshToken storedRefreshToken, ClaimsPrincipal jwt)
+    {
+        if (storedRefreshToken is null) return false;
+
+        var jti = jwt.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Jti).Value;
+
+        if (storedRefreshToken.JwtId != jti) return false;
+
+        if (storedRefreshToken.Expired < DateTime.UtcNow) return false;
+
+        return true;
     }
 
     private async Task<JwtSecurityToken> GenerateToken(User user)
@@ -66,7 +141,7 @@ public class TokenRepository : GenericRepository<RefreshToken>, ITokenRepository
             issuer: _configuration["JwtConfig:Issuer"],
             audience: _configuration["JwtConfig:Audience"],
             claims: claims,
-            expires: DateTime.Now.AddDays(Convert.ToInt32(_configuration["JwtConfig:DurationInMinutes"])),
+            expires: DateTime.UtcNow.AddMinutes(Convert.ToInt32(_configuration["JwtConfig:DurationInMinutes"])),
             signingCredentials: credentials
             );
 
@@ -79,7 +154,7 @@ public class TokenRepository : GenericRepository<RefreshToken>, ITokenRepository
         {
             JwtId = token.Id,
             Token = await _userManager.GenerateUserTokenAsync(user, "MarvelCUAPI", "RefreshToken"),
-            Expired = DateTime.Now.AddMonths(1),
+            Expired = DateTime.UtcNow.AddMonths(1),
             UserId = user.Id
         };
 

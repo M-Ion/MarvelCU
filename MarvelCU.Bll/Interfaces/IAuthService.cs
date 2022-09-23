@@ -9,5 +9,7 @@ public interface IAuthService
 
     Task<AuthResponseDto> Login(LoginUserDto loginUserDto);
 
+    Task<AuthResponseDto> RefreshToken(TokenRequestDto tokenRequestDto);
+
 }
 

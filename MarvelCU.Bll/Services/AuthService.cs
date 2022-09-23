@@ -17,18 +17,16 @@ public class AuthService : IAuthService
     private readonly IAuthRepository _authRepository;
     private readonly ITokenRepository _tokenRepository;
     private readonly IMapper _mapper;
-    private readonly IConfiguration _configuration;
 
     public AuthService(
         IAuthRepository authRepository, 
         ITokenRepository tokenRepository,
-        IMapper mapper, 
-        IConfiguration configuration)
+        IMapper mapper
+        )
     {
         _authRepository = authRepository;
         _tokenRepository = tokenRepository;
         _mapper = mapper;
-        _configuration = configuration;
     }
 
     public async Task<AuthResponseDto> Login(LoginUserDto loginUserDto)
@@ -38,6 +36,11 @@ public class AuthService : IAuthService
         if (user is null) return null;
 
         return await _tokenRepository.GenerateTokens(user);
+    }
+
+    public async Task<AuthResponseDto> RefreshToken(TokenRequestDto tokenRequestDto)
+    {
+        return await _tokenRepository.RefreshToken(tokenRequestDto);
     }
 
     public async Task<IEnumerable<IdentityError>> Register(RegisterUserDto registerUserDto)

@@ -42,6 +42,10 @@ public class ExceptionHandlingMiddleware
                 errDetails.StatusCode = (int)HttpStatusCode.NotFound;
                 errDetails.Type = "Not Found";
                 break;
+            case InvalidRefreshTokenException:
+                errDetails.StatusCode = (int)HttpStatusCode.BadRequest;
+                errDetails.Type = "Not valid Refresh Token";
+                break;
             default:
                 break;
         }

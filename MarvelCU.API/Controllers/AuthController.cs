@@ -32,12 +32,20 @@ public class AuthController : ControllerBase
 
     [HttpPost]
     [Route("Login")]
-    public async Task<ActionResult> Login([FromBody] LoginUserDto loginUserDto)
+    public async Task<ActionResult<AuthResponseDto>> Login([FromBody] LoginUserDto loginUserDto)
     {
         AuthResponseDto authResponse = await _authService.Login(loginUserDto);
 
         if (authResponse is null) return Unauthorized();
 
+        return Ok(authResponse);
+    }
+
+    [HttpPost]
+    [Route("Refresh")]
+    public async Task<ActionResult<AuthResponseDto>> RefreshToken([FromBody] TokenRequestDto tokenRequestDto)
+    {
+        var authResponse = await _authService.RefreshToken(tokenRequestDto);
         return Ok(authResponse);
     }
 }
