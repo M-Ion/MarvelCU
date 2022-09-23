@@ -2,17 +2,40 @@
 using MarvelCU.Dal.Interfaces;
 using MarvelCU.Domain;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 
 namespace MarvelCU.Dal.Repositories;
 
 public class AuthRepository : IAuthRepository
 {
     private readonly UserManager<User> _userManager;
+    private readonly MarvelDbContext _context;
+    private readonly IConfiguration _configuration;
+    private readonly TokenValidationParameters _tokenValidationParameters;
 
-    public AuthRepository(UserManager<User> userManager)
+    public AuthRepository(
+        UserManager<User> userManager,
+        MarvelDbContext context,
+        IConfiguration configuration
+        )
     {
         _userManager = userManager;
+        _context = context;
+        _configuration = configuration;
+        _tokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuerSigningKey = true,
+            ValidateIssuer = true,
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero,
+            ValidIssuer = _configuration["JwtConfig:Issuer"],
+            ValidAudience = _configuration["JwtConfig:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtConfig:Key"])),
+        };
     }
 
     public async Task<IList<Claim>> GetUserClaims(User user)
@@ -33,7 +56,7 @@ public class AuthRepository : IAuthRepository
 
         bool valid = await _userManager.CheckPasswordAsync(user, loginUserDto.Password);
 
-        return valid ? user : null;
+        return user;
     }
 
     public async Task<IEnumerable<IdentityError>> Register(User user, string password)

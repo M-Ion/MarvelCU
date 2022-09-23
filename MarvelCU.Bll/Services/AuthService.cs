@@ -15,12 +15,18 @@ namespace MarvelCU.Bll.Services;
 public class AuthService : IAuthService
 {
     private readonly IAuthRepository _authRepository;
+    private readonly ITokenRepository _tokenRepository;
     private readonly IMapper _mapper;
     private readonly IConfiguration _configuration;
 
-    public AuthService(IAuthRepository authRepository, IMapper mapper, IConfiguration configuration)
+    public AuthService(
+        IAuthRepository authRepository, 
+        ITokenRepository tokenRepository,
+        IMapper mapper, 
+        IConfiguration configuration)
     {
         _authRepository = authRepository;
+        _tokenRepository = tokenRepository;
         _mapper = mapper;
         _configuration = configuration;
     }
@@ -29,12 +35,9 @@ public class AuthService : IAuthService
     {
         User user = await _authRepository.Login(loginUserDto);
 
-        if (user is not null)
-        {
-            string token = await GenerateToken(user);
-            return new AuthResponseDto { UserId = user.Id, Token = token };
-        }
-        else return null;
+        if (user is null) return null;
+
+        return await _tokenRepository.GenerateTokens(user);
     }
 
     public async Task<IEnumerable<IdentityError>> Register(RegisterUserDto registerUserDto)
@@ -43,36 +46,6 @@ public class AuthService : IAuthService
         user.UserName = registerUserDto.Email;
 
         return await _authRepository.Register(user, registerUserDto.Password);
-    }
-
-    private async Task<string> GenerateToken(User user)
-    {
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtConfig:Key"]));
-
-        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-        var roles = await _authRepository.GetUserRole(user);
-
-        var roleClaims = roles.Select(r => new Claim(ClaimTypes.Role, r)).ToList();
-        var userClaims = await _authRepository.GetUserClaims(user);
-
-        var claims = new List<Claim>()
-        {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
-        }
-        .Union(userClaims).Union(roleClaims);
-
-        var token = new JwtSecurityToken(
-            issuer: _configuration["JwtConfig:Issuer"],
-            audience: _configuration["JwtConfig:Audience"],
-            claims: claims,
-            expires: DateTime.Now.AddDays(Convert.ToInt32(_configuration["JwtConfig:DurationInMinutes"])),
-            signingCredentials: credentials
-            );
-
-        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }
 

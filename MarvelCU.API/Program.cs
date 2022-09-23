@@ -24,7 +24,12 @@ builder.Services.AddDbContext<MarvelDbContext>(options =>
     options.UseLazyLoadingProxies().UseSqlServer(connectionString);
 });
 
-builder.Services.AddIdentityCore<User>().AddRoles<IdentityRole>().AddEntityFrameworkStores<MarvelDbContext>();
+builder.Services
+    .AddIdentityCore<User>()
+    .AddRoles<IdentityRole>()
+    .AddTokenProvider<DataProtectorTokenProvider<User>>("MarvelCUAPI")
+    .AddEntityFrameworkStores<MarvelDbContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 
@@ -43,6 +48,20 @@ builder.Services.AddScoped<IHeroRepository, HeroRepository>();
 builder.Services.AddScoped<IHeroService, HeroService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+
+TokenValidationParameters tokenValidationParameters = new()
+{
+    ValidateIssuerSigningKey = true,
+    ValidateIssuer = true,
+    ValidateLifetime = true,
+    ClockSkew = TimeSpan.Zero,
+    ValidIssuer = builder.Configuration["JwtConfig:Issuer"],
+    ValidAudience = builder.Configuration["JwtConfig:Audience"],
+    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtConfig:Key"])),
+};
+
+builder.Services.AddSingleton(tokenValidationParameters);
 
 builder.Services.AddAuthentication(options =>
 {
@@ -50,16 +69,7 @@ builder.Services.AddAuthentication(options =>
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
-    options.TokenValidationParameters = new TokenValidationParameters()
-    {
-        ValidateIssuerSigningKey = true,
-        ValidateIssuer = true,
-        ValidateLifetime = true,
-        ClockSkew = TimeSpan.Zero,
-        ValidIssuer = builder.Configuration["JwtConfig:Issuer"],
-        ValidAudience = builder.Configuration["JwtConfig:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtConfig:Key"])),
-    };
+    options.TokenValidationParameters = tokenValidationParameters;
 });
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
