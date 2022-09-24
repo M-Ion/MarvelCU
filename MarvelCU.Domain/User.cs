@@ -11,6 +11,8 @@ public class User : IdentityUser
     [Required]
     public string LastName { get; set;} 
 
+    public string CustomerId { get; set; }
+
     public virtual ICollection<Review> Reviews { get; set; }
 
     public virtual ICollection<Actor> FavouriteActors { get; set; }

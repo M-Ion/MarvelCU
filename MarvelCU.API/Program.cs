@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Stripe;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -49,6 +50,8 @@ builder.Services.AddScoped<IHeroService, HeroService>();
 builder.Services.AddScoped<IAuthManager, AuthManager>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenManager, TokenManager>();
+builder.Services.AddScoped<IPaymentManager, PaymentManager>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 TokenValidationParameters tokenValidationParameters = new()
 {
@@ -78,6 +81,8 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
     options.Select().Filter().OrderBy();
 });
+
+StripeConfiguration.ApiKey = builder.Configuration["StripeConfig:SecretKey"];
 
 var app = builder.Build();
 

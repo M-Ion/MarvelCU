@@ -38,9 +38,9 @@ public class AuthManager : IAuthManager
         };
     }
 
-    public async Task<IList<Claim>> GetUserClaims(User user)
+    public async Task<User> GetUserByEmail(string email)
     {
-        return await _userManager.GetClaimsAsync(user);
+        return await _userManager.FindByEmailAsync(email);
     }
 
     public async Task<IList<string>> GetUserRole(User user)

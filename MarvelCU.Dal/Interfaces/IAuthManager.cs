@@ -13,6 +13,6 @@ public interface IAuthManager
 
     Task<IList<string>> GetUserRole(User user);
 
-    Task<IList<Claim>> GetUserClaims(User user);
+    Task<User> GetUserByEmail(string email);
 }
 

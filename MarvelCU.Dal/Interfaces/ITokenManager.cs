@@ -5,8 +5,12 @@ namespace MarvelCU.Dal.Interfaces;
 
 public interface ITokenManager
 {
-    public Task<AuthResponseDto> GenerateTokens(User user);
+    Task<AuthResponseDto> GenerateTokens(User user);
 
-    public Task<AuthResponseDto> RefreshToken(TokenRequestDto tokenRequestDto);
+    Task<AuthResponseDto> RefreshToken(TokenRequestDto tokenRequestDto);
+
+    Task RevokeRefreshToken(RefreshToken refreshToken);
+
+    Task<RefreshToken> GetRefreshTokenByUser(User user);
 }
 

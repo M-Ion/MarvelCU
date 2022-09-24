@@ -32,6 +32,7 @@ public class TokenManager : ITokenManager
         _tokenValidationParameters = tokenValidationParameters;
     }
 
+    // Generate Jwt and refresh token and store refresh token to db
     public async Task<AuthResponseDto> GenerateTokens(User user)
     {
         var token = await GenerateToken(user);
@@ -45,6 +46,7 @@ public class TokenManager : ITokenManager
         };
     }
 
+    // Generate Jwt
     private async Task<JwtSecurityToken> GenerateToken(User user)
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtConfig:Key"]));
@@ -75,6 +77,7 @@ public class TokenManager : ITokenManager
         return token;
     }
 
+    // Generate refresh token and store it to db
     private async Task<string> GenerateRefreshToken(User user, JwtSecurityToken token)
     {
         RefreshToken refreshToken = new()
@@ -91,6 +94,7 @@ public class TokenManager : ITokenManager
         return refreshToken.Token;
     }
 
+    // Refresh the Jwt and generate another refresh token
     public async Task<AuthResponseDto> RefreshToken(TokenRequestDto tokenRequestDto)
     {
         ClaimsPrincipal tokenVerification;
@@ -107,6 +111,10 @@ public class TokenManager : ITokenManager
         catch (Exception e)
         {
             throw new InvalidJwtException(e.Message);
+        }
+        finally
+        {
+            _tokenValidationParameters.ValidateLifetime = true;
         }
 
         if (!ValidateJwt(tokenVerification, validatedToken)) throw new InvalidJwtException("Invalid jwt!");
@@ -133,7 +141,8 @@ public class TokenManager : ITokenManager
         };
     }
 
-    private async Task RevokeRefreshToken(RefreshToken refreshToken)
+    // Remove refresh token from db
+    public async Task RevokeRefreshToken(RefreshToken refreshToken)
     {
         _context.Set<RefreshToken>().Remove(refreshToken);
         await _context.SaveChangesAsync();
@@ -174,5 +183,9 @@ public class TokenManager : ITokenManager
         return true;
     }
 
+    public async Task<RefreshToken> GetRefreshTokenByUser(User user)
+    {
+        return await _context.RefreshTokens.FirstOrDefaultAsync(t => t.UserId == user.Id);
+    }
 }
 

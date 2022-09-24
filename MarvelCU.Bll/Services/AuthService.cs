@@ -15,18 +15,23 @@ namespace MarvelCU.Bll.Services;
 public class AuthService : IAuthService
 {
     private readonly IAuthManager _authRepository;
-    private readonly ITokenManager _tokenRepository;
+    private readonly ITokenManager _tokenManager;
     private readonly IMapper _mapper;
 
     public AuthService(
         IAuthManager authRepository, 
-        ITokenManager tokenRepository,
+        ITokenManager tokenManager,
         IMapper mapper
         )
     {
         _authRepository = authRepository;
-        _tokenRepository = tokenRepository;
+        _tokenManager = tokenManager;
         _mapper = mapper;
+    }
+
+    public async Task<User> GetUserByEmail(string email)
+    {
+        return await _authRepository.GetUserByEmail(email);
     }
 
     public async Task<AuthResponseDto> Login(LoginUserDto loginUserDto)
@@ -35,12 +40,16 @@ public class AuthService : IAuthService
 
         if (user is null) return null;
 
-        return await _tokenRepository.GenerateTokens(user);
+        // Verify if refresh token already exists and remove it
+        var refreshToken = await _tokenManager.GetRefreshTokenByUser(user);
+        if (refreshToken is not null) await _tokenManager.RevokeRefreshToken(refreshToken);
+
+        return await _tokenManager.GenerateTokens(user);
     }
 
     public async Task<AuthResponseDto> RefreshToken(TokenRequestDto tokenRequestDto)
     {
-        return await _tokenRepository.RefreshToken(tokenRequestDto);
+        return await _tokenManager.RefreshToken(tokenRequestDto);
     }
 
     public async Task<IEnumerable<IdentityError>> Register(RegisterUserDto registerUserDto)
