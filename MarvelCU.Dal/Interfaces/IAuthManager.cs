@@ -5,7 +5,7 @@ using System.Security.Claims;
 
 namespace MarvelCU.Dal.Interfaces;
 
-public interface IAuthRepository
+public interface IAuthManager
 {
     Task<IEnumerable<IdentityError>> Register(User user, string password);
 

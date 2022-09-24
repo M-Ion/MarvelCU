@@ -14,13 +14,13 @@ namespace MarvelCU.Bll.Services;
 
 public class AuthService : IAuthService
 {
-    private readonly IAuthRepository _authRepository;
-    private readonly ITokenRepository _tokenRepository;
+    private readonly IAuthManager _authRepository;
+    private readonly ITokenManager _tokenRepository;
     private readonly IMapper _mapper;
 
     public AuthService(
-        IAuthRepository authRepository, 
-        ITokenRepository tokenRepository,
+        IAuthManager authRepository, 
+        ITokenManager tokenRepository,
         IMapper mapper
         )
     {

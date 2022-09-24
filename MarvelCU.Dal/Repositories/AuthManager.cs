@@ -10,14 +10,14 @@ using System.Text;
 
 namespace MarvelCU.Dal.Repositories;
 
-public class AuthRepository : IAuthRepository
+public class AuthManager : IAuthManager
 {
     private readonly UserManager<User> _userManager;
     private readonly MarvelDbContext _context;
     private readonly IConfiguration _configuration;
     private readonly TokenValidationParameters _tokenValidationParameters;
 
-    public AuthRepository(
+    public AuthManager(
         UserManager<User> userManager,
         MarvelDbContext context,
         IConfiguration configuration
