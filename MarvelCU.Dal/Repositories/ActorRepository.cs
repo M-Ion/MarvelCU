@@ -12,13 +12,5 @@ public class ActorRepository : GenericRepository<Actor>, IActorRepository
     {
         _context = context;
     }
-
-    public async Task<Actor> GetActorDetails(int id)
-    {
-        return await _context.Actors
-            .Include(q => q.Movies)
-            .Include(q => q.Heroes)
-            .FirstOrDefaultAsync(x => x.Id == id);
-    }
 }
 

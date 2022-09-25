@@ -34,7 +34,12 @@ public class MovieService : IMovieService
     {
         await _repository.Exists(id);
 
-        var movie = await _repository.GetDetails(id);
+        var movie = await _repository.GetEntityDetails(
+            id,
+            movie => movie.Actors,
+            movie => movie.Heroes
+            );
+
         return _mapper.Map<MovieDto>(movie);
     }
 

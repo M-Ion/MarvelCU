@@ -1,6 +1,9 @@
-﻿namespace MarvelCU.Dal.Interfaces;
+﻿using MarvelCU.Domain;
+using System.Linq.Expressions;
 
-public interface IRepository<T> where T : class
+namespace MarvelCU.Dal.Interfaces;
+
+public interface IRepository<T> where T : BaseEntity
 {
     Task<T> GetAsync(int id);
 
@@ -13,5 +16,7 @@ public interface IRepository<T> where T : class
     Task UpdateAsync(T entity);
 
     Task<T> Exists(int id);
+
+    Task<T> GetEntityDetails(int id, params Expression<Func<T, object>>[] properties);
 }
 

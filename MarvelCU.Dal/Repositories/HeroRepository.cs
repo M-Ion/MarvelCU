@@ -12,13 +12,5 @@ public class HeroRepository : GenericRepository<Hero>, IHeroRepository
     {
         _context = context;
     }
-
-    public async Task<Hero> GetHeroDetails(int id)
-    {
-        return await _context.Heores
-            .Include(h => h.Movies)
-            .Include(h => h.Actors)
-            .FirstOrDefaultAsync(h => h.Id == id);
-    }
 }
 

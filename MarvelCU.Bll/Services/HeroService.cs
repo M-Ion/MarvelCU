@@ -38,7 +38,11 @@ public class HeroService : IHeroService
     {
         await _heroRepository.Exists(id);
 
-        var hero = await _heroRepository.GetHeroDetails(id);
+        var hero = await _heroRepository.GetEntityDetails(
+            id,
+            hero => hero.Movies,
+            hero => hero.Actors
+            );
         return _mapper.Map<HeroDto>(hero);
     }
 }

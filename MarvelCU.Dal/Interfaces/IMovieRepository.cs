@@ -8,8 +8,6 @@ public interface IMovieRepository : IRepository<Movie>
 {
     Task RemoveFromCast(int movieId, Actor actor);
 
-    Task<Movie> GetDetails(int id);
-
     Task<IList<Movie>> GetOrderedMovies();
 
     Task<IList<Movie>> GetPagedMovies(PagedRequest pagedRequest);

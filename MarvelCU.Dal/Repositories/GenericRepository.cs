@@ -1,10 +1,12 @@
 ﻿using MarvelCU.Common.Exceptions;
 using MarvelCU.Dal.Interfaces;
+using MarvelCU.Domain;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace MarvelCU.Dal.Repositories;
 
-public class GenericRepository<T> : IRepository<T> where T : class
+public class GenericRepository<T> : IRepository<T> where T : BaseEntity
 {
     private readonly MarvelDbContext _context;
 
@@ -37,6 +39,13 @@ public class GenericRepository<T> : IRepository<T> where T : class
         return await _context.Set<T>().FindAsync(id);
     }
 
+    public async Task<T> GetEntityDetails(int id, params Expression<Func<T, object>>[] properties)
+    {
+        IQueryable<T> query = IncludeProperties(properties);
+
+        return await query.FirstOrDefaultAsync(e => e.Id == id);
+    }
+
     public async Task RemoveAsync(T entity)
     {
         _context.Set<T>().Remove(entity);
@@ -47,6 +56,15 @@ public class GenericRepository<T> : IRepository<T> where T : class
     {
         _context.Update(entity);
         await _context.SaveChangesAsync();
+    }
+
+    private IQueryable<T> IncludeProperties(params Expression<Func<T, object>>[] properties)
+    {
+        IQueryable<T> query = _context.Set<T>();
+
+        foreach(var property in properties) query = query.Include(property);
+      
+        return query;
     }
 }
 

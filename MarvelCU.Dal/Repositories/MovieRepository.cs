@@ -15,14 +15,6 @@ public class MovieRepository : GenericRepository<Movie>, IMovieRepository
         _context = context;
     }
 
-    public async Task<Movie> GetDetails(int id)
-    {
-        return await _context.Movies
-            .Include(m => m.Actors)
-            .Include(m => m.Heroes)
-            .FirstOrDefaultAsync(m => m.Id == id);
-    }
-
     public async Task<IList<Movie>> GetOrderedMovies()
     {
         return await _context.Movies.OrderBy(m => m.Premiere).ToListAsync();

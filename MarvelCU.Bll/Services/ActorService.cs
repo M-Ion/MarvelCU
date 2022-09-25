@@ -36,7 +36,11 @@ public class ActorService : IActorService
     {
         await _actorRepository.Exists(id);
 
-        var actor = await _actorRepository.GetActorDetails(id);
+        var actor = await _actorRepository.GetEntityDetails(
+            id,
+            actor => actor.Movies, 
+            actor => actor.Heroes
+            );
 
         return _mapper.Map<ActorDto>(actor);
     }
