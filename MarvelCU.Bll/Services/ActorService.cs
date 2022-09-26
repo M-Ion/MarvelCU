@@ -18,7 +18,8 @@ public class ActorService : IActorService
         IActorRepository repository, 
         IMovieRepository movieRepository, 
         IHeroRepository heroRepository,
-        IMapper mapper)
+        IMapper mapper
+        )
     {
         _actorRepository = repository;
         _movieRepository = movieRepository;

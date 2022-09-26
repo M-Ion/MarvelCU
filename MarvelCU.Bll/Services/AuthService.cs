@@ -3,6 +3,7 @@ using MarvelCU.Bll.Interfaces;
 using MarvelCU.Common.Dtos.User;
 using MarvelCU.Dal.Interfaces;
 using MarvelCU.Domain;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -14,29 +15,39 @@ namespace MarvelCU.Bll.Services;
 
 public class AuthService : IAuthService
 {
-    private readonly IAuthManager _authRepository;
+    private readonly IAuthManager _authManager;
     private readonly ITokenManager _tokenManager;
     private readonly IMapper _mapper;
 
     public AuthService(
-        IAuthManager authRepository, 
+        IAuthManager authManager, 
         ITokenManager tokenManager,
         IMapper mapper
         )
     {
-        _authRepository = authRepository;
+        _authManager = authManager;
         _tokenManager = tokenManager;
         _mapper = mapper;
     }
 
     public async Task<User> GetUserByEmail(string email)
     {
-        return await _authRepository.GetUserByEmail(email);
+        return await _authManager.GetUserByEmail(email);
+    }
+
+    public async Task<User> GetUserFromContext(HttpContext context)
+    {
+        var identity = context.User.Identity as ClaimsIdentity;
+        var email = identity.Claims.FirstOrDefault(c => c.Type == ClaimValueTypes.Email).Value;
+
+        var user = await _authManager.GetUserByEmail(email);
+
+        return user;
     }
 
     public async Task<AuthResponseDto> Login(LoginUserDto loginUserDto)
     {
-        User user = await _authRepository.Login(loginUserDto);
+        User user = await _authManager.Login(loginUserDto);
 
         if (user is null) return null;
 
@@ -57,7 +68,7 @@ public class AuthService : IAuthService
         var user = _mapper.Map<User>(registerUserDto);
         user.UserName = registerUserDto.Email;
 
-        return await _authRepository.Register(user, registerUserDto.Password);
+        return await _authManager.Register(user, registerUserDto.Password);
     }
 }
 

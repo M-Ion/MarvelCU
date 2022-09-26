@@ -12,22 +12,19 @@ namespace MarvelCU.API.Controllers;
 public class PaymentsController : ControllerBase
 {
     private readonly IPaymentService _paymentService;
-    private readonly IAuthManager _authManager;
+    private readonly IAuthService _authService;
 
-    public PaymentsController(IPaymentService paymentService, IAuthManager authManager)
+    public PaymentsController(IPaymentService paymentService, IAuthService authService)
     {
         _paymentService = paymentService;
-        _authManager = authManager;
+        _authService = authService;
     }
 
     [HttpPost("Pay")]
     [Authorize]
     public async Task<ActionResult> Pay([FromBody] PaymentDto paymentDto)
     {
-        var identity = HttpContext.User.Identity as ClaimsIdentity;
-        var email = identity.Claims.FirstOrDefault(c => c.Type == ClaimValueTypes.Email).Value;
-
-        var user = await _authManager.GetUserByEmail(email);
+        var user = await _authService.GetUserFromContext(HttpContext);
 
         if (user is null) return Unauthorized();
 

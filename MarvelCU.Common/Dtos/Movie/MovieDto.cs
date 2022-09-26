@@ -1,5 +1,6 @@
 ﻿using MarvelCU.Common.Dtos.Actor;
 using MarvelCU.Common.Dtos.Hero;
+using MarvelCU.Common.Dtos.Review;
 using MarvelCU.Domain;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -22,5 +23,7 @@ public class MovieDto : BaseMovieDto
     public List<GetActorDto> Actors { get; set; }
 
     public List<GetHeroDto> Heroes { get; set; }
+
+    public List<GetReviewDto> Reviews { get; set; }
 }
 

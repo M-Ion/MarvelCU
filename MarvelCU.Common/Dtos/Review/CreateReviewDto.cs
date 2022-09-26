@@ -4,8 +4,7 @@ namespace MarvelCU.Common.Dtos.Review;
 
 public class CreateReviewDto
 {
-    [Required]
-    public Domain.User Author { get; set; }
+    public Domain.User User { get; set; }
 
     [Required]
     [StringLength(100)]
