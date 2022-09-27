@@ -52,7 +52,7 @@ public class MovieService : IMovieService
 
     public async Task<IList<GetMovieDto>> GetPagedMovies(PagedRequest pagedRequest)
     {
-        var movies =  await _repository.GetPagedMovies(pagedRequest);
+        var movies =  (await _repository.GetPagedMovies(pagedRequest)).ToList();
         return _mapper.Map<IList<GetMovieDto>>(movies);
     }
 }

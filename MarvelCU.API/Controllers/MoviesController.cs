@@ -39,7 +39,8 @@ public class MoviesController : ControllerBase
 
     [HttpGet]
     [Route("Page")]
-    public async Task<ActionResult<IList<MovieDto>>> GetPageMovie([FromQuery] PagedRequest pagedRequest)
+    [EnableQuery]
+    public async Task<ActionResult<IList<GetMovieDto>>> GetPageMovie([FromQuery] PagedRequest pagedRequest)
     { 
         return Ok(await _movieService.GetPagedMovies(pagedRequest));
     }
