@@ -3,6 +3,7 @@ using MarvelCU.Dal.Interfaces;
 using AutoMapper;
 using MarvelCU.Common.Dtos.Actor;
 using MarvelCU.Domain;
+using MarvelCU.Dal.Repositories;
 
 namespace MarvelCU.Bll.Services;
 
@@ -35,8 +36,6 @@ public class ActorService : IActorService
 
     public async Task<ActorDto> GetActorDetails(int id)
     {
-        await _actorRepository.Exists(id);
-
         var actor = await _actorRepository.GetEntityDetails(
             id,
             actor => actor.Movies, 
@@ -63,6 +62,7 @@ public class ActorService : IActorService
         var actor = await _actorRepository.Exists(actorId);
 
         actor.Heroes.Add(hero);
+
         await _actorRepository.UpdateAsync(actor);
 
         return _mapper.Map<ActorDto>(actor);

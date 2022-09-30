@@ -1,5 +1,7 @@
-﻿using MarvelCU.Bll.Interfaces;
+﻿using MarvelCU.API.Infrastructure.Filters;
+using MarvelCU.Bll.Interfaces;
 using MarvelCU.Common.Dtos.Hero;
+using MarvelCU.Domain;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +25,7 @@ namespace MarvelCU.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [ServiceFilter(typeof(EntityIdValidationFilter<Hero>))]
         public async Task<ActionResult<HeroDto>> GetHero(int id)
         {
             return Ok(await _heroService.GetHeroDetails(id));

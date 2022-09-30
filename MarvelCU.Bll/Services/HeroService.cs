@@ -23,11 +23,6 @@ public class HeroService : IHeroService
         await _heroRepository.AddAsync(hero);
     }
 
-    public async Task<Hero> Exists(int id)
-    {
-        return await _heroRepository.Exists(id);
-    }
-
     public async Task<IList<GetHeroDto>> GetAllHeroes()
     {
         var heroes = await _heroRepository.GetAllAsync();
@@ -36,8 +31,6 @@ public class HeroService : IHeroService
 
     public async Task<HeroDto> GetHeroDetails(int id)
     {
-        await _heroRepository.Exists(id);
-
         var hero = await _heroRepository.GetEntityDetails(
             id,
             hero => hero.Movies,

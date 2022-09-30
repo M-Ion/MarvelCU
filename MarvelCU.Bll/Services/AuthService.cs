@@ -30,21 +30,6 @@ public class AuthService : IAuthService
         _mapper = mapper;
     }
 
-    public async Task<User> GetUserByEmail(string email)
-    {
-        return await _authManager.GetUserByEmail(email);
-    }
-
-    public async Task<User> GetUserFromContext(HttpContext context)
-    {
-        var identity = context.User.Identity as ClaimsIdentity;
-        var email = identity.Claims.FirstOrDefault(c => c.Type == ClaimValueTypes.Email).Value;
-
-        var user = await _authManager.GetUserByEmail(email);
-
-        return user;
-    }
-
     public async Task<AuthResponseDto> Login(LoginUserDto loginUserDto)
     {
         User user = await _authManager.Login(loginUserDto);

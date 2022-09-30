@@ -12,9 +12,5 @@ public interface IAuthService
     Task<AuthResponseDto> Login(LoginUserDto loginUserDto);
 
     Task<AuthResponseDto> RefreshToken(TokenRequestDto tokenRequestDto);
-
-    Task<User> GetUserByEmail(string email);
-
-    Task<User> GetUserFromContext(HttpContext context);
 }
 

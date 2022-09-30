@@ -1,6 +1,8 @@
-﻿using MarvelCU.Bll.Interfaces;
+﻿using MarvelCU.API.Infrastructure.Filters;
+using MarvelCU.Bll.Interfaces;
 using MarvelCU.Common.Dtos;
 using MarvelCU.Dal.Interfaces;
+using MarvelCU.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -22,11 +24,10 @@ public class PaymentsController : ControllerBase
 
     [HttpPost("Pay")]
     [Authorize]
+    [ServiceFilter(typeof(CurrentUserValidationFilter))]
     public async Task<ActionResult> Pay([FromBody] PaymentDto paymentDto)
     {
-        var user = await _authService.GetUserFromContext(HttpContext);
-
-        if (user is null) return Unauthorized();
+        var user = HttpContext.Items["CurrentUser"] as User;
 
         var charged = await _paymentService.ProcessPayment(paymentDto, user);
 

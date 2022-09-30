@@ -1,6 +1,6 @@
 using Azure.Storage.Blobs;
 using MarvelCU.API.Infrastructure.Extensions;
-using MarvelCU.API.Infrastructure.Middlewares;
+using MarvelCU.API.Infrastructure.Filters;
 using MarvelCU.Bll.Interfaces;
 using MarvelCU.Bll.Services;
 using MarvelCU.Common.Configurations;
@@ -17,6 +17,12 @@ using Stripe;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.ConfigureLogging(logging =>
+{
+    logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
+    logging.AddEventSourceLogger();
+});
 
 // Add services to the container.
 
@@ -73,7 +79,13 @@ builder.Services.AddScoped<ITokenManager, TokenManager>();
 builder.Services.AddScoped<IPaymentManager, PaymentManager>();
 
 // Cloud Storage
-builder.Services.AddScoped<ICloudStorageManager, CloudStorageManager>();
+//builder.Services.AddScoped<ICloudStorageManager, CloudStorageManager>();
+
+// Filters
+builder.Services.AddScoped(typeof(EntityIdValidationFilter<>));
+builder.Services.AddScoped(typeof(EntityIdValidationFilter<,>));
+builder.Services.AddScoped<CurrentUserValidationFilter>();
+builder.Services.AddScoped<UserReviewValidationFiler>();
 
 TokenValidationParameters tokenValidationParameters = new()
 {
@@ -98,7 +110,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 // Azure Blob Storage
-builder.Services.AddSingleton(x => new BlobServiceClient(builder.Configuration.GetConnectionString("AzureBlobStorageConnectionString")));
+//builder.Services.AddSingleton(x => new BlobServiceClient(builder.Configuration.GetConnectionString("AzureBlobStorageConnectionString")));
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
@@ -120,12 +132,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseHttpLogging();
+
+app.UseCustomExceptionHandler();
 
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseDbTransaction();
 
 app.MapControllers();
 

@@ -3,6 +3,7 @@ using MarvelCU.Dal.Extensions;
 using MarvelCU.Dal.Interfaces;
 using MarvelCU.Domain;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace MarvelCU.Dal.Repositories;
 

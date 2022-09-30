@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using MarvelCU.API.Infrastructure.Filters;
 using MarvelCU.Bll.Interfaces;
 using MarvelCU.Common.Dtos.News;
 using MarvelCU.Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,11 +37,10 @@ public class NewsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    //[Authorize(Roles = "Administrator")]
+    [ServiceFilter(typeof(EntityIdValidationFilter<News>))]
     public async Task<ActionResult> UpdateNews(int id, [FromBody] UpdateNewsDto updateNewsDto)
     {
         await _newsService.UpdateNews(id, updateNewsDto);
-
         return NoContent();
     }
 }

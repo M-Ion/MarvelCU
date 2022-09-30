@@ -10,7 +10,5 @@ public interface IHeroService
     Task<HeroDto> GetHeroDetails(int id);
 
     Task CreateHero(CreateHeroDto createHeroDto);
-
-    Task<Hero> Exists(int id);
 }
 

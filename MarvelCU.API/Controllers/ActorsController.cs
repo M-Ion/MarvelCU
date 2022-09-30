@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MarvelCU.API.Infrastructure.Filters;
 using MarvelCU.Bll.Interfaces;
 using MarvelCU.Common.Dtos.Actor;
 using MarvelCU.Domain;
@@ -12,7 +13,6 @@ namespace MarvelCU.API.Controllers;
 public class ActorsController : ControllerBase
 {
     private readonly IActorService _actorService;
-
     public ActorsController(IActorService actorService)
     {
         _actorService = actorService;
@@ -22,40 +22,39 @@ public class ActorsController : ControllerBase
     public async Task<ActionResult<List<GetActorDto>>> GetActors()
     {
         var actors = await _actorService.GetAllActors();
-
         return Ok(actors);
     }
 
     [HttpGet("{id}")]
+    [ServiceFilter(typeof(EntityIdValidationFilter<Actor>))]
     public async Task<ActionResult<ActorDto>> GetActor(int id)
     {
         var actor = await _actorService.GetActorDetails(id);
-
-        if (actor is null) return NotFound();
-
         return Ok(actor);
     }
 
-    [HttpPut("Movies/{actorId}/{movieId}")]
+    // id - Actor Id
+    // entityId - Movie Id
+
+    [HttpPut("Movies/{id}/{entityId}")]
     //[Authorize(Roles = "Administrator")]
-    public async Task<ActionResult> UpdateActorMovies(int actorId, int movieId)
+    [ServiceFilter(typeof(EntityIdValidationFilter<Actor, Movie>))]
+    public async Task<ActionResult> UpdateActorMovies(int id, int entityId)
     {
-        var updatedActor = await _actorService.AddActorToCast(actorId, movieId);
-
-        if (updatedActor is null) return NotFound();
-
-        return Ok();
+        var updatedActor = await _actorService.AddActorToCast(id, entityId);
+        return Ok(updatedActor);
     }
 
-    [HttpPut("Heroes/{actorId}/{heroId}")]
+    // id - Actor Id
+    // entityId - Hero Id
+
+    [HttpPut("Heroes/{id}/{entityId}")]
     //[Authorize(Roles = "Administrator")]
-    public async Task<ActionResult> UpdateActorHeroes(int actorId, int heroId)
+    [ServiceFilter(typeof(EntityIdValidationFilter<Actor, Hero>))]
+    public async Task<ActionResult> UpdateActorHeroes(int id, int entityId)
     {
-        var updatedActor = await _actorService.AddActorToCast(actorId, heroId);
-
-        if (updatedActor is null) return NotFound();
-
-        return Ok();
+        var updatedActor = await _actorService.AddActorToCast(id, entityId);
+        return Ok(updatedActor);
     }
 }
 

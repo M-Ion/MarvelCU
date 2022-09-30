@@ -14,7 +14,5 @@ public interface IMovieService
     Task<IList<GetMovieDto>> GetPagedMovies(PagedRequest pagedRequest);
 
     Task CreateMovie(CreateMovieDto createMovieDto);
-
-    Task<Movie> Exists(int id);
 }
 
