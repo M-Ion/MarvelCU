@@ -19,12 +19,6 @@ public class MovieService : IMovieService
         _mapper = mapper;
     }
 
-    public async Task CreateMovie(CreateMovieDto createMovieDto)
-    {
-        var movie = _mapper.Map<Movie>(createMovieDto);
-        await _repository.AddAsync(movie);
-    }
-
     public async Task<MovieDto> GetMovieDetails(int id)
     {
         var movie = await _repository.GetEntityDetails(
@@ -47,6 +41,12 @@ public class MovieService : IMovieService
     {
         var movies =  (await _repository.GetPagedMovies(pagedRequest)).ToList();
         return _mapper.Map<IList<GetMovieDto>>(movies);
+    }
+
+    public async Task CreateMovie(CreateMovieDto createMovieDto)
+    {
+        var movie = _mapper.Map<Movie>(createMovieDto);
+        await _repository.AddAsync(movie);
     }
 }
 

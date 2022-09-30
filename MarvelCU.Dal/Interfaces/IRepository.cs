@@ -19,6 +19,6 @@ public interface IRepository<T> where T : BaseEntity
 
     Task<T> GetEntityDetails(int id, params Expression<Func<T, object>>[] properties);
 
-    //Task Supply<E>(int id, E entityToAdd) where E : BaseEntity;
+    Task Supply<E>(ICollection<E> collection, E entityToAdd) where E : BaseEntity;
 }
 

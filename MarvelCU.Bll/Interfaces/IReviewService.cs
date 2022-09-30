@@ -10,9 +10,5 @@ public interface IReviewService
     Task DeleteReview(int id);
 
     Task UpdateReview(UpdateReviewDto updateReviewDto, int id);
-
-    bool ExistsUserReview(int reviewId, User user);
-
-    bool ExistsMovieUserReview(int movieId, User user);
 }
 

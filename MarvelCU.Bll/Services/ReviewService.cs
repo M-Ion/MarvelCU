@@ -46,15 +46,5 @@ public class ReviewService : IReviewService
 
         await _reviewRepository.UpdateAsync(review);
     }
-
-    public bool ExistsUserReview(int reviewId, User user)
-    {
-        return user.Reviews.FirstOrDefault(r => r.Id == reviewId) is null ? false : true;
-    }
-
-    public bool ExistsMovieUserReview(int movieId, User user)
-    {
-        return user.Reviews.FirstOrDefault(r => r.Movie.Id == movieId) is null ? false : true;
-    }
 }
 

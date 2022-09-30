@@ -77,6 +77,7 @@ namespace MarvelCU.API.Infrastructure.Filters
             }
 
             context.HttpContext.Items.Add("Entity", entity);
+            context.HttpContext.Items.Add("SecondEntity", entityToAdd);
 
             await next();
         }

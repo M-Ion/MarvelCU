@@ -3,13 +3,7 @@ using MarvelCU.Bll.Interfaces;
 using MarvelCU.Common.Dtos.User;
 using MarvelCU.Dal.Interfaces;
 using MarvelCU.Domain;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace MarvelCU.Bll.Services;
 
@@ -30,6 +24,14 @@ public class AuthService : IAuthService
         _mapper = mapper;
     }
 
+    public async Task<IEnumerable<IdentityError>> Register(RegisterUserDto registerUserDto)
+    {
+        var user = _mapper.Map<User>(registerUserDto);
+        user.UserName = registerUserDto.Email;
+
+        return await _authManager.Register(user, registerUserDto.Password);
+    }
+
     public async Task<AuthResponseDto> Login(LoginUserDto loginUserDto)
     {
         User user = await _authManager.Login(loginUserDto);
@@ -46,14 +48,6 @@ public class AuthService : IAuthService
     public async Task<AuthResponseDto> RefreshToken(TokenRequestDto tokenRequestDto)
     {
         return await _tokenManager.RefreshToken(tokenRequestDto);
-    }
-
-    public async Task<IEnumerable<IdentityError>> Register(RegisterUserDto registerUserDto)
-    {
-        var user = _mapper.Map<User>(registerUserDto);
-        user.UserName = registerUserDto.Email;
-
-        return await _authManager.Register(user, registerUserDto.Password);
     }
 }
 

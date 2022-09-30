@@ -53,26 +53,17 @@ public class GenericRepository<T> : IRepository<T> where T : BaseEntity
         await _context.SaveChangesAsync();
     }
 
+    public async Task Supply<E>(ICollection<E> collection, E entityToAdd) where E : BaseEntity
+    {
+        collection.Add(entityToAdd);
+        await _context.SaveChangesAsync();
+    }
+
     public async Task UpdateAsync(T entity)
     {
         _context.Update(entity);
         await _context.SaveChangesAsync();
     }
-
-    //public async Task Supply<E>(int id, E entityToAdd) where E : BaseEntity
-    //{
-    //    T entity = await GetAsync(id);
-
-    //    PropertyInfo property = typeof(T).GetProperties().FirstOrDefault(prop => prop.PropertyType == typeof(ICollection<E>));
-
-    //    if (property is not null && entity is not null)
-    //    {
-    //        dynamic collection = typeof(T).GetProperty(property.Name).GetValue(entity);
-    //        collection.Add(entityToAdd);
-
-    //        await _context.SaveChangesAsync();
-    //    }
-    //}
 
     private IQueryable<T> IncludeProperties(params Expression<Func<T, object>>[] properties)
     {

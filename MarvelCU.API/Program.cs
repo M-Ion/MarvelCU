@@ -45,43 +45,32 @@ builder.Services.AddAutoMapper(typeof(MapperConfig));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Generic Repository
 builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 
-// Actor entity
 builder.Services.AddScoped<IActorRepository, ActorRepository>();
 builder.Services.AddScoped<IActorService, ActorService>();
 
-// Movie entity
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<IMovieService, MovieService>();
 
-// Hero entity
 builder.Services.AddScoped<IHeroRepository, HeroRepository>();
 builder.Services.AddScoped<IHeroService, HeroService>();
 
-// News entity
 builder.Services.AddScoped<INewsRepository, NewsRepository>();
 builder.Services.AddScoped<INewsService, NewsService>();
 
-// Review entity
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<IReviewService, MarvelCU.Bll.Services.ReviewService>();
 
-// Authentication
 builder.Services.AddScoped<IAuthManager, AuthManager>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
-// Jwt
 builder.Services.AddScoped<ITokenManager, TokenManager>();
 
-// Payments
 builder.Services.AddScoped<IPaymentManager, PaymentManager>();
 
-// Cloud Storage
-//builder.Services.AddScoped<ICloudStorageManager, CloudStorageManager>();
+builder.Services.AddScoped<ICloudStorageManager, CloudStorageManager>();
 
-// Filters
 builder.Services.AddScoped(typeof(EntityIdValidationFilter<>));
 builder.Services.AddScoped(typeof(EntityIdValidationFilter<,>));
 builder.Services.AddScoped<CurrentUserValidationFilter>();
@@ -110,7 +99,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 // Azure Blob Storage
-//builder.Services.AddSingleton(x => new BlobServiceClient(builder.Configuration.GetConnectionString("AzureBlobStorageConnectionString")));
+builder.Services.AddSingleton(x => new BlobServiceClient(builder.Configuration.GetConnectionString("AzureBlobStorageConnectionString")));
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore

@@ -17,12 +17,6 @@ public class HeroService : IHeroService
         _mapper = mapper;
     }
 
-    public async Task CreateHero(CreateHeroDto createHeroDto)
-    {
-        var hero = _mapper.Map<Hero>(createHeroDto);
-        await _heroRepository.AddAsync(hero);
-    }
-
     public async Task<IList<GetHeroDto>> GetAllHeroes()
     {
         var heroes = await _heroRepository.GetAllAsync();
@@ -37,6 +31,12 @@ public class HeroService : IHeroService
             hero => hero.Actors
             );
         return _mapper.Map<HeroDto>(hero);
+    }
+
+    public async Task CreateHero(CreateHeroDto createHeroDto)
+    {
+        var hero = _mapper.Map<Hero>(createHeroDto);
+        await _heroRepository.AddAsync(hero);
     }
 }
 

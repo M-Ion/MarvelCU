@@ -41,8 +41,11 @@ public class ActorsController : ControllerBase
     [ServiceFilter(typeof(EntityIdValidationFilter<Actor, Movie>))]
     public async Task<ActionResult> UpdateActorMovies(int id, int entityId)
     {
-        var updatedActor = await _actorService.AddActorToCast(id, entityId);
-        return Ok(updatedActor);
+        var actor = HttpContext.Items["Entity"] as Actor;
+        var movie = HttpContext.Items["SecondEntity"] as Movie;
+
+        await _actorService.SupplyCollection(actor.Movies, movie);
+        return Ok();
     }
 
     // id - Actor Id
@@ -53,8 +56,11 @@ public class ActorsController : ControllerBase
     [ServiceFilter(typeof(EntityIdValidationFilter<Actor, Hero>))]
     public async Task<ActionResult> UpdateActorHeroes(int id, int entityId)
     {
-        var updatedActor = await _actorService.AddActorToCast(id, entityId);
-        return Ok(updatedActor);
+        var actor = HttpContext.Items["Entity"] as Actor;
+        var hero = HttpContext.Items["SecondEntity"] as Hero;
+
+        await _actorService.SupplyCollection(actor.Heroes, hero);
+        return Ok();
     }
 }
 

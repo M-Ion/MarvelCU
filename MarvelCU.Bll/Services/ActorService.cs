@@ -3,16 +3,12 @@ using MarvelCU.Dal.Interfaces;
 using AutoMapper;
 using MarvelCU.Common.Dtos.Actor;
 using MarvelCU.Domain;
-using MarvelCU.Dal.Repositories;
 
 namespace MarvelCU.Bll.Services;
 
 public class ActorService : IActorService
 {
     private readonly IActorRepository _actorRepository;
-    private readonly IMovieRepository _movieRepository;
-    private readonly IHeroRepository _heroRepository;
-
     private readonly IMapper _mapper;
 
     public ActorService(
@@ -23,8 +19,6 @@ public class ActorService : IActorService
         )
     {
         _actorRepository = repository;
-        _movieRepository = movieRepository;
-        _heroRepository = heroRepository;
         _mapper = mapper;
     }
 
@@ -45,27 +39,9 @@ public class ActorService : IActorService
         return _mapper.Map<ActorDto>(actor);
     }
 
-    public async Task<ActorDto> AddActorToCast(int actorId, int movieId)
+    public async Task SupplyCollection<E>(ICollection<E> collection, E item) where E : BaseEntity
     {
-        var movie = await _movieRepository.Exists(movieId);
-        var actor = await _actorRepository.Exists(actorId);
-
-        actor.Movies.Add(movie);
-        await _actorRepository.UpdateAsync(actor);
-
-        return _mapper.Map<ActorDto>(actor);
-    }
-
-    public async Task<ActorDto> AddActorToHero(int actorId, int heroId)
-    {
-        var hero = await _heroRepository.Exists(heroId);
-        var actor = await _actorRepository.Exists(actorId);
-
-        actor.Heroes.Add(hero);
-
-        await _actorRepository.UpdateAsync(actor);
-
-        return _mapper.Map<ActorDto>(actor);
+        await _actorRepository.Supply<E>(collection, item);
     }
 
     public async Task<Actor> Exists(int id)

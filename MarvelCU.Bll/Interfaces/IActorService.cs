@@ -9,9 +9,7 @@ public interface IActorService
 
     Task<ActorDto> GetActorDetails(int id);
 
-    Task<ActorDto> AddActorToCast(int actorId, int movieId);
-
-    Task<ActorDto> AddActorToHero(int actorId, int heroId);
+    Task SupplyCollection<E>(ICollection<E> collection, E item) where E : BaseEntity;
 
     Task<Actor> Exists(int id);
 }

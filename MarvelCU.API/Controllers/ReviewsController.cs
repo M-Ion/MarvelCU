@@ -33,25 +33,9 @@ public class ReviewsController : ControllerBase
     public async Task<ActionResult<Review>> PostReview(int id, [FromBody] CreateReviewDto createReviewDto)
     {
         var user = HttpContext.Items["CurrentUser"] as User;
-
-        // Verify if current user already posted review for movie
-        if (_reviewService.ExistsMovieUserReview(id, user)) return BadRequest();
-
         createReviewDto.User = user;
 
         return Ok(await _reviewService.CreateReview(id, createReviewDto));
-    }
-
-    // id - Review Id
-    [HttpDelete("{id}")]
-    [Authorize]
-    [ServiceFilter(typeof(EntityIdValidationFilter<Review>))]
-    [ServiceFilter(typeof(CurrentUserValidationFilter))]
-    [ServiceFilter(typeof(UserReviewValidationFiler))]
-    public async Task<ActionResult> DeleteReview(int id)
-    {
-        await _reviewService.DeleteReview(id);
-        return Ok();
     }
 
     // id - Review Id
@@ -64,6 +48,18 @@ public class ReviewsController : ControllerBase
         var user = HttpContext.Items["CurrentUser"] as User;
 
         await _reviewService.UpdateReview(updateReviewDto, id);
+        return Ok();
+    }
+
+    // id - Review Id
+    [HttpDelete("{id}")]
+    [Authorize]
+    [ServiceFilter(typeof(EntityIdValidationFilter<Review>))]
+    [ServiceFilter(typeof(CurrentUserValidationFilter))]
+    [ServiceFilter(typeof(UserReviewValidationFiler))]
+    public async Task<ActionResult> DeleteReview(int id)
+    {
+        await _reviewService.DeleteReview(id);
         return Ok();
     }
 }

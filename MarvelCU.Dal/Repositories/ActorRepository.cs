@@ -1,6 +1,5 @@
 ﻿using MarvelCU.Dal.Interfaces;
 using MarvelCU.Domain;
-using Microsoft.EntityFrameworkCore;
 
 namespace MarvelCU.Dal.Repositories;
 

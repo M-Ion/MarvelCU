@@ -30,14 +30,6 @@ public class MoviesController : ControllerBase
         return Ok(await _movieService.GetMovies());
     }
 
-    [HttpPost]
-    //[Authorize(Roles = "Administrator")]
-    public async Task<ActionResult> CreateMovie([FromBody] CreateMovieDto createMovieDto)
-    {
-        await _movieService.CreateMovie(createMovieDto);
-        return Ok();
-    }
-
     [HttpGet]
     [Route("Page")]
     [EnableQuery]
@@ -53,6 +45,14 @@ public class MoviesController : ControllerBase
     {
         var movie = await _movieService.GetMovieDetails(id);
         return Ok(movie);
+    }
+
+    [HttpPost]
+    //[Authorize(Roles = "Administrator")]
+    public async Task<ActionResult> CreateMovie([FromBody] CreateMovieDto createMovieDto)
+    {
+        await _movieService.CreateMovie(createMovieDto);
+        return Ok();
     }
 }
 
