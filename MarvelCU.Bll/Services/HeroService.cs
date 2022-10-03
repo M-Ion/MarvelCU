@@ -9,14 +9,16 @@ namespace MarvelCU.Bll.Services;
 public class HeroService : IHeroService
 {
     private readonly IHeroRepository _heroRepository;
-    private readonly ICloudStorageService _cloudStorageService;
+    private readonly ICloudStorageManager _cloudStorageManager;
 
     private readonly IMapper _mapper;
 
-    public HeroService(IHeroRepository heroRepository, ICloudStorageService cloudStorageService, IMapper mapper)
+    private readonly string _blobContainer = "hero-images";
+
+    public HeroService(IHeroRepository heroRepository, ICloudStorageManager cloudStorageManager, IMapper mapper)
     {
         _heroRepository = heroRepository;
-        _cloudStorageService = cloudStorageService;
+        _cloudStorageManager = cloudStorageManager;
         _mapper = mapper;
     }
 
@@ -33,7 +35,10 @@ public class HeroService : IHeroService
             hero => hero.Movies,
             hero => hero.Actors
             );
-        return _mapper.Map<HeroDto>(hero);
+
+        var heroDto = _mapper.Map<HeroDto>(hero);
+
+        return heroDto;
     }
 
     public async Task CreateHero(CreateHeroDto createHeroDto)
@@ -41,7 +46,7 @@ public class HeroService : IHeroService
         var hero = _mapper.Map<Hero>(createHeroDto);
         var entity = await _heroRepository.AddAsync(hero);
 
-        await _cloudStorageService.UploadBlob(entity.Id.ToString(), "hero-images", createHeroDto.BlobFilePath);
+        await _cloudStorageManager.UploadBlob(entity.Id.ToString(), _blobContainer, createHeroDto.BlobFilePath);
     }
 }
 

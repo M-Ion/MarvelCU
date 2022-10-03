@@ -12,6 +12,11 @@ public class CloudStorageService : ICloudStorageService
         _cloudStorageManager = cloudStorageManager;
     }
 
+    public async Task<List<string>> GetAllBlobs(string containerName)
+    {
+        return await _cloudStorageManager.AllBlobs(containerName);
+    }
+
     public async Task<string> GetBlob(string blobName, string containerName)
     {
         return await _cloudStorageManager.GetBlob(blobName, containerName);

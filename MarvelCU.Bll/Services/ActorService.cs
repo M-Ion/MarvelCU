@@ -9,18 +9,20 @@ namespace MarvelCU.Bll.Services;
 public class ActorService : IActorService
 {
     private readonly IActorRepository _actorRepository;
-    private readonly ICloudStorageService _cloudStorageService;
+    private readonly ICloudStorageManager _cloudStorageManager;
 
     private readonly IMapper _mapper;
 
+    private readonly string _blobContainer = "actor-images";
+
     public ActorService(
         IActorRepository repository,
-        ICloudStorageService cloudStorageService,
+        ICloudStorageManager cloudStorageManager,
         IMapper mapper
         )
     {
         _actorRepository = repository;
-        _cloudStorageService = cloudStorageService;
+        _cloudStorageManager = cloudStorageManager;
 
         _mapper = mapper;
     }
@@ -28,18 +30,23 @@ public class ActorService : IActorService
     public async Task<List<GetActorDto>> GetAllActors()
     {
         var actors = await _actorRepository.GetAllAsync();
-        return _mapper.Map<List<GetActorDto>>(actors);
+
+        List<GetActorDto> actorsDtos = _mapper.Map<List<GetActorDto>>(actors);
+
+        return actorsDtos;
     }
 
     public async Task<ActorDto> GetActorDetails(int id)
     {
         var actor = await _actorRepository.GetEntityDetails(
             id,
-            actor => actor.Movies, 
+            actor => actor.Movies,
             actor => actor.Heroes
             );
 
-        return _mapper.Map<ActorDto>(actor);
+        ActorDto actorDto = _mapper.Map<ActorDto>(actor);
+
+        return actorDto;
     }
 
     public async Task CreateActor(CreateActorDto createActorDto)
@@ -47,12 +54,12 @@ public class ActorService : IActorService
         var actor = _mapper.Map<Actor>(createActorDto);
         var entity = await _actorRepository.AddAsync(actor);
 
-        await _cloudStorageService.UploadBlob(entity.Id.ToString(), "actor-images", createActorDto.BlobFilePath);
+        await _cloudStorageManager.UploadBlob(entity.Id.ToString(), _blobContainer, createActorDto.BlobFilePath);
     }
 
     public async Task SupplyCollection<E>(ICollection<E> collection, E item) where E : BaseEntity
     {
-        await _actorRepository.Supply<E>(collection, item);
+        await _actorRepository.Supply(collection, item);
     }
 
     public async Task<Actor> Exists(int id)

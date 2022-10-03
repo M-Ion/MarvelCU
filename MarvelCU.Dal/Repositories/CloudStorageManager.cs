@@ -18,8 +18,24 @@ public class CloudStorageManager : ICloudStorageManager
         var container = _blobServiceClient.GetBlobContainerClient(containerName);
 
         var blob = container.GetBlobClient(blobName);
+        bool exists = await blob.ExistsAsync();
 
-        return blob.Uri.AbsoluteUri;
+        return exists ? blob.Uri.AbsoluteUri : null;
+    }
+
+    public async Task<List<string>> AllBlobs(string containerName)
+    {
+        var container = _blobServiceClient.GetBlobContainerClient(containerName);
+        var blobs = container.GetBlobsAsync();
+
+        List<string> files = new();
+
+        await foreach(var blob in blobs)
+        {
+            files.Add(await GetBlob(blob.Name, containerName));
+        }
+
+        return files;
     }
 
     public async Task<bool> UploadBlob(string blobName, string containerName, string filePath)
