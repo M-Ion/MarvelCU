@@ -11,11 +11,14 @@ namespace MarvelCU.Bll.Services;
 public class MovieService : IMovieService
 {
     private readonly IMovieRepository _repository;
+    private readonly ICloudStorageService _cloudStorageService;
+
     private readonly IMapper _mapper;
 
-    public MovieService(IMovieRepository repository, IMapper mapper)
+    public MovieService(IMovieRepository repository, ICloudStorageService cloudStorageService, IMapper mapper)
     {
         _repository = repository;
+        _cloudStorageService = cloudStorageService;
         _mapper = mapper;
     }
 
@@ -46,7 +49,9 @@ public class MovieService : IMovieService
     public async Task CreateMovie(CreateMovieDto createMovieDto)
     {
         var movie = _mapper.Map<Movie>(createMovieDto);
-        await _repository.AddAsync(movie);
+        var entity = await _repository.AddAsync(movie);
+
+        await _cloudStorageService.UploadBlob(entity.Id.ToString(), "movie-images", createMovieDto.BlobFilePath);
     }
 }
 

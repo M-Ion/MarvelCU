@@ -9,7 +9,7 @@ public interface INewsService
 
     Task<News> CreateNews(CreateNewsDto createNewsDto);
 
-    Task DeleteNews(News news);
+    Task DeleteNews(int id);
 
     Task<News> GetNews(int id);
 

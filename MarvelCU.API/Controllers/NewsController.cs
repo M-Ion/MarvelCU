@@ -14,12 +14,10 @@ namespace MarvelCU.API.Controllers;
 public class NewsController : ControllerBase
 {
     private readonly INewsService _newsService;
-    private readonly IMapper _mapper;
 
-    public NewsController(INewsService newsService, IMapper mapper)
+    public NewsController(INewsService newsService)
     {
         _newsService = newsService;
-        _mapper = mapper;
     }
 
     [HttpGet]
@@ -41,6 +39,14 @@ public class NewsController : ControllerBase
     public async Task<ActionResult> UpdateNews(int id, [FromBody] UpdateNewsDto updateNewsDto)
     {
         await _newsService.UpdateNews(id, updateNewsDto);
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    [ServiceFilter(typeof(EntityIdValidationFilter<News>))]
+    public async Task<ActionResult> RemoveNews(int id)
+    {
+        await _newsService.DeleteNews(id);
         return NoContent();
     }
 }

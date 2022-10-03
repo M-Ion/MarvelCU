@@ -9,16 +9,19 @@ namespace MarvelCU.Bll.Services;
 public class ActorService : IActorService
 {
     private readonly IActorRepository _actorRepository;
+    private readonly ICloudStorageService _cloudStorageService;
+
     private readonly IMapper _mapper;
 
     public ActorService(
-        IActorRepository repository, 
-        IMovieRepository movieRepository, 
-        IHeroRepository heroRepository,
+        IActorRepository repository,
+        ICloudStorageService cloudStorageService,
         IMapper mapper
         )
     {
         _actorRepository = repository;
+        _cloudStorageService = cloudStorageService;
+
         _mapper = mapper;
     }
 
@@ -37,6 +40,14 @@ public class ActorService : IActorService
             );
 
         return _mapper.Map<ActorDto>(actor);
+    }
+
+    public async Task CreateActor(CreateActorDto createActorDto)
+    {
+        var actor = _mapper.Map<Actor>(createActorDto);
+        var entity = await _actorRepository.AddAsync(actor);
+
+        await _cloudStorageService.UploadBlob(entity.Id.ToString(), "actor-images", createActorDto.BlobFilePath);
     }
 
     public async Task SupplyCollection<E>(ICollection<E> collection, E item) where E : BaseEntity

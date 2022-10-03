@@ -14,17 +14,15 @@ namespace MarvelCU.API.Controllers;
 public class PaymentsController : ControllerBase
 {
     private readonly IPaymentService _paymentService;
-    private readonly IAuthService _authService;
 
-    public PaymentsController(IPaymentService paymentService, IAuthService authService)
+    public PaymentsController(IPaymentService paymentService)
     {
         _paymentService = paymentService;
-        _authService = authService;
     }
 
     [HttpPost("Pay")]
-    [Authorize]
-    [ServiceFilter(typeof(CurrentUserValidationFilter))]
+    //[Authorize]
+    //[ServiceFilter(typeof(CurrentUserValidationFilter))]
     public async Task<ActionResult> Pay([FromBody] PaymentDto paymentDto)
     {
         var user = HttpContext.Items["CurrentUser"] as User;

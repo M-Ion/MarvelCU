@@ -11,8 +11,11 @@ public class HeroDto
 
     public string Description { get; set; }
 
+    public string Blob { get; set; }
+
     public IList<GetActorDto> Actors { get; set; }
 
     public IList<GetMovieDto> Movies { get; set; }
+
 }
 

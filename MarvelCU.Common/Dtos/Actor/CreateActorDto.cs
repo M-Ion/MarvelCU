@@ -10,5 +10,7 @@ public class CreateActorDto
     public string MiddleName { get; set; }
 
     public string LastName { get; set; }
+
+    public string BlobFilePath { get; set; }
 }
 

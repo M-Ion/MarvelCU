@@ -20,9 +20,6 @@ public class Actor : BaseEntity
 
     public virtual ICollection<Hero> Heroes { get; set; }
 
-    [Column(TypeName = "image")]
-    public byte[] Image { get; set; }
-
     public virtual ICollection<Movie> Movies { get; set; }
 
     [BackingField(nameof(_users))]

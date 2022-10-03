@@ -11,5 +11,7 @@ public class GetMovieDto : BaseMovieDto
     public sbyte McuPhase { get; set; }
 
     public Sagas McuSaga { get; set; }
+
+    public string Blob { get; set; }
 }
 

@@ -42,8 +42,9 @@ public class NewsService : INewsService
         await _repository.UpdateAsync(news);
     }
 
-    public async Task DeleteNews(News news)
+    public async Task DeleteNews(int id)
     {
+        var news = await _repository.Exists(id);
         await _repository.RemoveAsync(news);
     }
 

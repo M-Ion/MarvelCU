@@ -70,6 +70,7 @@ builder.Services.AddScoped<ITokenManager, TokenManager>();
 builder.Services.AddScoped<IPaymentManager, PaymentManager>();
 
 builder.Services.AddScoped<ICloudStorageManager, CloudStorageManager>();
+builder.Services.AddScoped<ICloudStorageService, CloudStorageService>();
 
 builder.Services.AddScoped(typeof(EntityIdValidationFilter<>));
 builder.Services.AddScoped(typeof(EntityIdValidationFilter<,>));
@@ -135,3 +136,5 @@ app.UseDbTransaction();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }

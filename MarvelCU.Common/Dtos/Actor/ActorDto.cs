@@ -13,6 +13,8 @@ public class ActorDto
 
     public string LastName { get; set; }
 
+    public string Blob { get; set; }
+
     public IList<GetMovieDto> Movies { get; set; }
 
     public IList<GetHeroDto> Heroes { get; set; }

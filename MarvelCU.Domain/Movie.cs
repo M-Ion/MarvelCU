@@ -18,9 +18,6 @@ public class Movie : BaseEntity
     [Column(TypeName = "date")]
     public DateTime Premiere { get; set; }
 
-    [Column(TypeName = "image")]
-    public byte[] Image { get; set; }
-
     public virtual ICollection<Actor> Actors { get; set; }
 
     [Range(1, 5)]

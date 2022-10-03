@@ -29,4 +29,8 @@
 		<ProjectReference Include="..\MarvelCU.Dal\MarvelCU.Dal.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<InternalsVisibleTo Include="..\MarvelCU.Bll\MarvelCU.Tests" />
+	</ItemGroup>
+
 </Project>

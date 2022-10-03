@@ -13,9 +13,13 @@ namespace MarvelCU.API.Controllers;
 public class ActorsController : ControllerBase
 {
     private readonly IActorService _actorService;
-    public ActorsController(IActorService actorService)
+    private readonly ICloudStorageService _cloudStorageService;
+
+    public ActorsController(IActorService actorService, ICloudStorageService cloudStorageService)
     {
         _actorService = actorService;
+        _cloudStorageService = cloudStorageService;
+
     }
 
     [HttpGet]
@@ -33,6 +37,13 @@ public class ActorsController : ControllerBase
         return Ok(actor);
     }
 
+    [HttpPost]
+    public async Task<ActionResult> CreateActor([FromBody] CreateActorDto createActorDto)
+    {
+        await _actorService.CreateActor(createActorDto);
+        return Ok();
+    }
+
     // id - Actor Id
     // entityId - Movie Id
 
@@ -45,7 +56,7 @@ public class ActorsController : ControllerBase
         var movie = HttpContext.Items["SecondEntity"] as Movie;
 
         await _actorService.SupplyCollection(actor.Movies, movie);
-        return Ok();
+        return NoContent();
     }
 
     // id - Actor Id

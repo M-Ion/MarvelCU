@@ -20,6 +20,8 @@ public class MovieDto : BaseMovieDto
 
     public Sagas McuSaga { get; set; }
 
+    public string Blob { get; set; }
+
     public List<GetActorDto> Actors { get; set; }
 
     public List<GetHeroDto> Heroes { get; set; }
