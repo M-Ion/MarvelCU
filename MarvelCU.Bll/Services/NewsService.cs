@@ -17,21 +17,15 @@ public class NewsService : INewsService
         _mapper = mapper;
     }
 
-    public async Task<News> GetNews(int id)
-    {
-        return await _repository.Exists(id);
-    }
-
     public async Task<List<News>> GetAllNews()
     {
         return await _repository.GetAllAsync();
     }
 
-    public async Task<News> CreateNews(CreateNewsDto createNewsDto)
+    public async Task CreateNews(CreateNewsDto createNewsDto)
     {
         var news = _mapper.Map<News>(createNewsDto);
-
-        return await _repository.AddAsync(news); ;
+        await _repository.AddAsync(news); ;
     }
 
     public async Task UpdateNews(int id, UpdateNewsDto updateNewsDto)
@@ -46,11 +40,6 @@ public class NewsService : INewsService
     {
         var news = await _repository.Exists(id);
         await _repository.RemoveAsync(news);
-    }
-
-    public async Task<News> Exists(int id)
-    {
-       return await _repository.Exists(id);
     }
 }
 

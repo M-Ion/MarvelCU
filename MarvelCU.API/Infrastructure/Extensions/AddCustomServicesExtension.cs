@@ -1,5 +1,4 @@
-﻿using MarvelCU.API.Infrastructure.Filters;
-using MarvelCU.Bll.Interfaces;
+﻿using MarvelCU.Bll.Interfaces;
 using MarvelCU.Bll.Services;
 using MarvelCU.Dal.Interfaces;
 using MarvelCU.Dal.Repositories;
@@ -10,6 +9,8 @@ public static class AddCustomServicesExtension
 {
     public static IServiceCollection AddCustomServices(this IServiceCollection services)
     {
+        services.AddScoped<ICurrentUser, HttpContextCurrentUser>();
+
         services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 
         services.AddScoped<IActorRepository, ActorRepository>();
@@ -36,11 +37,6 @@ public static class AddCustomServicesExtension
 
         services.AddScoped<ICloudStorageManager, CloudStorageManager>();
         services.AddScoped<ICloudStorageService, CloudStorageService>();
-
-        services.AddScoped(typeof(EntityIdValidationFilter<>));
-        services.AddScoped(typeof(EntityIdValidationFilter<,>));
-        services.AddScoped<CurrentUserValidationFilter>();
-        services.AddScoped<UserReviewValidationFiler>();
 
         return services;
     }

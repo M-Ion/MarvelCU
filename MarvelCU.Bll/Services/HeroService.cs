@@ -10,7 +10,6 @@ public class HeroService : IHeroService
 {
     private readonly IHeroRepository _heroRepository;
     private readonly ICloudStorageManager _cloudStorageManager;
-
     private readonly IMapper _mapper;
 
     private readonly string _blobContainer = "hero-images";
@@ -30,15 +29,15 @@ public class HeroService : IHeroService
 
     public async Task<HeroDto> GetHeroDetails(int id)
     {
+        await _heroRepository.Exists(id);
+
         var hero = await _heroRepository.GetEntityDetails(
             id,
             hero => hero.Movies,
             hero => hero.Actors
             );
 
-        var heroDto = _mapper.Map<HeroDto>(hero);
-
-        return heroDto;
+        return _mapper.Map<HeroDto>(hero);
     }
 
     public async Task CreateHero(CreateHeroDto createHeroDto)
@@ -46,6 +45,7 @@ public class HeroService : IHeroService
         var hero = _mapper.Map<Hero>(createHeroDto);
         var entity = await _heroRepository.AddAsync(hero);
 
+        // Upload hero's image if presented
         await _cloudStorageManager.UploadBlob(entity.Id.ToString(), _blobContainer, createHeroDto.BlobFilePath);
     }
 }

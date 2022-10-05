@@ -1,7 +1,7 @@
-﻿using MarvelCU.API.Infrastructure.Filters;
-using MarvelCU.Bll.Interfaces;
+﻿using MarvelCU.Bll.Interfaces;
 using MarvelCU.Common.Dtos.Actor;
 using MarvelCU.Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MarvelCU.API.Controllers;
@@ -20,13 +20,11 @@ public class ActorsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<GetActorDto>>> GetActors()
     {
-
         var actors = await _actorService.GetAllActors();
         return Ok(actors);
     }
 
     [HttpGet("{id}")]
-    [ServiceFilter(typeof(EntityIdValidationFilter<Actor>))]
     public async Task<ActionResult<ActorDto>> GetActor(int id)
     {
         var actor = await _actorService.GetActorDetails(id);
@@ -40,33 +38,20 @@ public class ActorsController : ControllerBase
         return Ok();
     }
 
-    // id - Actor Id
-    // entityId - Movie Id
-
-    [HttpPut("Movies/{id}/{entityId}")]
-    //[Authorize(Roles = "Administrator")]
-    [ServiceFilter(typeof(EntityIdValidationFilter<Actor, Movie>))]
-    public async Task<ActionResult> UpdateActorMovies(int id, int entityId)
+    [HttpPut("Movies/{id}/{movieId}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult> UpdateActorMovies(int id, int movieId)
     {
-        var actor = HttpContext.Items["Entity"] as Actor;
-        var movie = HttpContext.Items["SecondEntity"] as Movie;
-
-        await _actorService.SupplyCollection(actor.Movies, movie);
+        await _actorService.SupplyCollection(id, movieId);
         return NoContent();
     }
 
-    // id - Actor Id
-    // entityId - Hero Id
 
-    [HttpPut("Heroes/{id}/{entityId}")]
-    //[Authorize(Roles = "Administrator")]
-    [ServiceFilter(typeof(EntityIdValidationFilter<Actor, Hero>))]
-    public async Task<ActionResult> UpdateActorHeroes(int id, int entityId)
+    [HttpPut("Heroes/{id}/{heroId}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult> UpdateActorHeroes(int id, int heroId)
     {
-        var actor = HttpContext.Items["Entity"] as Actor;
-        var hero = HttpContext.Items["SecondEntity"] as Hero;
-
-        await _actorService.SupplyCollection(actor.Heroes, hero);
+        await _actorService.SupplyCollection(id, heroId);
         return Ok();
     }
 }

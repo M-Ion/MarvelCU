@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using MarvelCU.API.Infrastructure.Filters;
 using MarvelCU.Bll.Interfaces;
 using MarvelCU.Common.Dtos.News;
 using MarvelCU.Domain;
@@ -21,21 +20,21 @@ public class NewsController : ControllerBase
     }
 
     [HttpGet]
-    //[Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<List<News>>> GetNews()
     {
         return Ok(await _newsService.GetAllNews());
     }
 
     [HttpPost]
-    //[Authorize(Roles = "Administrator")]
-    public async Task<ActionResult<News>> CreateNews([FromBody] CreateNewsDto createNewsDto)
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult> CreateNews([FromBody] CreateNewsDto createNewsDto)
     {
-        return Ok(await _newsService.CreateNews(createNewsDto));
+        await _newsService.CreateNews(createNewsDto);
+        return NoContent();
     }
 
     [HttpPut("{id}")]
-    [ServiceFilter(typeof(EntityIdValidationFilter<News>))]
     public async Task<ActionResult> UpdateNews(int id, [FromBody] UpdateNewsDto updateNewsDto)
     {
         await _newsService.UpdateNews(id, updateNewsDto);
@@ -43,7 +42,6 @@ public class NewsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [ServiceFilter(typeof(EntityIdValidationFilter<News>))]
     public async Task<ActionResult> RemoveNews(int id)
     {
         await _newsService.DeleteNews(id);

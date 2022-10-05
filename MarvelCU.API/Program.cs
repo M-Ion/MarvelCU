@@ -43,6 +43,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddCustomServices();
 
+builder.Services.AddHttpContextAccessor();
+
 TokenValidationParameters tokenValidationParameters = new()
 {
     ValidateIssuerSigningKey = true,
@@ -65,7 +67,6 @@ builder.Services.AddAuthentication(options =>
     options.TokenValidationParameters = tokenValidationParameters;
 });
 
-// Azure Blob Storage
 builder.Services.AddSingleton(x => new BlobServiceClient(builder.Configuration.GetConnectionString("AzureBlobStorageConnectionString")));
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
@@ -102,5 +103,3 @@ app.UseDbTransaction();
 app.MapControllers();
 
 app.Run();
-
-public partial class Program { }

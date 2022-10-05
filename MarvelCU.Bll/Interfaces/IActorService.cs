@@ -11,8 +11,6 @@ public interface IActorService
 
     Task CreateActor(CreateActorDto createActorDto);
 
-    Task SupplyCollection<E>(ICollection<E> collection, E item) where E : BaseEntity;
-
-    Task<Actor> Exists(int id);
+    Task SupplyCollection(int id, int entityId);
 }
 

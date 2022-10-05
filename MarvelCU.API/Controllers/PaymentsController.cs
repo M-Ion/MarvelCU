@@ -1,5 +1,4 @@
-﻿using MarvelCU.API.Infrastructure.Filters;
-using MarvelCU.Bll.Interfaces;
+﻿using MarvelCU.Bll.Interfaces;
 using MarvelCU.Common.Dtos;
 using MarvelCU.Dal.Interfaces;
 using MarvelCU.Domain;

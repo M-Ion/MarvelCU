@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using MarvelCU.API.Infrastructure.Filters;
 using MarvelCU.API.Models.Movie;
 using MarvelCU.Bll.Interfaces;
 using MarvelCU.Common.Dtos.Movie;
@@ -40,7 +39,6 @@ public class MoviesController : ControllerBase
         
     [HttpGet]
     [Route("{id}")]
-    [ServiceFilter(typeof(EntityIdValidationFilter<Movie>))]
     public async Task<ActionResult<MovieDto>> GetMovie(int id)
     {
         var movie = await _movieService.GetMovieDetails(id);
@@ -48,7 +46,7 @@ public class MoviesController : ControllerBase
     }
 
     [HttpPost]
-    //[Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult> CreateMovie([FromBody] CreateMovieDto createMovieDto)
     {
         await _movieService.CreateMovie(createMovieDto);
