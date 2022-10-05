@@ -55,11 +55,11 @@ namespace MarvelCU.Tests
                     MiddleName = "Junior"
                 });
 
-            //_actorsController = new(actorServiceMock.Object);
+            _actorsController = new ActorsController(actorServiceMock.Object);
         }
 
         [TestMethod]
-        public async Task ShouldReturnActorsList()
+        public async Task GetActors_ShouldReturnActorsList()
         {
             var result = (await _actorsController.GetActors()).Result as ObjectResult;
             var actors = result.Value as List<GetActorDto>;
@@ -69,7 +69,7 @@ namespace MarvelCU.Tests
         }
 
         [TestMethod]
-        public async Task ShouldReturnOneActor()
+        public async Task GetActor_ShouldReturnOneActor()
         {
             var result = (await _actorsController.GetActor(1)).Result as ObjectResult;
             var actor = result.Value as ActorDto;
@@ -108,7 +108,7 @@ namespace MarvelCU.Tests
         [DataRow(1)]
         public async Task ReturnOkAndActorOnGetActor(int id)
         {
-            var response = await _httpClient.GetFromJsonAsync<ActorDto>($"/api/Actors/{1}");
+            var response = await _httpClient.GetFromJsonAsync<ActorDto>($"/api/Actors/{id}");
             Assert.AreEqual(id, response.Id);
         }
     }

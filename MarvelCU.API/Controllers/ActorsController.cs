@@ -1,10 +1,8 @@
-﻿using AutoMapper;
-using MarvelCU.API.Infrastructure.Filters;
+﻿using MarvelCU.API.Infrastructure.Filters;
 using MarvelCU.Bll.Interfaces;
 using MarvelCU.Common.Dtos.Actor;
 using MarvelCU.Domain;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq.Expressions;
 
 namespace MarvelCU.API.Controllers;
 
@@ -13,18 +11,16 @@ namespace MarvelCU.API.Controllers;
 public class ActorsController : ControllerBase
 {
     private readonly IActorService _actorService;
-    private readonly ICloudStorageService _cloudStorageService;
 
-    public ActorsController(IActorService actorService, ICloudStorageService cloudStorageService)
+    public ActorsController(IActorService actorService)
     {
         _actorService = actorService;
-        _cloudStorageService = cloudStorageService;
-
     }
 
     [HttpGet]
     public async Task<ActionResult<List<GetActorDto>>> GetActors()
     {
+
         var actors = await _actorService.GetAllActors();
         return Ok(actors);
     }

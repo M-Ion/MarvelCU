@@ -6,10 +6,10 @@ public class RolesSeed
 {
     public static async Task Seed(MarvelDbContext context)
     {
-        if (!context.Roles.Any())
+        if (context.Roles.Count() <= 1)
         {
             context.Roles.AddRange(
-                new IdentityRole { Name = "User", NormalizedName = "USER" }
+                new IdentityRole { Name = "Admin", NormalizedName = "ADMIN" }
                 );
 
             await context.SaveChangesAsync();

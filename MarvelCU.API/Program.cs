@@ -1,12 +1,7 @@
 using Azure.Storage.Blobs;
 using MarvelCU.API.Infrastructure.Extensions;
-using MarvelCU.API.Infrastructure.Filters;
-using MarvelCU.Bll.Interfaces;
-using MarvelCU.Bll.Services;
 using MarvelCU.Common.Configurations;
 using MarvelCU.Dal;
-using MarvelCU.Dal.Interfaces;
-using MarvelCU.Dal.Repositories;
 using MarvelCU.Domain;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -21,6 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.ConfigureLogging(logging =>
 {
     logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
+    logging.AddDebug();
     logging.AddEventSourceLogger();
 });
 
@@ -45,37 +41,7 @@ builder.Services.AddAutoMapper(typeof(MapperConfig));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
-
-builder.Services.AddScoped<IActorRepository, ActorRepository>();
-builder.Services.AddScoped<IActorService, ActorService>();
-
-builder.Services.AddScoped<IMovieRepository, MovieRepository>();
-builder.Services.AddScoped<IMovieService, MovieService>();
-
-builder.Services.AddScoped<IHeroRepository, HeroRepository>();
-builder.Services.AddScoped<IHeroService, HeroService>();
-
-builder.Services.AddScoped<INewsRepository, NewsRepository>();
-builder.Services.AddScoped<INewsService, NewsService>();
-
-builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
-builder.Services.AddScoped<IReviewService, MarvelCU.Bll.Services.ReviewService>();
-
-builder.Services.AddScoped<IAuthManager, AuthManager>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-
-builder.Services.AddScoped<ITokenManager, TokenManager>();
-
-builder.Services.AddScoped<IPaymentManager, PaymentManager>();
-
-builder.Services.AddScoped<ICloudStorageManager, CloudStorageManager>();
-builder.Services.AddScoped<ICloudStorageService, CloudStorageService>();
-
-builder.Services.AddScoped(typeof(EntityIdValidationFilter<>));
-builder.Services.AddScoped(typeof(EntityIdValidationFilter<,>));
-builder.Services.AddScoped<CurrentUserValidationFilter>();
-builder.Services.AddScoped<UserReviewValidationFiler>();
+builder.Services.AddCustomServices();
 
 TokenValidationParameters tokenValidationParameters = new()
 {
