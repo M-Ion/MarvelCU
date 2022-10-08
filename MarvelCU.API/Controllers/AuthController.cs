@@ -1,5 +1,7 @@
-﻿using MarvelCU.Bll.Interfaces;
+﻿using MarvelCU.API.Infrastructure.Extensions;
+using MarvelCU.Bll.Interfaces;
 using MarvelCU.Common.Dtos.User;
+using MarvelCU.Common.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,10 +12,18 @@ namespace MarvelCU.API.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
+    private readonly IConfiguration _configuration;
 
-    public AuthController(IAuthService authService)
+    public AuthController(IAuthService authService, IConfiguration configuration)
     {
         _authService = authService;
+        _configuration = configuration;
+    }
+
+    [HttpGet]
+    public ActionResult<TokenRequestDto> GetAuthCookies()
+    {
+        return Ok(_authService.GetAuthCookies());
     }
 
     [HttpPost]
@@ -38,7 +48,9 @@ public class AuthController : ControllerBase
 
         if (authResponse is null) return Unauthorized();
 
-        return Ok(authResponse);
+        return Ok(authResponse)
+            .SetCookie(Response, "jwt", authResponse.Token, DateTime.UtcNow.AddMinutes(Convert.ToInt32(_configuration["JwtConfig:DurationInMinutes"])))
+            .SetCookie(Response, "refreshToken", authResponse.RefreshToken, DateTime.UtcNow.AddMonths(Convert.ToInt32(_configuration["JwtConfig:RefreshTokenDurationInMonths"])));
     }
 
     [HttpPost]

@@ -11,16 +11,19 @@ public class AuthService : IAuthService
 {
     private readonly IAuthManager _authManager;
     private readonly ITokenManager _tokenManager;
+    private readonly ICurrentCookies _currentCookies;
     private readonly IMapper _mapper;
 
     public AuthService(
         IAuthManager authManager, 
         ITokenManager tokenManager,
+        ICurrentCookies currentCookies,
         IMapper mapper
         )
     {
         _authManager = authManager;
         _tokenManager = tokenManager;
+        _currentCookies = currentCookies;
         _mapper = mapper;
     }
 
@@ -49,5 +52,15 @@ public class AuthService : IAuthService
     {
         return await _tokenManager.RefreshToken(tokenRequestDto);
     }
+
+    public TokenRequestDto GetAuthCookies()
+    {
+        return new TokenRequestDto()
+        {
+            Token = _currentCookies.Jwt,
+            RefreshToken = _currentCookies.RefreshToken,
+        };
+    }
+
 }
 

@@ -11,6 +11,8 @@ public static class AddCustomServicesExtension
     {
         services.AddScoped<ICurrentUser, HttpContextCurrentUser>();
 
+        services.AddScoped<ICurrentCookies, CurrentCookies>();
+
         services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 
         services.AddScoped<IActorRepository, ActorRepository>();
