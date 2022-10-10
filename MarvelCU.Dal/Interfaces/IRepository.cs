@@ -1,4 +1,5 @@
-﻿using MarvelCU.Domain;
+﻿using MarvelCU.Common.Models.Processing;
+using MarvelCU.Domain;
 using System.Linq.Expressions;
 
 namespace MarvelCU.Dal.Interfaces;
@@ -8,6 +9,8 @@ public interface IRepository<T> where T : BaseEntity
     Task<T> GetAsync(int id);
 
     Task<List<T>> GetAllAsync();
+
+    Task<ProcessedResult<T>> GetAllAsyncProcessed(ProcessedRequest processedRequest);
 
     Task<T> AddAsync(T entity);
 

@@ -2,7 +2,9 @@
 using MarvelCU.API.Models.Movie;
 using MarvelCU.Bll.Interfaces;
 using MarvelCU.Common.Dtos.Movie;
+using MarvelCU.Common.Extensions;
 using MarvelCU.Common.Models;
+using MarvelCU.Common.Models.Processing;
 using MarvelCU.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -24,17 +26,13 @@ public class MoviesController : ControllerBase
 
     [HttpGet]
     [EnableQuery]
-    public async Task<ActionResult<IList<GetMovieDto>>> GetAllMovie()
+    public async Task<ActionResult<IList<GetMovieDto>>> GetAllMovie(
+        [FromQuery] PagingRequest paging, 
+        [FromQuery] SortingRequest sorting,
+        [FromBody] IList<Filter> filters
+        )
     {
-        return Ok(await _movieService.GetMovies());
-    }
-
-    [HttpGet]
-    [Route("Page")]
-    [EnableQuery]
-    public async Task<ActionResult<IList<GetMovieDto>>> GetPageMovie([FromQuery] PagedRequest pagedRequest)
-    { 
-        return Ok(await _movieService.GetPagedMovies(pagedRequest));
+        return Ok(await _movieService.GetMovies(paging, sorting, filters));
     }
         
     [HttpGet]

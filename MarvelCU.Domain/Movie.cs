@@ -27,7 +27,7 @@ public class Movie : BaseEntity
     public sbyte McuPhase { get; set; }
 
     [Required]
-    public Sagas McuSaga { get; set; }
+    public sbyte McuSaga { get; set; }
 
     public virtual ICollection<Review> Reviews { get; set; }
 

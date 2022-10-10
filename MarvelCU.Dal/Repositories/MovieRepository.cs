@@ -15,15 +15,5 @@ public class MovieRepository : GenericRepository<Movie>, IMovieRepository
     {
         _context = context;
     }
-
-    public async Task<IList<Movie>> GetOrderedMovies()
-    {
-        return await _context.Movies.OrderBy(m => m.Premiere).ToListAsync();
-    }
-
-    public async Task<IList<Movie>> GetPagedMovies(PagedRequest pagedRequest)
-    {
-        return await _context.Movies.Paginate(pagedRequest).ToListAsync();
-    }
 }
 

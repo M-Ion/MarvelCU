@@ -1,4 +1,7 @@
 ﻿using MarvelCU.Common.Exceptions;
+using MarvelCU.Common.Models;
+using MarvelCU.Common.Models.Processing;
+using MarvelCU.Dal.Extensions;
 using MarvelCU.Dal.Interfaces;
 using MarvelCU.Domain;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +38,11 @@ public class GenericRepository<T> : IRepository<T> where T : BaseEntity
         return await _context.Set<T>().ToListAsync();
     }
 
+    public async Task<ProcessedResult<T>> GetAllAsyncProcessed(ProcessedRequest processedRequest)
+    {
+        return await _context.Set<T>().Query(processedRequest);
+    }
+
     public async Task<T> GetAsync(int id)
     {
         return await _context.Set<T>().FindAsync(id);
@@ -65,6 +73,11 @@ public class GenericRepository<T> : IRepository<T> where T : BaseEntity
         await _context.SaveChangesAsync();
     }
 
+    public async Task<ProcessedResult<T>> GetPagedResult(ProcessedRequest pagedRequest)
+    {
+        throw new NotImplementedException();
+    }
+
     private IQueryable<T> IncludeProperties(params Expression<Func<T, object>>[] properties)
     {
         IQueryable<T> query = _context.Set<T>();
@@ -73,5 +86,6 @@ public class GenericRepository<T> : IRepository<T> where T : BaseEntity
       
         return query;
     }
+
 }
 

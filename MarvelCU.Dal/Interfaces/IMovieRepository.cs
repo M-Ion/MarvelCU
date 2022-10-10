@@ -6,8 +6,5 @@ namespace MarvelCU.Dal.Interfaces;
 
 public interface IMovieRepository : IRepository<Movie>
 {
-    Task<IList<Movie>> GetOrderedMovies();
-
-    Task<IList<Movie>> GetPagedMovies(PagedRequest pagedRequest);
 }
 
