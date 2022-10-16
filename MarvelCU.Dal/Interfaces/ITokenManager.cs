@@ -12,5 +12,7 @@ public interface ITokenManager
     Task RevokeRefreshToken(RefreshToken refreshToken);
 
     Task<RefreshToken> GetRefreshTokenByUser(User user);
+
+    Task<RefreshToken> GetRefreshToken(string value);
 }
 

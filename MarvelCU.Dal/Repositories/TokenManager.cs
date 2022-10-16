@@ -188,5 +188,10 @@ public class TokenManager : ITokenManager
     {
         return await _context.RefreshTokens.FirstOrDefaultAsync(t => t.UserId == user.Id);
     }
+
+    public async Task<RefreshToken> GetRefreshToken(string value)
+    {
+        return await _context.RefreshTokens.FirstOrDefaultAsync(t => t.Token == value);
+    }
 }
 

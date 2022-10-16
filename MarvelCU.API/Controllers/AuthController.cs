@@ -54,11 +54,24 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost]
+    [Route("Logout")]
+    public async Task<ActionResult> Logout()
+    {
+        await _authService.Logout();
+
+        return Ok()
+            .ClearCookie(Response, "jwt")
+            .ClearCookie(Response, "refreshToken");
+    }
+
+    [HttpPost]
     [Route("Refresh")]
     public async Task<ActionResult<AuthResponseDto>> RefreshToken([FromBody] TokenRequestDto tokenRequestDto)
     {
         var authResponse = await _authService.RefreshToken(tokenRequestDto);
-        return Ok(authResponse);
+        return Ok(authResponse)
+            .SetCookie(Response, "jwt", authResponse.Token, DateTime.UtcNow.AddMinutes(Convert.ToInt32(_configuration["JwtConfig:DurationInMinutes"])))
+            .SetCookie(Response, "refreshToken", authResponse.RefreshToken, DateTime.UtcNow.AddMonths(Convert.ToInt32(_configuration["JwtConfig:RefreshTokenDurationInMonths"]))); ;
     }
 }
 

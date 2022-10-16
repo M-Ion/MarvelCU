@@ -21,5 +21,15 @@ public static class ActionResultAuthCookiesExtension
 
         return actionResult;
     }
+
+    public static ActionResult ClearCookie(
+        this ActionResult actionResult,
+        HttpResponse httpResponse, 
+        string cookie)
+    { 
+        httpResponse.Cookies.Delete(cookie);
+
+        return actionResult;
+    }
 }
 
