@@ -1,11 +1,16 @@
-﻿namespace MarvelCU.Bll.Interfaces;
+﻿using Azure;
+using MarvelCU.Common.Dtos.Blob;
+
+namespace MarvelCU.Bll.Interfaces;
 
 public interface ICloudStorageService
 {
-    public Task<string> GetBlob(string blobName, string containerName);
+    public Task<string> GetBlob(GetBlobRequestDto requestBlobDto);
 
-    public Task<bool> UploadBlob(string blobName, string containerName, string filePath);
+    public Task<bool> UploadBlob(UploadBlobDto uploadBlobDto);
 
-    public Task<List<string>> GetAllBlobs(string containerName);
+    public Task<List<string>> GetAllBlobs(BaseBlobDto blobDto);
+
+    Task<Response> DownloadBlob(UploadBlobDto uploadBlobDto);
 }
 

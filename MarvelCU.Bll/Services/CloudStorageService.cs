@@ -1,4 +1,6 @@
-﻿using MarvelCU.Bll.Interfaces;
+﻿using Azure;
+using MarvelCU.Bll.Interfaces;
+using MarvelCU.Common.Dtos.Blob;
 using MarvelCU.Dal.Interfaces;
 
 namespace MarvelCU.Bll.Services;
@@ -12,23 +14,30 @@ public class CloudStorageService : ICloudStorageService
         _cloudStorageManager = cloudStorageManager;
     }
 
-    public async Task<List<string>> GetAllBlobs(string containerName)
+    public async Task<List<string>> GetAllBlobs(BaseBlobDto blobDto)
     {
-        return await _cloudStorageManager.AllBlobs(containerName);
+        return await _cloudStorageManager.AllBlobs(blobDto.Container);
     }
 
-    public async Task<string> GetBlob(string blobName, string containerName)
+    public async Task<string> GetBlob(GetBlobRequestDto requestBlobDto)
     {
-        return await _cloudStorageManager.GetBlob(blobName, containerName);
+        return await _cloudStorageManager.GetBlob(requestBlobDto.Blob, requestBlobDto.Container);
     }
 
-    public async Task<bool> UploadBlob(string blobName, string containerName, string filePath)
+    public async Task<bool> UploadBlob(UploadBlobDto uploadBlobDto)
     {
-        if (!VerifyFilePath(filePath)) return false;
+        if (!VerifyFilePath(uploadBlobDto.Path)) return false;
 
-        FileInfo file = new FileInfo(filePath);
+        FileInfo file = new FileInfo(uploadBlobDto.Path);
 
-        return await _cloudStorageManager.UploadBlob($"{blobName}{file.Extension}", containerName, filePath);
+        return await _cloudStorageManager.UploadBlob($"{uploadBlobDto.Blob}{file.Extension}", uploadBlobDto.Container, uploadBlobDto.Path);
+    }
+
+    public async Task<Response> DownloadBlob(UploadBlobDto uploadBlobDto)
+    {
+        if (!Directory.Exists(uploadBlobDto.Path)) return null;
+
+        return await _cloudStorageManager.DownloadBlob(uploadBlobDto.Blob, uploadBlobDto.Container, Path.Combine(uploadBlobDto.Path, uploadBlobDto.Blob));
     }
 
     private bool VerifyFilePath(string path)

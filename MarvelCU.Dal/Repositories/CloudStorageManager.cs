@@ -1,4 +1,5 @@
-﻿using Azure.Storage.Blobs;
+﻿using Azure;
+using Azure.Storage.Blobs;
 using MarvelCU.Dal.Interfaces;
 using Microsoft.AspNetCore.Http;
 
@@ -53,6 +54,16 @@ public class CloudStorageManager : ICloudStorageManager
         }
 
         return false;
+    }
+
+    public async Task<Response> DownloadBlob(string blobName, string containerName, string filePath)
+    {
+        var container = _blobServiceClient.GetBlobContainerClient(containerName);
+
+        var blob = container.GetBlobClient(blobName);
+        bool exists = await blob.ExistsAsync();
+
+        return exists ? await blob.DownloadToAsync(filePath) : null;
     }
 }
 
