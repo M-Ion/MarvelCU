@@ -20,7 +20,7 @@ public class NewsController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,User")]
     public async Task<ActionResult<List<News>>> GetNews()
     {
         return Ok(await _newsService.GetAllNews());

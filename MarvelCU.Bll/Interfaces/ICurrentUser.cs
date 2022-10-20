@@ -8,6 +8,8 @@ public interface ICurrentUser
 
     public string Email { get; }
 
+    public string Jwt { get; }
+
     public IList<string> Roles { get; }
 }
 

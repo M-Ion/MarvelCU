@@ -2,6 +2,7 @@
 using MarvelCU.Bll.Interfaces;
 using MarvelCU.Common.Dtos.User;
 using MarvelCU.Common.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,9 +22,9 @@ public class AuthController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<TokenRequestDto> GetAuthCookies()
+    public async Task<ActionResult<TokenRequestDto>> GetAuthCookies()
     {
-        return Ok(_authService.GetAuthCookies());
+        return Ok(await Task.Run(() => _authService.GetAuthCookies()));
     }
 
     [HttpPost]
@@ -46,7 +47,7 @@ public class AuthController : ControllerBase
     {
         AuthResponseDto authResponse = await _authService.Login(loginUserDto);
 
-        if (authResponse is null) return Unauthorized();
+        if (authResponse is null) return BadRequest();
 
         return Ok(authResponse)
             .SetCookie(Response, "jwt", authResponse.Token, DateTime.UtcNow.AddMinutes(Convert.ToInt32(_configuration["JwtConfig:DurationInMinutes"])))
@@ -64,11 +65,11 @@ public class AuthController : ControllerBase
             .ClearCookie(Response, "refreshToken");
     }
 
-    [HttpPost]
+    [HttpGet]
     [Route("Refresh")]
-    public async Task<ActionResult<AuthResponseDto>> RefreshToken([FromBody] TokenRequestDto tokenRequestDto)
+    public async Task<ActionResult<AuthResponseDto>> RefreshToken()
     {
-        var authResponse = await _authService.RefreshToken(tokenRequestDto);
+        var authResponse = await _authService.RefreshToken();
         return Ok(authResponse)
             .SetCookie(Response, "jwt", authResponse.Token, DateTime.UtcNow.AddMinutes(Convert.ToInt32(_configuration["JwtConfig:DurationInMinutes"])))
             .SetCookie(Response, "refreshToken", authResponse.RefreshToken, DateTime.UtcNow.AddMonths(Convert.ToInt32(_configuration["JwtConfig:RefreshTokenDurationInMonths"]))); ;

@@ -43,5 +43,14 @@ public class HttpContextCurrentUser : ICurrentUser
                 .ToList();
         }
     }
+
+    public string Jwt
+    {
+        get
+        {
+            var httpContext = _httpContextAccessor.HttpContext;
+            return ((string)httpContext.Request.Headers.Authorization).Replace("Bearer ", "");
+        }
+    }
 }
 

@@ -14,7 +14,10 @@ public static class ActionResultAuthCookiesExtension
         CookieOptions options = new()
         {
             Expires = cookieExpires,
-            HttpOnly = true
+            HttpOnly = true,
+            IsEssential = true,
+            Secure = true,
+            SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None,
         };
 
         httpResponse.Cookies.Append(cookieName, cookieValue, options);
@@ -27,7 +30,13 @@ public static class ActionResultAuthCookiesExtension
         HttpResponse httpResponse, 
         string cookie)
     { 
-        httpResponse.Cookies.Delete(cookie);
+        httpResponse.Cookies.Delete(cookie, new CookieOptions()
+        {
+            HttpOnly = true,
+            IsEssential = true,
+            Secure = true,
+            SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None,
+        });
 
         return actionResult;
     }

@@ -16,7 +16,7 @@ public class AuthService : IAuthService
     private readonly IMapper _mapper;
 
     public AuthService(
-        IAuthManager authManager, 
+        IAuthManager authManager,
         ITokenManager tokenManager,
         ICurrentCookies currentCookies,
         ICurrentUser currentUser,
@@ -62,8 +62,9 @@ public class AuthService : IAuthService
         await _tokenManager.RevokeRefreshToken(refreshToken);
     }
 
-    public async Task<AuthResponseDto> RefreshToken(TokenRequestDto tokenRequestDto)
+    public async Task<AuthResponseDto> RefreshToken()
     {
+        TokenRequestDto tokenRequestDto = new() { Token = _currentUser.Jwt, RefreshToken = _currentCookies.RefreshToken };
         return await _tokenManager.RefreshToken(tokenRequestDto);
     }
 

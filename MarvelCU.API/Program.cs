@@ -43,10 +43,18 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        b => b.AllowAnyHeader()
-            .AllowAnyOrigin()
-            .AllowAnyMethod());
+    options.AddPolicy("AllowLocalhost",
+        b => b
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials()
+        .SetIsOriginAllowed(origin =>
+        {
+            if (origin.ToLower().StartsWith("http://localhost")) return true;
+             return false;
+        })
+    );
+
 });
 
 builder.Services.AddCustomServices();
@@ -103,7 +111,7 @@ app.UseCustomExceptionHandler();
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowAll");
+app.UseCors("AllowLocalhost");
 
 app.UseAuthentication();
 app.UseAuthorization();
