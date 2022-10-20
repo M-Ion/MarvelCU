@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MarvelCU.Bll.Interfaces;
+using MarvelCU.Common.Constants;
 using MarvelCU.Common.Dtos.Hero;
 using MarvelCU.Dal.Interfaces;
 using MarvelCU.Domain;
@@ -11,8 +12,6 @@ public class HeroService : IHeroService
     private readonly IHeroRepository _heroRepository;
     private readonly ICloudStorageManager _cloudStorageManager;
     private readonly IMapper _mapper;
-
-    private readonly string _blobContainer = "hero-images";
 
     public HeroService(IHeroRepository heroRepository, ICloudStorageManager cloudStorageManager, IMapper mapper)
     {
@@ -46,7 +45,7 @@ public class HeroService : IHeroService
         var entity = await _heroRepository.AddAsync(hero);
 
         // Upload hero's image if presented
-        await _cloudStorageManager.UploadBlob(entity.Id.ToString(), _blobContainer, createHeroDto.BlobFilePath);
+        await _cloudStorageManager.UploadBlob(entity.Id.ToString(), AzureBlobContainers.HerosImages, createHeroDto.BlobFilePath);
     }
 }
 

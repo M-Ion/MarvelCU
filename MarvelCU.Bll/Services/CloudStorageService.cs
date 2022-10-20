@@ -14,14 +14,16 @@ public class CloudStorageService : ICloudStorageService
         _cloudStorageManager = cloudStorageManager;
     }
 
-    public async Task<List<string>> GetAllBlobs(BaseBlobDto blobDto)
+    public async Task<List<GetBlobDto>> GetAllBlobs(BaseBlobDto blobDto)
     {
-        return await _cloudStorageManager.AllBlobs(blobDto.Container);
+        var blobs = await _cloudStorageManager.AllBlobs(blobDto.Container);
+        return blobs.Select(b => new GetBlobDto() { Blob = b }).ToList();
     }
 
-    public async Task<string> GetBlob(GetBlobRequestDto requestBlobDto)
+    public async Task<GetBlobDto> GetBlob(GetBlobRequestDto requestBlobDto)
     {
-        return await _cloudStorageManager.GetBlob(requestBlobDto.Blob, requestBlobDto.Container);
+        string blob = await _cloudStorageManager.GetBlob(requestBlobDto.Blob, requestBlobDto.Container);
+        return new GetBlobDto() { Blob = blob };
     }
 
     public async Task<bool> UploadBlob(UploadBlobDto uploadBlobDto)

@@ -3,6 +3,7 @@ using MarvelCU.Dal.Interfaces;
 using AutoMapper;
 using MarvelCU.Common.Dtos.Actor;
 using MarvelCU.Domain;
+using MarvelCU.Common.Constants;
 
 namespace MarvelCU.Bll.Services;
 
@@ -12,8 +13,6 @@ public class ActorService : IActorService
     private readonly IMovieRepository _movieRepository;
     private readonly ICloudStorageManager _cloudStorageManager;
     private readonly IMapper _mapper;
-
-    private readonly string _blobContainer = "actor-images";
 
     public ActorService(
         IActorRepository repository,
@@ -53,7 +52,7 @@ public class ActorService : IActorService
         var entity = await _actorRepository.AddAsync(actor);
 
         // Upload actor's image if presented
-        await _cloudStorageManager.UploadBlob(entity.Id.ToString(), _blobContainer, createActorDto.BlobFilePath);
+        await _cloudStorageManager.UploadBlob(entity.Id.ToString(), AzureBlobContainers.ActorsImages, createActorDto.BlobFilePath);
     }
 
     public async Task SupplyCollection(int id, int entityId)

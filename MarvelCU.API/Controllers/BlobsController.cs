@@ -18,13 +18,13 @@ namespace MarvelCU.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IList<string>>> GetAllBlobs([FromBody] BaseBlobDto blobDto)
+        public async Task<ActionResult<IList<GetBlobDto>>> GetAllBlobs([FromBody] BaseBlobDto blobDto)
         {
             return Ok(await _cloudService.GetAllBlobs(blobDto));
         }
 
         [HttpGet("Blob")]
-        public async Task<ActionResult<string>> GetBlob([FromBody] GetBlobRequestDto requestBlobDto)
+        public async Task<ActionResult<GetBlobDto>> GetBlob([FromBody] GetBlobRequestDto requestBlobDto)
         {
             var blob = await _cloudService.GetBlob(requestBlobDto);
 
