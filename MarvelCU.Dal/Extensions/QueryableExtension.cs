@@ -22,7 +22,8 @@ public static class QueryableExtension
             PageIndex = processedRequest.Paging.PageIndex,
             PageSize = processedRequest.Paging.PageSize,
             Total = total,
-            Items = await query.ProjectTo<TDto>(mapper.ConfigurationProvider).ToListAsync()
+            Items = await query.ProjectTo<TDto>(mapper.ConfigurationProvider).ToListAsync(),
+            Next = AddNextPageRequest(processedRequest, total),
         };
 
         return result;
@@ -101,6 +102,30 @@ public static class QueryableExtension
             default:
                 return null;
         }
+    }
+
+    private static ProcessedRequest AddNextPageRequest(ProcessedRequest processedRequest, int total)
+    {
+        // Verify if paging was applied
+        if (isPagingApplied(processedRequest.Paging)) return null;
+
+        // Verify if there is enough left items
+        int? left = total - (processedRequest.Paging.PageIndex + 1) * processedRequest.Paging.PageSize;
+
+        if (left <= 0) return null;
+
+        return new ProcessedRequest()
+        {
+            Paging = new PagingRequest() { PageIndex = processedRequest.Paging.PageIndex + 1, PageSize = processedRequest.Paging.PageSize },
+            Sorting = processedRequest.Sorting,
+            Filters = processedRequest.Filters,
+        };
+    }
+
+    private static bool isPagingApplied(PagingRequest pagingRequest)
+    {
+        if (pagingRequest.PageIndex is null || pagingRequest.PageSize is null) return false;
+        return true;
     }
 }
 

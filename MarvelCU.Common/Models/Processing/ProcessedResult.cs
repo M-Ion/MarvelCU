@@ -9,5 +9,10 @@ public class ProcessedResult<T> where T : class
     public int Total { get; set; }
 
     public IList<T> Items { get; set; }
+
+    public ProcessedRequest Next { get; set; }
+
+    public ProcessedRequest Previous { get; set; }
+
 }
 
