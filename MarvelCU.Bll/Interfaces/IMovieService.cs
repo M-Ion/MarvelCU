@@ -12,7 +12,7 @@ public interface IMovieService
 
     Task<IList<GetMovieDto>> GetMovies();
 
-    Task<ProcessedResult<Movie>> GetMovies(PagingRequest pagingRequest, SortingRequest sortingRequest, IList<Filter> filters);
+    Task<ProcessedResult<GetMovieDto>> GetMovies(PagingRequest pagingRequest, SortingRequest sortingRequest, IList<Filter> filters);
 
     Task CreateMovie(CreateMovieDto createMovieDto);
 }

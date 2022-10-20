@@ -1,4 +1,5 @@
-﻿using MarvelCU.Common.Models.Processing;
+﻿using AutoMapper;
+using MarvelCU.Common.Models.Processing;
 using MarvelCU.Domain;
 using System.Linq.Expressions;
 
@@ -10,7 +11,7 @@ public interface IRepository<T> where T : BaseEntity
 
     Task<List<T>> GetAllAsync();
 
-    Task<ProcessedResult<T>> GetAllAsyncProcessed(ProcessedRequest processedRequest);
+    Task<ProcessedResult<TDto>> GetAllAsyncProcessed<TDto>(ProcessedRequest processedRequest, IMapper mapper) where TDto : class;
 
     Task<T> AddAsync(T entity);
 

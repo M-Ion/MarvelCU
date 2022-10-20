@@ -23,17 +23,17 @@ namespace MarvelCU.API.Controllers
             return Ok(await _cloudService.GetAllBlobs(blobDto));
         }
 
-        [HttpGet("Blob")]
-        public async Task<ActionResult<GetBlobDto>> GetBlob([FromBody] GetBlobRequestDto requestBlobDto)
+        [HttpGet("Blob/{container}/{blobName}")]
+        public async Task<ActionResult<GetBlobDto>> GetBlob([FromRoute] string container, [FromRoute] string blobName)
         {
-            var blob = await _cloudService.GetBlob(requestBlobDto);
+            var blob = await _cloudService.GetBlob(new GetBlobRequestDto() { Container = container, Blob = blobName });
 
             if (blob is null) return NotFound();
 
             return Ok(blob);
         }
 
-        [HttpGet("Download")]
+        [HttpPost("Download")]
         public async Task<ActionResult<Response>> DownloadBlob([FromBody] UploadBlobDto uploadBlobDto)
         {
             Response blob = await _cloudService.DownloadBlob(uploadBlobDto);

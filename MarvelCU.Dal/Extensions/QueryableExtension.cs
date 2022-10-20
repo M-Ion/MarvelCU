@@ -1,15 +1,15 @@
-﻿using MarvelCU.Common.Models;
-using MarvelCU.Common.Models.Processing;
+﻿using MarvelCU.Common.Models.Processing;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using static System.Linq.Queryable;
-using System.Text;
+using AutoMapper.QueryableExtensions;
+using AutoMapper;
 
 namespace MarvelCU.Dal.Extensions;
 
 public static class QueryableExtension
 {
-    public async static Task<ProcessedResult<T>> Query<T>(this IQueryable<T> query, ProcessedRequest processedRequest) where T : class
+    public async static Task<ProcessedResult<TDto>> Query<T, TDto>(this IQueryable<T> query, ProcessedRequest processedRequest, IMapper mapper) where T : class where TDto : class
     {
         query = query.ApplyFilters(processedRequest.Filters);
 
@@ -17,12 +17,12 @@ public static class QueryableExtension
 
         query = query.Paging(processedRequest.Paging).Sort(processedRequest.Sorting);
 
-        ProcessedResult<T> result = new()
+        ProcessedResult<TDto> result = new()
         {
             PageIndex = processedRequest.Paging.PageIndex,
             PageSize = processedRequest.Paging.PageSize,
             Total = total,
-            Items = await query.ToListAsync()
+            Items = await query.ProjectTo<TDto>(mapper.ConfigurationProvider).ToListAsync()
         };
 
         return result;

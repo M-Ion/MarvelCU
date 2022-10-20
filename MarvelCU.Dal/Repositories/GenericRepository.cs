@@ -1,12 +1,11 @@
-﻿using MarvelCU.Common.Exceptions;
-using MarvelCU.Common.Models;
+﻿using AutoMapper;
+using MarvelCU.Common.Exceptions;
 using MarvelCU.Common.Models.Processing;
 using MarvelCU.Dal.Extensions;
 using MarvelCU.Dal.Interfaces;
 using MarvelCU.Domain;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using System.Reflection;
 
 namespace MarvelCU.Dal.Repositories;
 
@@ -38,9 +37,9 @@ public class GenericRepository<T> : IRepository<T> where T : BaseEntity
         return await _context.Set<T>().ToListAsync();
     }
 
-    public async Task<ProcessedResult<T>> GetAllAsyncProcessed(ProcessedRequest processedRequest)
+    public async Task<ProcessedResult<TDto>> GetAllAsyncProcessed<TDto>(ProcessedRequest processedRequest, IMapper mapper) where TDto: class
     {
-        return await _context.Set<T>().Query(processedRequest);
+        return await _context.Set<T>().Query<T, TDto>(processedRequest, mapper);
     }
 
     public async Task<T> GetAsync(int id)

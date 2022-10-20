@@ -18,8 +18,6 @@ public class MovieService : IMovieService
 
     private readonly IMapper _mapper;
 
-    private readonly string _blobContainer = "movie-images";
-
     public MovieService(IMovieRepository movieRepository, ICloudStorageManager cloudStorageManager, IMapper mapper)
     {
         _movieRepository = movieRepository;
@@ -56,10 +54,10 @@ public class MovieService : IMovieService
         await _cloudStorageManager.UploadBlob(entity.Id.ToString(), AzureBlobContainers.MoviesImages, createMovieDto.BlobFilePath);
     }
 
-    public async Task<ProcessedResult<Movie>> GetMovies(PagingRequest pagingRequest, SortingRequest sortingRequest, IList<Filter> filters)
+    public async Task<ProcessedResult<GetMovieDto>> GetMovies(PagingRequest pagingRequest, SortingRequest sortingRequest, IList<Filter> filters)
     {
         ProcessedRequest request = new() { Paging = pagingRequest, Sorting = sortingRequest, Filters = filters };
-        ProcessedResult<Movie> result = await _movieRepository.GetAllAsyncProcessed(request);
+        ProcessedResult<GetMovieDto> result = await _movieRepository.GetAllAsyncProcessed<GetMovieDto>(request, _mapper);
 
         return result;
     }
