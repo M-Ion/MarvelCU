@@ -8,13 +8,22 @@ namespace MarvelCU.Dal.Repositories;
 
 public class PaymentManager : IPaymentManager
 {
+    private readonly ChargeService _chargeService;
+
+    public PaymentManager(ChargeService chargeService)
+    {
+        _chargeService = chargeService;
+    }
+
     public async Task<bool> Pay(PaymentDto paymentDto, User user)
     {
         var options = await CreateChargeOptions(paymentDto, user);
-        Charge charge = await new ChargeService().CreateAsync(options);
+        Charge charge = await _chargeService.CreateAsync(options);
 
         if (charge.Paid && (user.CustomerId is null) && paymentDto.Save)
+        {
             user.CustomerId = options.Customer;
+        }
 
         return charge.Paid;
     }

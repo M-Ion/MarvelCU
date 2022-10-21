@@ -21,9 +21,7 @@ public class PaymentsController : ControllerBase
     //[ServiceFilter(typeof(CurrentUserValidationFilter))]
     public async Task<ActionResult> Pay([FromBody] PaymentDto paymentDto)
     {
-        var user = HttpContext.Items["CurrentUser"] as User;
-
-        var charged = await _paymentService.ProcessPayment(paymentDto, user);
+        var charged = await _paymentService.ProcessPayment(paymentDto);
 
         return charged ? Ok() : BadRequest();
     }

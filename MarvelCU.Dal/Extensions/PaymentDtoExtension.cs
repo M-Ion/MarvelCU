@@ -12,7 +12,7 @@ public static class PaymentDtoExtension
             Card = new TokenCardOptions()
             {
                 Number = paymentDto.CardNumber,
-                ExpMonth = paymentDto.ExpMonth.ToString(),
+                ExpMonth = ((int)paymentDto.ExpMonth).ToString(),
                 ExpYear = paymentDto.ExpYear.ToString(),
                 Cvc = paymentDto.Cvc.ToString(),
             }
