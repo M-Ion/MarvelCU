@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MarvelCU.Common.Dtos;
+namespace MarvelCU.Common.Dtos.Payment;
 
 public class PaymentDto
 {
@@ -8,13 +8,13 @@ public class PaymentDto
     public string CardNumber { get; set; }
 
     [Required]
-    public int ExpMonth { get; set; }
+    public Months ExpMonth { get; set; }
 
     [Required]
     public int ExpYear { get; set; }
 
     [Required]
-    public string Cvc { get; set; }
+    public int Cvc { get; set; }
 
     [Required]
     public int Amount { get; set; }

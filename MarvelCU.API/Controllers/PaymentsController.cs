@@ -1,10 +1,7 @@
 ﻿using MarvelCU.Bll.Interfaces;
-using MarvelCU.Common.Dtos;
-using MarvelCU.Dal.Interfaces;
+using MarvelCU.Common.Dtos.Payment;
 using MarvelCU.Domain;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace MarvelCU.API.Controllers;
 

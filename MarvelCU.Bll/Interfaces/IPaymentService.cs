@@ -1,4 +1,4 @@
-﻿using MarvelCU.Common.Dtos;
+﻿using MarvelCU.Common.Dtos.Payment;
 using MarvelCU.Domain;
 
 namespace MarvelCU.Bll.Interfaces;
