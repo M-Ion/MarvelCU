@@ -42,22 +42,34 @@ public class AuthService : IAuthService
     {
         User user = await _authManager.Login(loginUserDto);
 
-        if (user is null) return null;
+        if (user is null)
+        {
+            return null;
+        }
 
         // Verify if refresh token already exists and remove it
         var refreshToken = await _tokenManager.GetRefreshTokenByUser(user);
-        if (refreshToken is not null) await _tokenManager.RevokeRefreshToken(refreshToken);
+        if (refreshToken is not null)
+        {
+            await _tokenManager.RevokeRefreshToken(refreshToken);
+        }
 
         return await _tokenManager.GenerateTokens(user);
     }
 
     public async Task Logout()
     {
-        if (_currentCookies.RefreshToken is null) return;
+        if (_currentCookies.RefreshToken is null)
+        {
+            return;
+        }
 
         RefreshToken refreshToken = await _tokenManager.GetRefreshToken(_currentCookies.RefreshToken);
 
-        if (refreshToken is null) return;
+        if (refreshToken is null)
+        {
+            return;
+        }
 
         await _tokenManager.RevokeRefreshToken(refreshToken);
     }

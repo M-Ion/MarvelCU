@@ -28,7 +28,10 @@ namespace MarvelCU.API.Controllers
         {
             var blob = await _cloudService.GetBlob(new GetBlobRequestDto() { Container = container, Blob = blobName });
 
-            if (blob is null) return NotFound();
+            if (blob is null)
+            {
+                return NotFound();
+            }
 
             return Ok(blob);
         }
@@ -38,7 +41,10 @@ namespace MarvelCU.API.Controllers
         {
             Response blob = await _cloudService.DownloadBlob(uploadBlobDto);
 
-            if (blob is null) return NotFound();
+            if (blob is null)
+            {
+                return NotFound();
+            }
 
             return Ok(blob);
         }

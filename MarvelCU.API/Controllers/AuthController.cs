@@ -47,7 +47,10 @@ public class AuthController : ControllerBase
     {
         AuthResponseDto authResponse = await _authService.Login(loginUserDto);
 
-        if (authResponse is null) return BadRequest();
+        if (authResponse is null)
+        {
+            return BadRequest();
+        }
 
         return Ok(authResponse)
             .SetCookie(Response, "jwt", authResponse.Token, DateTime.UtcNow.AddMinutes(Convert.ToInt32(_configuration["JwtConfig:DurationInMinutes"])))

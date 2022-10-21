@@ -118,11 +118,17 @@ public class TokenManager : ITokenManager
             _tokenValidationParameters.ValidateLifetime = true;
         }
 
-        if (!ValidateJwt(tokenVerification, validatedToken)) throw new InvalidJwtException("Invalid jwt!");
+        if (!ValidateJwt(tokenVerification, validatedToken))
+        {
+            throw new InvalidJwtException("Invalid jwt!");
+        }
 
         var storedRefreshToken = await _context.RefreshTokens.FirstOrDefaultAsync(t => t.Token == tokenRequestDto.RefreshToken);
 
-        if (!await ValidateRefreshToken(storedRefreshToken, tokenVerification)) throw new InvalidRefreshTokenException("Invalid refresh token!");
+        if (!await ValidateRefreshToken(storedRefreshToken, tokenVerification))
+        {
+            throw new InvalidRefreshTokenException("Invalid refresh token!");
+        }
 
         var user = await _userManager.FindByIdAsync(storedRefreshToken.UserId);
 
@@ -153,7 +159,10 @@ public class TokenManager : ITokenManager
     {
         if (validatedToken is JwtSecurityToken jwtSecurity)
         {
-            if (!jwtSecurity.Header.Alg.Equals(SecurityAlgorithms.HmacSha256)) return false;
+            if (!jwtSecurity.Header.Alg.Equals(SecurityAlgorithms.HmacSha256))
+            {
+                return false;
+            }
         }
 
         long expiryDate = long.Parse(tokenVerification.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Exp).Value);
@@ -169,11 +178,17 @@ public class TokenManager : ITokenManager
 
     private async Task<bool> ValidateRefreshToken(RefreshToken storedRefreshToken, ClaimsPrincipal jwt)
     {
-        if (storedRefreshToken is null) return false;
+        if (storedRefreshToken is null)
+        {
+            return false;
+        }
 
         var jti = jwt.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Jti).Value;
 
-        if (storedRefreshToken.JwtId != jti) return false;
+        if (storedRefreshToken.JwtId != jti)
+        {
+            return false;
+        }
 
         if (storedRefreshToken.Expired < DateTime.UtcNow)
         {

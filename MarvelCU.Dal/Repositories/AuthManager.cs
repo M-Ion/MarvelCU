@@ -52,7 +52,10 @@ public class AuthManager : IAuthManager
     {
         var user = await _userManager.FindByEmailAsync(loginUserDto.Email);
 
-        if (user is null) return null;
+        if (user is null)
+        {
+            return null;
+        }
 
         bool valid = await _userManager.CheckPasswordAsync(user, loginUserDto.Password);
 

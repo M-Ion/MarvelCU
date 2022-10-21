@@ -28,7 +28,10 @@ public class CloudStorageService : ICloudStorageService
 
     public async Task<bool> UploadBlob(UploadBlobDto uploadBlobDto)
     {
-        if (!VerifyFilePath(uploadBlobDto.Path)) return false;
+        if (!VerifyFilePath(uploadBlobDto.Path))
+        {
+            return false;
+        }
 
         FileInfo file = new FileInfo(uploadBlobDto.Path);
 
@@ -37,7 +40,10 @@ public class CloudStorageService : ICloudStorageService
 
     public async Task<Response> DownloadBlob(UploadBlobDto uploadBlobDto)
     {
-        if (!Directory.Exists(uploadBlobDto.Path)) return null;
+        if (!Directory.Exists(uploadBlobDto.Path))
+        {
+            return null;
+        }
 
         return await _cloudStorageManager.DownloadBlob(uploadBlobDto.Blob, uploadBlobDto.Container, Path.Combine(uploadBlobDto.Path, uploadBlobDto.Blob));
     }

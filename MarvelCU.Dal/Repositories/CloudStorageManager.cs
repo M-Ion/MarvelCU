@@ -31,7 +31,7 @@ public class CloudStorageManager : ICloudStorageManager
 
         List<string> files = new();
 
-        await foreach(var blob in blobs)
+        await foreach (var blob in blobs)
         {
             files.Add(await GetBlob(blob.Name, containerName));
         }
@@ -50,7 +50,9 @@ public class CloudStorageManager : ICloudStorageManager
             var res = await blob.UploadAsync(stream, true);
 
             if (res != null)
+            {
                 return true;
+            }
         }
 
         return false;
