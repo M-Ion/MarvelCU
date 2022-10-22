@@ -23,7 +23,8 @@ public class NewsController : ControllerBase
     [Authorize(Roles = "Admin,User")]
     public async Task<ActionResult<List<News>>> GetNews()
     {
-        return Ok(await _newsService.GetAllNews());
+        var news = await _newsService.GetAllNews();
+        return Ok(news);
     }
 
     [HttpPost]

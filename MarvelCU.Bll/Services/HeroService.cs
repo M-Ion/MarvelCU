@@ -45,7 +45,7 @@ public class HeroService : IHeroService
         var entity = await _heroRepository.AddAsync(hero);
 
         // Upload hero's image if presented
-        await _cloudStorageManager.UploadBlob(entity.Id.ToString(), AzureBlobContainers.HerosImages, createHeroDto.BlobFilePath);
+        //await _cloudStorageManager.UploadBlob(entity.Id.ToString(), AzureBlobContainers.HerosImages, createHeroDto.BlobFilePath);
     }
 }
 

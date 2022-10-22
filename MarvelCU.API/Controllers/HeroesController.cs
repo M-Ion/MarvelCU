@@ -20,13 +20,15 @@ namespace MarvelCU.API.Controllers
         [HttpGet]
         public async Task<ActionResult<GetHeroDto>> GetHeroes()
         {
-            return Ok(await _heroService.GetAllHeroes());
+            var heroes = await _heroService.GetAllHeroes();
+            return Ok(heroes);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<HeroDto>> GetHero(int id)
         {
-            return Ok(await _heroService.GetHeroDetails(id));
+            var hero = await _heroService.GetHeroDetails(id);
+            return Ok(hero);
         }
 
         [HttpPost]

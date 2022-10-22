@@ -3,7 +3,7 @@ using Azure.Storage.Blobs;
 using MarvelCU.Dal.Interfaces;
 using Microsoft.AspNetCore.Http;
 
-namespace MarvelCU.Dal.Repositories;
+namespace MarvelCU.Bll.Services;
 
 public class CloudStorageManager : ICloudStorageManager
 {
@@ -37,35 +37,6 @@ public class CloudStorageManager : ICloudStorageManager
         }
 
         return files;
-    }
-
-    public async Task<bool> UploadBlob(string blobName, string containerName, string filePath)
-    {
-        var container = _blobServiceClient.GetBlobContainerClient(containerName);
-
-        var blob = container.GetBlobClient(blobName);
-
-        using (FileStream stream = File.OpenRead(filePath))
-        {
-            var res = await blob.UploadAsync(stream, true);
-
-            if (res != null)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public async Task<Response> DownloadBlob(string blobName, string containerName, string filePath)
-    {
-        var container = _blobServiceClient.GetBlobContainerClient(containerName);
-
-        var blob = container.GetBlobClient(blobName);
-        bool exists = await blob.ExistsAsync();
-
-        return exists ? await blob.DownloadToAsync(filePath) : null;
     }
 }
 

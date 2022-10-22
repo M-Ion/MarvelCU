@@ -1,10 +1,11 @@
-﻿using MarvelCU.Common.Dtos.Payment;
+﻿using MarvelCU.Bll.Interfaces;
+using MarvelCU.Common.Dtos.Payment;
 using MarvelCU.Dal.Extensions;
 using MarvelCU.Dal.Interfaces;
 using MarvelCU.Domain;
 using Stripe;
 
-namespace MarvelCU.Dal.Repositories;
+namespace MarvelCU.Bll.Services;
 
 public class PaymentManager : IPaymentManager
 {

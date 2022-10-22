@@ -24,7 +24,8 @@ public class AuthController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<TokenRequestDto>> GetAuthCookies()
     {
-        return Ok(await Task.Run(() => _authService.GetAuthCookies()));
+        var reponse = Task.Run(() => _authService.GetAuthCookies());
+        return Ok(await reponse);
     }
 
     [HttpPost]

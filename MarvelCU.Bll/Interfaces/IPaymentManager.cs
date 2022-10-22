@@ -1,7 +1,7 @@
 ﻿using MarvelCU.Common.Dtos.Payment;
 using MarvelCU.Domain;
 
-namespace MarvelCU.Dal.Interfaces;
+namespace MarvelCU.Bll.Interfaces;
 
 public interface IPaymentManager
 {
