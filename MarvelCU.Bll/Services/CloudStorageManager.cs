@@ -61,6 +61,25 @@ public class CloudStorageManager : ICloudStorageManager
 
         return false;
     }
+
+    public async Task<MemoryStream> DownloadBlob(string containerName, string blobName)
+    {
+        BlobContainerClient containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
+
+        BlobClient blobClient = containerClient.GetBlobClient(blobName);
+
+        if (await blobClient.ExistsAsync())
+        {
+            var response = await blobClient.DownloadAsync();
+
+            MemoryStream stream = new MemoryStream();
+
+            await response.Value.Content.CopyToAsync(stream);
+            return stream;
+        }
+
+        return null;
+    }
 }
 
 

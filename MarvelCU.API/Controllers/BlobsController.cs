@@ -50,5 +50,18 @@ namespace MarvelCU.API.Controllers
 
             return BadRequest();
         }
+
+        [HttpGet("Download/{container}/{blobName}")]
+        public async Task<ActionResult> DownloadBlob([FromRoute] string container, [FromRoute] string blobName)
+        {
+            MemoryStream stream = await _cloudService.DownloadBlob(new GetBlobRequestDto() { Container = container, Blob = blobName });
+            if (stream is null)
+            {
+                return NotFound();
+            }
+
+            stream.Position = 0;
+            return File(stream, "video/mp4", blobName);
+        }
     }
 }

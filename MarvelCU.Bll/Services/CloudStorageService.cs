@@ -2,6 +2,7 @@
 using MarvelCU.Bll.Interfaces;
 using MarvelCU.Common.Dtos.Blob;
 using MarvelCU.Dal.Interfaces;
+using Microsoft.AspNetCore.Http;
 
 namespace MarvelCU.Bll.Services;
 
@@ -30,6 +31,12 @@ public class CloudStorageService : ICloudStorageService
     {
         bool uploaded = await _cloudStorageManager.UploadBlob(uploadBlobDto.Container, uploadBlobDto.Blob, uploadBlobDto.File);
         return uploaded;
+    }
+
+    public async Task<MemoryStream> DownloadBlob(GetBlobRequestDto requestBlobDto)
+    {
+        MemoryStream stream = await _cloudStorageManager.DownloadBlob(requestBlobDto.Container, requestBlobDto.Blob);
+        return stream;
     }
 }
 
