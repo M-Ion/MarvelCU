@@ -1,4 +1,5 @@
-﻿using MarvelCU.Common.Dtos.User;
+﻿using MarvelCU.Common.Constants;
+using MarvelCU.Common.Dtos.User;
 using MarvelCU.Common.Exceptions;
 using MarvelCU.Dal.Interfaces;
 using MarvelCU.Domain;
@@ -84,7 +85,7 @@ public class TokenManager : ITokenManager
         RefreshToken refreshToken = new()
         {
             JwtId = token.Id,
-            Token = await _userManager.GenerateUserTokenAsync(user, "MarvelCUAPI", "RefreshToken"),
+            Token = await _userManager.GenerateUserTokenAsync(user, TokenUtils.TokenProvider, TokenUtils.RefreshTokenPurpose),
             Expired = DateTime.UtcNow.AddMonths(Convert.ToInt32(_configuration["JwtConfig:RefreshTokenDurationInMonths"])),
             UserId = user.Id
         };
@@ -135,7 +136,7 @@ public class TokenManager : ITokenManager
         _tokenValidationParameters.ValidateLifetime = true;
 
         var token = await GenerateToken(user);
-        storedRefreshToken.Token = await _userManager.GenerateUserTokenAsync(user, "MarvelCUAPI", "RefreshToken");
+        storedRefreshToken.Token = await _userManager.GenerateUserTokenAsync(user, TokenUtils.TokenProvider, TokenUtils.RefreshTokenPurpose);
         storedRefreshToken.JwtId = token.Id;
 
         await _context.SaveChangesAsync();

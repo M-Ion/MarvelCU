@@ -59,6 +59,11 @@ public class AuthManager : IAuthManager
 
         bool valid = await _userManager.CheckPasswordAsync(user, loginUserDto.Password);
 
+        if (!valid)
+        {
+            return null;
+        }
+
         return user;
     }
 
