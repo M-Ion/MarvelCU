@@ -36,5 +36,19 @@ namespace MarvelCU.API.Controllers
 
             return Ok(blob);
         }
+
+        [HttpPost("Upload/{container}/{blobName}")]
+        public async Task<ActionResult> UploadBlob([FromForm] IFormFile file, [FromRoute] string container, [FromRoute] string blobName)
+        {
+
+            bool uploaded = await _cloudService.UploadBlob(new UploadBlobDto() { Container = container, Blob = blobName, File = file });
+
+            if (uploaded)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
+        }
     }
 }

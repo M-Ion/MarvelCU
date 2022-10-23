@@ -1,4 +1,6 @@
-﻿namespace MarvelCU.Bll.Interfaces;
+﻿using Microsoft.AspNetCore.Http;
+
+namespace MarvelCU.Bll.Interfaces;
 
 public interface ICloudStorageManager
 {
@@ -6,5 +8,6 @@ public interface ICloudStorageManager
 
     Task<List<string>> AllBlobs(string containerName);
 
+    Task<bool> UploadBlob(string containerName, string blobName, IFormFile file);
 }
 

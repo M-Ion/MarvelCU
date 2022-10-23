@@ -8,5 +8,7 @@ public interface ICloudStorageService
     public Task<GetBlobDto> GetBlob(GetBlobRequestDto requestBlobDto);
 
     public Task<List<GetBlobDto>> GetAllBlobs(BaseBlobDto blobDto);
+
+    public Task<bool> UploadBlob(UploadBlobDto uploadBlobDto);
 }
 

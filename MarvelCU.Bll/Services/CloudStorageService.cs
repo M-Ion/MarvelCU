@@ -25,5 +25,11 @@ public class CloudStorageService : ICloudStorageService
         string blob = await _cloudStorageManager.GetBlob(requestBlobDto.Blob, requestBlobDto.Container);
         return new GetBlobDto() { Blob = blob };
     }
+
+    public async Task<bool> UploadBlob(UploadBlobDto uploadBlobDto)
+    {
+        bool uploaded = await _cloudStorageManager.UploadBlob(uploadBlobDto.Container, uploadBlobDto.Blob, uploadBlobDto.File);
+        return uploaded;
+    }
 }
 

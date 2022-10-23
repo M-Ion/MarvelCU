@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Azure.Storage.Blobs;
+using MarvelCU.Bll.Interfaces;
 using MarvelCU.Dal.Interfaces;
 using Microsoft.AspNetCore.Http;
 
@@ -37,6 +38,28 @@ public class CloudStorageManager : ICloudStorageManager
         }
 
         return files;
+    }
+
+    public async Task<bool> UploadBlob(string containerName, string blobName, IFormFile file)
+    {
+        var container = _blobServiceClient.GetBlobContainerClient(containerName);
+
+        var blob = container.GetBlobClient(blobName);
+
+        using (Stream stream = new MemoryStream())
+        {
+            await file.CopyToAsync(stream);
+            stream.Position = 0;
+
+            var res = await blob.UploadAsync(stream, true);
+
+            if (res != null)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
 
