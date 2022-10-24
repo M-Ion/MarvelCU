@@ -1,4 +1,5 @@
 ﻿using MarvelCU.Bll.Interfaces;
+using MarvelCU.Common.Constants;
 using MarvelCU.Common.Dtos.Payment;
 using MarvelCU.Dal.Extensions;
 using MarvelCU.Dal.Interfaces;
@@ -21,9 +22,15 @@ public class PaymentManager : IPaymentManager
         var options = await CreateChargeOptions(paymentDto, user);
         Charge charge = await _chargeService.CreateAsync(options);
 
-        if (charge.Paid && (user.CustomerId is null) && paymentDto.Save)
+        // If charge was successful
+        if (charge.Paid)
         {
-            user.CustomerId = options.Customer;
+            bool saveCredentials = user.CustomerId is null && paymentDto.Save;
+
+            if (saveCredentials)
+            {
+                user.CustomerId = options.Customer;
+            }
         }
 
         return charge.Paid;
@@ -32,7 +39,7 @@ public class PaymentManager : IPaymentManager
 
     private async Task<ChargeCreateOptions> CreateChargeOptions(PaymentDto paymentDto, User user)
     {
-        var options = new ChargeCreateOptions() { Amount = paymentDto.Amount, Currency = "usd" };
+        var options = new ChargeCreateOptions() { Amount = paymentDto.Amount, Currency = Currencies.Usd };
 
         if (user.CustomerId is not null)
         {

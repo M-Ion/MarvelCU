@@ -116,7 +116,7 @@ public static class QueryableExtension
     private static ProcessedRequest AddNextPageRequest(ProcessedRequest processedRequest, int total)
     {
         // Verify if paging was applied
-        if (isPagingApplied(processedRequest.Paging))
+        if (IsPagingApplied(processedRequest.Paging))
         {
             return null;
         }
@@ -137,7 +137,7 @@ public static class QueryableExtension
         };
     }
 
-    private static bool isPagingApplied(PagingRequest pagingRequest)
+    private static bool IsPagingApplied(PagingRequest pagingRequest)
     {
         if (pagingRequest.PageIndex is null || pagingRequest.PageSize is null)
         {

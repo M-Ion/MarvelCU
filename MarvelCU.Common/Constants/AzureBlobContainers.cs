@@ -6,6 +6,8 @@ public static class AzureBlobContainers
 
     public static readonly string MoviesImages = "movie-images";
 
-    public static readonly string HerosImages = "hero-images";
+    public static readonly string HeroesImages = "hero-images";
+
+    public static readonly string Videos = "videos";
 }
 
