@@ -1,6 +1,6 @@
 import SortDirection from "./SortDirection.model";
 
 export default interface ISortingRequest {
-  prop: string;
+  prop: string | null;
   direction: SortDirection;
 }

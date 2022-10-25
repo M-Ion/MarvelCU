@@ -1,20 +1,20 @@
+import TheaterComedyIcon from "@mui/icons-material/TheaterComedy";
 import { Container, Grid, useTheme } from "@mui/material";
-import MovieCreationIcon from "@mui/icons-material/MovieCreation";
 
-import MovieCard from "../../components/movieCard/movieCard.component";
-import HeadingBg from "../../components/headingBg/headingBg.component";
+import ActorCard from "../components/actorCard/actorCard.component";
+import HeadingBg from "../components/headingBg/headingBg.component";
 
 const count = [1, 2, 3, 4, 5];
 
-const MoviesPage = () => {
+const ActorsPage = () => {
   const theme = useTheme();
 
   return (
     <>
       <HeadingBg
-        bgImg={"/bgImg/movies.jpg"}
-        title={"Movies"}
-        Icon={MovieCreationIcon}
+        bgImg={"/bgImg/actors.jpg"}
+        title={"Actors"}
+        Icon={TheaterComedyIcon}
       />
       <Container
         maxWidth="lg"
@@ -23,7 +23,7 @@ const MoviesPage = () => {
       >
         <Grid container spacing={4}>
           {count.map((el) => (
-            <MovieCard key={el} />
+            <ActorCard key={el} />
           ))}
         </Grid>
       </Container>
@@ -31,4 +31,4 @@ const MoviesPage = () => {
   );
 };
 
-export default MoviesPage;
+export default ActorsPage;

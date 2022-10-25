@@ -1,11 +1,12 @@
 import { createApi } from "@reduxjs/toolkit/dist/query/react";
 
+import baseQueryWithAuthCheck from "../utils/authCheckQuery.utils";
 import IGetMovie from "../types/movie/IGetMovie.model";
 import IMovie from "../types/movie/IMovie.model";
 import IPostMovie from "../types/movie/IPostMovie.model";
 import IProcessedRequest from "../types/processing/IProcessedRequest.model";
 import IProcessedResult from "../types/processing/IProcessedResult.model";
-import baseQueryWithAuthCheck from "../utils/authCheckQuery.utils";
+import prepareRequestParams from "../utils/prepareParams.utils";
 
 const movieService = createApi({
   reducerPath: "movie/service",
@@ -35,10 +36,11 @@ const movieService = createApi({
       IProcessedResult<IGetMovie>,
       IProcessedRequest
     >({
-      query: (body: IProcessedRequest) => ({
+      query: (arg: IProcessedRequest) => ({
         url: "/Movies/Filter",
         method: "POST",
-        body,
+        body: arg.filters,
+        params: prepareRequestParams(arg),
       }),
     }),
   }),

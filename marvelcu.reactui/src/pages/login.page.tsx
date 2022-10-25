@@ -1,6 +1,6 @@
 import { Container, Typography } from "@mui/material";
 
-import LoginForm from "../../components/loginForm/loginForm.component";
+import LoginForm from "../components/loginForm/loginForm.component";
 
 const LoginPage = () => {
   return (

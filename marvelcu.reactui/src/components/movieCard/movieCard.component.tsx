@@ -1,38 +1,21 @@
-import {
-  Button,
-  CardActions,
-  CardMedia,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { CardActionsProps } from "@mui/material";
+import { FC } from "react";
+import IGetMovie from "../../types/movie/IGetMovie.model";
+import Card from "../card/card.component";
 
-import { MovieCardStyled, CardContentStyled } from "./movieCard.styles";
+type Props = {
+  dto: IGetMovie;
+  CardActionsNode: FC<CardActionsProps> | null;
+};
 
-const MovieCard = () => {
+const MovieCard: FC<Props> = ({ dto }) => {
   return (
-    <Grid item xs={12} sm={6} md={3}>
-      <MovieCardStyled>
-        <CardMedia
-          sx={{ paddingTop: "80%" }}
-          image="/marvel.webp"
-          title="Image title"
-        />
-        <CardContentStyled>
-          <Typography gutterBottom variant="h5" component="h2">
-            Heading
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            This is a media card. You can use this section to describe the
-            content.
-          </Typography>
-        </CardContentStyled>
-        <CardActions>
-          <Button size="small" color="secondary">
-            View
-          </Button>
-        </CardActions>
-      </MovieCardStyled>
-    </Grid>
+    <Card
+      heading={dto.name}
+      imageurl={""}
+      description={`Saga ${dto.mcuSaga} Phase ${dto.mcuPhase}`}
+      CardActionsNode={null}
+    />
   );
 };
 

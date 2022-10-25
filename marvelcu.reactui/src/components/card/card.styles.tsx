@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { Card, CardContent } from "@mui/material";
 
-export const MovieCardStyled = styled(Card)({
+export const CardStyled = styled(Card)({
   display: "flex",
   flexDirection: "column",
   height: "100%",
