@@ -85,6 +85,8 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddSingleton(x => new BlobServiceClient(builder.Configuration.GetConnectionString("AzureBlobStorageConnectionString")));
 
+builder.Services.AddStackExchangeRedisCache(r => r.Configuration = builder.Configuration["Redis:connectionString"]);
+
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 ).AddOData(options =>
@@ -116,7 +118,10 @@ app.UseCors("AllowLocalhost");
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseJwtBlackList();
+
 app.UseDbTransaction();
+
 
 app.MapControllers();
 
