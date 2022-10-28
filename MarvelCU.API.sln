@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarvelCU.Dal", "MarvelCU.Da
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarvelCU.Bll", "MarvelCU.Bll\MarvelCU.Bll.csproj", "{6A9D08C3-4177-400E-94EA-16C7B6B4ACD7}"
 EndProject
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "MarvelCU.ReactUI", "MarvelCU.ReactUI\MarvelCU.ReactUI.esproj", "{CA5FDE85-00D1-40B3-B6BB-51CB30B2ED08}"
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "MarvelCU.ReactUI", "MarvelCU.ReactUI\MarvelCU.ReactUI.esproj", "{423B1596-F848-41A9-8759-E6C84324DEB9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,12 +41,12 @@ Global
 		{6A9D08C3-4177-400E-94EA-16C7B6B4ACD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A9D08C3-4177-400E-94EA-16C7B6B4ACD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A9D08C3-4177-400E-94EA-16C7B6B4ACD7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CA5FDE85-00D1-40B3-B6BB-51CB30B2ED08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CA5FDE85-00D1-40B3-B6BB-51CB30B2ED08}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CA5FDE85-00D1-40B3-B6BB-51CB30B2ED08}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{CA5FDE85-00D1-40B3-B6BB-51CB30B2ED08}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CA5FDE85-00D1-40B3-B6BB-51CB30B2ED08}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CA5FDE85-00D1-40B3-B6BB-51CB30B2ED08}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{423B1596-F848-41A9-8759-E6C84324DEB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{423B1596-F848-41A9-8759-E6C84324DEB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{423B1596-F848-41A9-8759-E6C84324DEB9}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{423B1596-F848-41A9-8759-E6C84324DEB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{423B1596-F848-41A9-8759-E6C84324DEB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{423B1596-F848-41A9-8759-E6C84324DEB9}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
