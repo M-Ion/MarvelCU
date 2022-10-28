@@ -1,4 +1,6 @@
-﻿namespace MarvelCU.Common.Models.Processing;
+﻿using System.Text.Json.Serialization;
+
+namespace MarvelCU.Common.Models.Processing;
 
 public enum Op
 {
@@ -7,5 +9,6 @@ public enum Op
     GtEq,
     Lt,
     LtEq,
+    Ct
 }
 

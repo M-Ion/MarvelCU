@@ -14,5 +14,9 @@ public interface ITokenManager
     Task<RefreshToken> GetRefreshTokenByUser(User user);
 
     Task<RefreshToken> GetRefreshToken(string value);
+
+    Task<bool> IsActiveTokenAsync(string token);
+
+    Task DeactivateTokenAsync(string token);
 }
 

@@ -15,6 +15,12 @@ public static class MiddlewareExtension
         app.UseMiddleware<ExceptionHandlingMiddleware>();
         return app;
     }
+
+    public static IApplicationBuilder UseJwtBlackList(this IApplicationBuilder app)
+    {
+        app.UseMiddleware<BlackListJwtMiddleware>();
+        return app;
+    }
 }
 
 
