@@ -21,7 +21,7 @@ public class Movie : BaseEntity
     public virtual ICollection<Actor> Actors { get; set; }
 
     [Range(1, 5)]
-    public sbyte? Rating { get; set; }
+    public float Rating { get; set; } = 0;
 
     [Required]
     public sbyte McuPhase { get; set; }

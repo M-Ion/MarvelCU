@@ -1,9 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace MarvelCU.Common.Dtos.User;
 
 public class RegisterUserDto : BaseUserDto/*, IValidatableObject*/
 {
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; }
+
     [Required]
     public string FirstName { get; set; }
 
@@ -11,7 +16,7 @@ public class RegisterUserDto : BaseUserDto/*, IValidatableObject*/
     public string LastName { get; set; }
 
     [Required]
-    [Compare(nameof(Password), ErrorMessage = "Mismatch confirm password!")]
+    [System.ComponentModel.DataAnnotations.Compare(nameof(Password), ErrorMessage = "Mismatch confirm password!")]
     public string ConfirmPassword { get; set; }
 
     //public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

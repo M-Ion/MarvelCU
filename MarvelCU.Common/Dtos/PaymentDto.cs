@@ -5,6 +5,7 @@ namespace MarvelCU.Common.Dtos;
 public class PaymentDto
 {
     [Required]
+    [CreditCard]
     public string CardNumber { get; set; }
 
     [Required]

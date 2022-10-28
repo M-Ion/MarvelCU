@@ -4,6 +4,7 @@ using MarvelCU.Dal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MarvelCU.Dal.Migrations
 {
     [DbContext(typeof(MarvelDbContext))]
-    partial class MarvelDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221027202817_ChangeMovieRatingType")]
+    partial class ChangeMovieRatingType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -168,8 +170,11 @@ namespace MarvelCU.Dal.Migrations
                     b.Property<DateTime>("Premiere")
                         .HasColumnType("date");
 
-                    b.Property<float>("Rating")
+                    b.Property<float?>("Rating")
                         .HasColumnType("real");
+
+                    b.Property<decimal>("ReviewsNum")
+                        .HasColumnType("decimal(20,0)");
 
                     b.HasKey("Id");
 

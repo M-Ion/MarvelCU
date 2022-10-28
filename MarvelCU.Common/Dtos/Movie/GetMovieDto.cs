@@ -8,7 +8,7 @@ public class GetMovieDto : BaseMovieDto
     public int Id { get; set; }
 
     [Range(0, 5)]
-    public sbyte Rating { get; set; }
+    public float Rating { get; set; }
 
     public sbyte McuPhase { get; set; }
 
