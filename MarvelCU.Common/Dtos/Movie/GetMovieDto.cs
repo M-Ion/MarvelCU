@@ -5,8 +5,10 @@ namespace MarvelCU.Common.Dtos.Movie;
 
 public class GetMovieDto : BaseMovieDto
 {
-    [Range(1, 5)]
-    public sbyte Rating { get; set; }
+    public int Id { get; set; }
+
+    [Range(0, 5)]
+    public float Rating { get; set; }
 
     public sbyte McuPhase { get; set; }
 

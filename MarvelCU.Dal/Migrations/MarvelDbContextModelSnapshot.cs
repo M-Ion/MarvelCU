@@ -168,8 +168,8 @@ namespace MarvelCU.Dal.Migrations
                     b.Property<DateTime>("Premiere")
                         .HasColumnType("date");
 
-                    b.Property<short?>("Rating")
-                        .HasColumnType("smallint");
+                    b.Property<float>("Rating")
+                        .HasColumnType("real");
 
                     b.HasKey("Id");
 

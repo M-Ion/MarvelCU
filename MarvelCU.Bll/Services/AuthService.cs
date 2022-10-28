@@ -72,6 +72,8 @@ public class AuthService : IAuthService
         }
 
         await _tokenManager.RevokeRefreshToken(refreshToken);
+
+        await _tokenManager.DeactivateTokenAsync(_currentCookies.Jwt);
     }
 
     public async Task<AuthResponseDto> RefreshToken()

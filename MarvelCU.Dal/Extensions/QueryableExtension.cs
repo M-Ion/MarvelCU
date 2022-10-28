@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using static System.Linq.Queryable;
 using AutoMapper.QueryableExtensions;
 using AutoMapper;
+using System.Reflection;
 
 namespace MarvelCU.Dal.Extensions;
 
@@ -77,15 +78,31 @@ public static class QueryableExtension
         ParameterExpression param = Expression.Parameter(typeof(T));
         Expression exp = default;
 
+        // Order filters by prop
+        filters = filters.OrderBy(f => f.Prop).ToList();
+
+        Filter current;
+
         for (int i = 0; i < filters.Count; i++)
         {
             if (i == 0)
             {
                 exp = GetExpression<T>(param, filters[i]);
+                current = filters[i];
                 continue;
             }
 
-            exp = Expression.AndAlso(exp, GetExpression<T>(param, filters[i]));
+            // If is multiple filters per prop apply or operator
+            if (filters[i].Prop == filters[i - 1].Prop)
+            {
+                exp = Expression.Or(exp, GetExpression<T>(param, filters[i]));
+            }
+            // If is different filter prop apply and operator
+            else
+            {
+                exp = Expression.AndAlso(exp, GetExpression<T>(param, filters[i]));
+            }
+
         }
 
         return Expression.Lambda<Func<T, bool>>(exp, param);
@@ -108,6 +125,9 @@ public static class QueryableExtension
                 return Expression.LessThan(member, constant);
             case Op.LtEq:
                 return Expression.LessThanOrEqual(member, constant);
+            case Op.Ct:
+                MethodInfo method = typeof(string).GetMethod("Contains", new[] { typeof(string) });
+                return Expression.Call(member, method, constant);
             default:
                 return null;
         }

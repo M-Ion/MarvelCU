@@ -5,6 +5,7 @@ using MarvelCU.Dal.Interfaces;
 using MarvelCU.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -19,18 +20,21 @@ public class TokenManager : ITokenManager
     private readonly UserManager<User> _userManager;
     private readonly IConfiguration _configuration;
     private readonly TokenValidationParameters _tokenValidationParameters;
+    private readonly IDistributedCache _cache;
 
     public TokenManager(
         MarvelDbContext context,
         UserManager<User> userManager,
         IConfiguration configuration,
-        TokenValidationParameters tokenValidationParameters
+        TokenValidationParameters tokenValidationParameters,
+        IDistributedCache cache
         )
     {
         _context = context;
         _userManager = userManager;
         _configuration = configuration;
         _tokenValidationParameters = tokenValidationParameters;
+        _cache = cache;
     }
 
     // Generate Jwt and refresh token and store refresh token to db
@@ -208,6 +212,20 @@ public class TokenManager : ITokenManager
     public async Task<RefreshToken> GetRefreshToken(string value)
     {
         return await _context.RefreshTokens.FirstOrDefaultAsync(t => t.Token == value);
+    }
+
+    public async Task DeactivateTokenAsync(string token)
+    {
+        await _cache.SetStringAsync(token, " ", new DistributedCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+        });
+    }
+
+    public async Task<bool> IsActiveTokenAsync(string token)
+    {
+        string cacheToken = await _cache.GetStringAsync(token);
+        return cacheToken == null;
     }
 }
 
