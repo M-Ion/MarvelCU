@@ -51,7 +51,7 @@ public class MovieService : IMovieService
         var entity = await _movieRepository.AddAsync(movie);
 
         // Upload movie's image if presented
-        await _cloudStorageManager.UploadBlob(entity.Id.ToString(), AzureBlobContainers.MoviesImages, createMovieDto.BlobFilePath);
+        //await _cloudStorageManager.UploadBlob(entity.Id.ToString(), AzureBlobContainers.MoviesImages, createMovieDto.BlobFilePath);
     }
 
     public async Task<ProcessedResult<GetMovieDto>> GetMovies(PagingRequest pagingRequest, SortingRequest sortingRequest, IList<Filter> filters)

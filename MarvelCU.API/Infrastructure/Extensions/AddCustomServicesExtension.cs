@@ -36,6 +36,7 @@ public static class AddCustomServicesExtension
         services.AddScoped<ITokenManager, TokenManager>();
 
         services.AddScoped<IPaymentManager, PaymentManager>();
+        services.AddScoped<IPaymentService, PaymentService>();
 
         services.AddScoped<ICloudStorageManager, CloudStorageManager>();
         services.AddScoped<ICloudStorageService, CloudStorageService>();

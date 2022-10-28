@@ -27,7 +27,8 @@ public class MoviesController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IList<GetMovieDto>>> GetAllMovie()
     {
-        return Ok(await _movieService.GetMovies());
+        var movies = await _movieService.GetMovies();
+        return Ok(movies);
     }
 
     // For processing request
@@ -39,7 +40,8 @@ public class MoviesController : ControllerBase
         [FromBody] IList<Filter> filters
         )
     {
-        return Ok(await _movieService.GetMovies(paging, sorting, filters));
+        var movies = await _movieService.GetMovies(paging, sorting, filters);
+        return Ok(movies);
     }
 
     [HttpGet]

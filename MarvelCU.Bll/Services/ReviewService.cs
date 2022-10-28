@@ -16,7 +16,7 @@ public class ReviewService : IReviewService
     private readonly IMapper _mapper;
 
     public ReviewService(
-        IReviewRepository reviewRepository, 
+        IReviewRepository reviewRepository,
         IMovieRepository movieRepository,
         UserManager<User> userManager,
         ICurrentUser currentUser,
@@ -34,8 +34,11 @@ public class ReviewService : IReviewService
         var review = _mapper.Map<Review>(createReviewDto);
         var movie = await _movieRepository.Exists(movieId);
 
-        if (await ExistsMovieReview(movie)) return null;
-   
+        if (await ExistsMovieReview(movie))
+        {
+            return null;
+        }
+
         review.Movie = movie;
         review.UserId = _currentUser.Id;
 
@@ -46,7 +49,10 @@ public class ReviewService : IReviewService
     {
         var review = await _reviewRepository.Exists(id);
 
-        if (!await BelongsReview(review)) return null;
+        if (!await BelongsReview(review))
+        {
+            return null;
+        }
 
         _mapper.Map(updateReviewDto, review);
 
@@ -59,7 +65,10 @@ public class ReviewService : IReviewService
     {
         var review = await _reviewRepository.Exists(id);
 
-        if (!await BelongsReview(review)) return false;
+        if (!await BelongsReview(review))
+        {
+            return false;
+        }
 
         await _reviewRepository.RemoveAsync(review);
 

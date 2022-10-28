@@ -50,8 +50,11 @@ builder.Services.AddCors(options =>
         .AllowCredentials()
         .SetIsOriginAllowed(origin =>
         {
-            if (origin.ToLower().StartsWith("http://localhost")) return true;
-             return false;
+            if (origin.ToLower().StartsWith("http://localhost"))
+            {
+                return true;
+            }
+            return false;
         })
     );
 
@@ -86,6 +89,8 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddSingleton(x => new BlobServiceClient(builder.Configuration.GetConnectionString("AzureBlobStorageConnectionString")));
 
 builder.Services.AddStackExchangeRedisCache(r => r.Configuration = builder.Configuration["Redis:connectionString"]);
+
+builder.Services.AddSingleton<ChargeService>();
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore

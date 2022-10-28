@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Storage.Files.Shares" Version="12.12.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MarvelCU.Common\MarvelCU.Common.csproj" />
     <ProjectReference Include="..\MarvelCU.Dal\MarvelCU.Dal.csproj" />
     <ProjectReference Include="..\MarvelCU.Domain\MarvelCU.Domain.csproj" />

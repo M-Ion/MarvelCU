@@ -52,7 +52,7 @@ public class ActorService : IActorService
         var entity = await _actorRepository.AddAsync(actor);
 
         // Upload actor's image if presented
-        await _cloudStorageManager.UploadBlob(entity.Id.ToString(), AzureBlobContainers.ActorsImages, createActorDto.BlobFilePath);
+        //await _cloudStorageManager.UploadBlob(entity.Id.ToString(), AzureBlobContainers.ActorsImages, createActorDto.BlobFilePath);
     }
 
     public async Task SupplyCollection(int id, int entityId)

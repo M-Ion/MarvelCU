@@ -1,7 +1,9 @@
-﻿namespace MarvelCU.Common.Dtos.Blob;
+﻿using Microsoft.AspNetCore.Http;
+
+namespace MarvelCU.Common.Dtos.Blob;
 
 public class UploadBlobDto : GetBlobRequestDto
 {
-    public string Path { get; set; }
+    public IFormFile File { get; set; }
 }
 

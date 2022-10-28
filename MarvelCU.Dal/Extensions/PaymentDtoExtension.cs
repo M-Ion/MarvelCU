@@ -1,4 +1,4 @@
-﻿using MarvelCU.Common.Dtos;
+﻿using MarvelCU.Common.Dtos.Payment;
 using Stripe;
 
 namespace MarvelCU.Dal.Extensions;
@@ -12,9 +12,9 @@ public static class PaymentDtoExtension
             Card = new TokenCardOptions()
             {
                 Number = paymentDto.CardNumber,
-                ExpMonth = paymentDto.ExpMonth.ToString(),
+                ExpMonth = ((int)paymentDto.ExpMonth).ToString(),
                 ExpYear = paymentDto.ExpYear.ToString(),
-                Cvc = paymentDto.Cvc,
+                Cvc = paymentDto.Cvc.ToString(),
             }
         };
 

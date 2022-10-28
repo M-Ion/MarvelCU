@@ -32,7 +32,10 @@ public static class QueryableExtension
 
     public static IQueryable<T> ApplyFilters<T>(this IQueryable<T> query, IList<Filter> filters)
     {
-        if (!filters.Any()) return query;
+        if (!filters.Any())
+        {
+            return query;
+        }
 
         Expression<Func<T, bool>> lambdas = BuildExpression<T>(filters);
 
@@ -43,7 +46,10 @@ public static class QueryableExtension
 
     public static IQueryable<T> Paging<T>(this IQueryable<T> query, PagingRequest pagingRequest)
     {
-        if (pagingRequest.PageSize is null || pagingRequest.PageIndex is null) return query;
+        if (pagingRequest.PageSize is null || pagingRequest.PageIndex is null)
+        {
+            return query;
+        }
 
         query = query.Skip((int)pagingRequest.PageIndex * (int)pagingRequest.PageSize).Take((int)pagingRequest.PageSize);
 
@@ -52,7 +58,10 @@ public static class QueryableExtension
 
     public static IQueryable<T> Sort<T>(this IQueryable<T> query, SortingRequest sorting)
     {
-        if (sorting.Prop is null) return query;
+        if (sorting.Prop is null)
+        {
+            return query;
+        }
 
         ParameterExpression param = Expression.Parameter(typeof(T));
         MemberExpression member = Expression.Property(param, sorting.Prop);
@@ -127,12 +136,18 @@ public static class QueryableExtension
     private static ProcessedRequest AddNextPageRequest(ProcessedRequest processedRequest, int total)
     {
         // Verify if paging was applied
-        if (isPagingApplied(processedRequest.Paging)) return null;
+        if (IsPagingApplied(processedRequest.Paging))
+        {
+            return null;
+        }
 
         // Verify if there is enough left items
         int? left = total - (processedRequest.Paging.PageIndex + 1) * processedRequest.Paging.PageSize;
 
-        if (left <= 0) return null;
+        if (left <= 0)
+        {
+            return null;
+        }
 
         return new ProcessedRequest()
         {
@@ -142,9 +157,12 @@ public static class QueryableExtension
         };
     }
 
-    private static bool isPagingApplied(PagingRequest pagingRequest)
+    private static bool IsPagingApplied(PagingRequest pagingRequest)
     {
-        if (pagingRequest.PageIndex is null || pagingRequest.PageSize is null) return false;
+        if (pagingRequest.PageIndex is null || pagingRequest.PageSize is null)
+        {
+            return false;
+        }
         return true;
     }
 }

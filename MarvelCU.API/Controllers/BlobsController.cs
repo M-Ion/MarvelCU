@@ -20,7 +20,8 @@ namespace MarvelCU.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IList<GetBlobDto>>> GetAllBlobs([FromBody] BaseBlobDto blobDto)
         {
-            return Ok(await _cloudService.GetAllBlobs(blobDto));
+            var blobs = await _cloudService.GetAllBlobs(blobDto);
+            return Ok(blobs);
         }
 
         [HttpGet("Blob/{container}/{blobName}")]
@@ -28,19 +29,39 @@ namespace MarvelCU.API.Controllers
         {
             var blob = await _cloudService.GetBlob(new GetBlobRequestDto() { Container = container, Blob = blobName });
 
-            if (blob is null) return NotFound();
+            if (blob is null)
+            {
+                return NotFound();
+            }
 
             return Ok(blob);
         }
 
-        [HttpPost("Download")]
-        public async Task<ActionResult<Response>> DownloadBlob([FromBody] UploadBlobDto uploadBlobDto)
+        [HttpPost("Upload/{container}/{blobName}")]
+        public async Task<ActionResult> UploadBlob([FromForm] IFormFile file, [FromRoute] string container, [FromRoute] string blobName)
         {
-            Response blob = await _cloudService.DownloadBlob(uploadBlobDto);
 
-            if (blob is null) return NotFound();
+            bool uploaded = await _cloudService.UploadBlob(new UploadBlobDto() { Container = container, Blob = blobName, File = file });
 
-            return Ok(blob);
+            if (uploaded)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+
+        [HttpGet("Download/{container}/{blobName}")]
+        public async Task<ActionResult> DownloadBlob([FromRoute] string container, [FromRoute] string blobName)
+        {
+            MemoryStream stream = await _cloudService.DownloadBlob(new GetBlobRequestDto() { Container = container, Blob = blobName });
+            if (stream is null)
+            {
+                return NotFound();
+            }
+
+            stream.Position = 0;
+            return File(stream, "video/mp4", blobName);
         }
     }
 }

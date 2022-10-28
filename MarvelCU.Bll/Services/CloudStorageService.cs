@@ -2,6 +2,7 @@
 using MarvelCU.Bll.Interfaces;
 using MarvelCU.Common.Dtos.Blob;
 using MarvelCU.Dal.Interfaces;
+using Microsoft.AspNetCore.Http;
 
 namespace MarvelCU.Bll.Services;
 
@@ -28,23 +29,14 @@ public class CloudStorageService : ICloudStorageService
 
     public async Task<bool> UploadBlob(UploadBlobDto uploadBlobDto)
     {
-        if (!VerifyFilePath(uploadBlobDto.Path)) return false;
-
-        FileInfo file = new FileInfo(uploadBlobDto.Path);
-
-        return await _cloudStorageManager.UploadBlob($"{uploadBlobDto.Blob}{file.Extension}", uploadBlobDto.Container, uploadBlobDto.Path);
+        bool uploaded = await _cloudStorageManager.UploadBlob(uploadBlobDto.Container, uploadBlobDto.Blob, uploadBlobDto.File);
+        return uploaded;
     }
 
-    public async Task<Response> DownloadBlob(UploadBlobDto uploadBlobDto)
+    public async Task<MemoryStream> DownloadBlob(GetBlobRequestDto requestBlobDto)
     {
-        if (!Directory.Exists(uploadBlobDto.Path)) return null;
-
-        return await _cloudStorageManager.DownloadBlob(uploadBlobDto.Blob, uploadBlobDto.Container, Path.Combine(uploadBlobDto.Path, uploadBlobDto.Blob));
-    }
-
-    private bool VerifyFilePath(string path)
-    {
-        return (path is not null && File.Exists(path));
+        MemoryStream stream = await _cloudStorageManager.DownloadBlob(requestBlobDto.Container, requestBlobDto.Blob);
+        return stream;
     }
 }
 
