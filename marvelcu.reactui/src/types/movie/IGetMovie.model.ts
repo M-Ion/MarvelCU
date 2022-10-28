@@ -1,8 +1,9 @@
 export default interface IGetMovie {
-  name: string;
+  blob?: string;
   id: number;
-  premiere: Date;
   mcuPhase: number;
   mcuSaga: number;
-  blob?: string;
+  name: string;
+  premiere: Date;
+  rating: number | null;
 }

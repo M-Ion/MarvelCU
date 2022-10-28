@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ThemeProvider } from "@emotion/react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 
 import ActorsPage from "./pages/actors.page";
-import Footer from "./components/footer/footer.component";
 import Header from "./components/header/header.component";
 import HeroesPage from "./pages/heroes.page";
 import LoginPage from "./pages/login.page";
@@ -27,7 +27,6 @@ function App() {
             {/* <Route path="/news" element={<NewsPage />} /> */}
             <Route path="/signup" element={<SignUpPage />} />
           </Routes>
-          {/* <Footer /> */}
         </div>
       </BrowserRouter>
     </ThemeProvider>
