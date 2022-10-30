@@ -1,5 +1,5 @@
 import { CardMedia, Grid, Typography } from "@mui/material";
-import { Children, FC, ReactNode } from "react";
+import { FC, ReactNode } from "react";
 
 import blobService from "../../../services/blob.services";
 import IGetBlob from "../../../types/blob/IGetBlob.model";

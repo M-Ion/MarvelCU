@@ -7,13 +7,7 @@ import {
   Rating,
   useTheme,
 } from "@mui/material";
-import {
-  ChangeEvent,
-  SetStateAction,
-  SyntheticEvent,
-  useEffect,
-  useState,
-} from "react";
+import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import MovieCreationIcon from "@mui/icons-material/MovieCreation";
 
 import {

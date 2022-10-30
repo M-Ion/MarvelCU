@@ -7,6 +7,7 @@ import ActorsPage from "./pages/actors.page";
 import Header from "./components/header/header.component";
 import HeroesPage from "./pages/heroes.page";
 import LoginPage from "./pages/login.page";
+import MovieItemPage from "./pages/moveItem/movieItem.page";
 import MoviesPage from "./pages/movies.page";
 import NewsPage from "./pages/news.page";
 import SignUpPage from "./pages/signUp.page";
@@ -24,6 +25,7 @@ function App() {
             {/* <Route path="/heroes" element={<HeroesPage />} /> */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/movies" element={<MoviesPage />} />
+            <Route path="/movies/:movieId" element={<MovieItemPage />} />
             {/* <Route path="/news" element={<NewsPage />} /> */}
             <Route path="/signup" element={<SignUpPage />} />
           </Routes>
