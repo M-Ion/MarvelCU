@@ -23,7 +23,7 @@ namespace MarvelCU.Dal.Migrations
 					BEGIN
 						UPDATE Movies
 						SET Movies.Rating = (
-							SELECT AVG(r.Rating) 
+							SELECT COALESCE(AVG(r.Rating), 0)
 							FROM Reviews AS r 
 							WHERE r.MovieId = inserted.MovieId
 							)
@@ -33,7 +33,7 @@ namespace MarvelCU.Dal.Migrations
 					BEGIN
 						UPDATE Movies
 						SET Movies.Rating = (
-							SELECT AVG(r.Rating) 
+							SELECT COALESCE(AVG(r.Rating), 0) 
 							FROM Reviews AS r 
 							WHERE r.MovieId = deleted.MovieId
 							)

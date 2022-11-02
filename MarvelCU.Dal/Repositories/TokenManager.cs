@@ -45,7 +45,6 @@ public class TokenManager : ITokenManager
 
         return new AuthResponseDto()
         {
-            UserId = user.Id,
             Token = new JwtSecurityTokenHandler().WriteToken(token),
             RefreshToken = refreshToken
         };
@@ -147,7 +146,6 @@ public class TokenManager : ITokenManager
 
         return new AuthResponseDto
         {
-            UserId = user.Id,
             Token = new JwtSecurityTokenHandler().WriteToken(token),
             RefreshToken = storedRefreshToken.Token
         };

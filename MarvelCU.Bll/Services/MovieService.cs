@@ -8,6 +8,7 @@ using MarvelCU.Common.Models;
 using MarvelCU.Common.Models.Processing;
 using MarvelCU.Dal.Interfaces;
 using MarvelCU.Domain;
+using Microsoft.AspNetCore.Identity;
 
 namespace MarvelCU.Bll.Services;
 
@@ -15,14 +16,17 @@ public class MovieService : IMovieService
 {
     private readonly IMovieRepository _movieRepository;
     private readonly ICloudStorageManager _cloudStorageManager;
-
+    private readonly ICurrentUser _currentUser;
+    private readonly UserManager<User> _userManager;
     private readonly IMapper _mapper;
 
-    public MovieService(IMovieRepository movieRepository, ICloudStorageManager cloudStorageManager, IMapper mapper)
+    public MovieService(IMovieRepository movieRepository, UserManager<User> userManager, ICloudStorageManager cloudStorageManager, IMapper mapper, ICurrentUser currentUser)
     {
         _movieRepository = movieRepository;
         _cloudStorageManager = cloudStorageManager;
         _mapper = mapper;
+        _currentUser = currentUser;
+        _userManager = userManager;
     }
 
     public async Task<MovieDto> GetMovieDetails(int id)
@@ -53,6 +57,29 @@ public class MovieService : IMovieService
         // Upload movie's image if presented
         //await _cloudStorageManager.UploadBlob(entity.Id.ToString(), AzureBlobContainers.MoviesImages, createMovieDto.BlobFilePath);
     }
+
+    public async Task AddMovieToFavourites(int movieId)
+    {
+        User user = await _userManager.FindByIdAsync(_currentUser.Id);
+        Movie movie = await _movieRepository.Exists(movieId);
+
+        user.FavouriteMovies.Add(movie);
+        await _userManager.UpdateAsync(user);
+        
+    }
+
+    public async Task RemoveFromFavourites(int movieId)
+    {
+        User user = await _userManager.FindByIdAsync(_currentUser.Id);
+
+        Movie movie = user.FavouriteMovies.FirstOrDefault(m => m.Id == movieId);
+
+        if (movie is not null)
+        {
+            user.FavouriteMovies.Remove(movie);
+            await _userManager.UpdateAsync(user);
+        }
+    } 
 
     public async Task<ProcessedResult<GetMovieDto>> GetMovies(PagingRequest pagingRequest, SortingRequest sortingRequest, IList<Filter> filters)
     {

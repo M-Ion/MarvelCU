@@ -1,4 +1,6 @@
+import IUser from "../user.model";
+
 export default interface IAuthResponse {
-  userId: string;
+  user: IUser;
   token: string;
 }

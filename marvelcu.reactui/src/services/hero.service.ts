@@ -1,9 +1,12 @@
 import { createApi } from "@reduxjs/toolkit/dist/query/react";
 
+import { IPostHero } from "../types/hero/IPostHero.model";
 import baseQueryWithAuthCheck from "../utils/authCheckQuery.utils";
 import IGetHero from "../types/hero/IGetHero.mode";
 import IHero from "../types/hero/IHero.mode";
-import { IPostHero } from "../types/hero/IPostHero.model";
+import IProcessedRequest from "../types/processing/IProcessedRequest.model";
+import IProcessedResult from "../types/processing/IProcessedResult.model";
+import prepareRequestParams from "../utils/prepareParams.utils";
 
 const heroService = createApi({
   reducerPath: "hero/service",
@@ -25,6 +28,17 @@ const heroService = createApi({
         url: "/Heroes",
         method: "POST",
         body: hero,
+      }),
+    }),
+    getFilteredHeroes: build.mutation<
+      IProcessedResult<IGetHero>,
+      IProcessedRequest
+    >({
+      query: (arg: IProcessedRequest) => ({
+        url: "/Heroes/Filter",
+        method: "POST",
+        body: arg.filters,
+        params: prepareRequestParams(arg),
       }),
     }),
   }),

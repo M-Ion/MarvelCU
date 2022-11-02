@@ -13,6 +13,7 @@ public class AuthService : IAuthService
     private readonly ITokenManager _tokenManager;
     private readonly ICurrentCookies _currentCookies;
     private readonly ICurrentUser _currentUser;
+    private readonly UserManager<User> _userManager;
     private readonly IMapper _mapper;
 
     public AuthService(
@@ -20,6 +21,7 @@ public class AuthService : IAuthService
         ITokenManager tokenManager,
         ICurrentCookies currentCookies,
         ICurrentUser currentUser,
+        UserManager<User> userManager,
         IMapper mapper
         )
     {
@@ -27,6 +29,7 @@ public class AuthService : IAuthService
         _tokenManager = tokenManager;
         _currentCookies = currentCookies;
         _currentUser = currentUser;
+        _userManager = userManager;
         _mapper = mapper;
     }
 
@@ -54,7 +57,11 @@ public class AuthService : IAuthService
             await _tokenManager.RevokeRefreshToken(refreshToken);
         }
 
-        return await _tokenManager.GenerateTokens(user);
+        UserDto userDto = _mapper.Map<UserDto>(user);
+        AuthResponseDto authResponse = await _tokenManager.GenerateTokens(user);
+        authResponse.User = userDto;
+
+        return authResponse;
     }
 
     public async Task Logout()
@@ -78,8 +85,15 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponseDto> RefreshToken()
     {
-        TokenRequestDto tokenRequestDto = new() { Token = _currentUser.Jwt, RefreshToken = _currentCookies.RefreshToken };
-        return await _tokenManager.RefreshToken(tokenRequestDto);
+        TokenRequestDto tokenRequestDto = new() { Token = _currentCookies.Jwt, RefreshToken = _currentCookies.RefreshToken };
+
+        User user = await _userManager.FindByIdAsync(_currentUser.Id);
+        UserDto userDto = _mapper.Map<UserDto>(user);
+
+        AuthResponseDto authResponse = await _tokenManager.RefreshToken(tokenRequestDto);
+        authResponse.User = userDto;
+
+        return authResponse;
     }
 
     public TokenRequestDto GetAuthCookies()
@@ -89,6 +103,15 @@ public class AuthService : IAuthService
             Token = _currentCookies.Jwt,
             RefreshToken = _currentCookies.RefreshToken,
         };
+    }
+
+    public async Task<UserDto> CheckUser()
+    {
+        User user = await _userManager.FindByIdAsync(_currentUser.Id);
+
+        UserDto userDto = _mapper.Map<UserDto>(user);
+
+        return userDto;
     }
 
 }

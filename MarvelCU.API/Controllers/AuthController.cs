@@ -28,6 +28,14 @@ public class AuthController : ControllerBase
         return Ok(await reponse);
     }
 
+    [HttpGet("Check")]
+    [Authorize]
+    public async Task<ActionResult<UserDto>> CheckUser()
+    {
+        UserDto userDto = await _authService.CheckUser();
+        return Ok(userDto);
+    }
+
     [HttpPost]
     [Route("Register")]
     public async Task<ActionResult> Register([FromBody] RegisterUserDto registerUserDto)
@@ -54,7 +62,7 @@ public class AuthController : ControllerBase
         }
 
         return Ok(authResponse)
-            .SetCookie(Response, "jwt", authResponse.Token, DateTime.UtcNow.AddMinutes(Convert.ToInt32(_configuration["JwtConfig:DurationInMinutes"])))
+            .SetCookie(Response, "jwt", authResponse.Token, DateTime.UtcNow.AddMonths(Convert.ToInt32(_configuration["JwtConfig:RefreshTokenDurationInMonths"])))
             .SetCookie(Response, "refreshToken", authResponse.RefreshToken, DateTime.UtcNow.AddMonths(Convert.ToInt32(_configuration["JwtConfig:RefreshTokenDurationInMonths"])));
     }
 
@@ -75,7 +83,7 @@ public class AuthController : ControllerBase
     {
         var authResponse = await _authService.RefreshToken();
         return Ok(authResponse)
-            .SetCookie(Response, "jwt", authResponse.Token, DateTime.UtcNow.AddMinutes(Convert.ToInt32(_configuration["JwtConfig:DurationInMinutes"])))
+            .SetCookie(Response, "jwt", authResponse.Token, DateTime.UtcNow.AddMonths(Convert.ToInt32(_configuration["JwtConfig:RefreshTokenDurationInMonths"])))
             .SetCookie(Response, "refreshToken", authResponse.RefreshToken, DateTime.UtcNow.AddMonths(Convert.ToInt32(_configuration["JwtConfig:RefreshTokenDurationInMonths"]))); ;
     }
 }

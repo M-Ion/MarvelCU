@@ -43,6 +43,20 @@ const movieService = createApi({
         params: prepareRequestParams(arg),
       }),
     }),
+
+    addToFavourites: build.mutation<void, number>({
+      query: (id: number) => ({
+        url: `/Movies/Favourite/${id}`,
+        method: "POST",
+      }),
+    }),
+
+    removeFromFavourite: build.mutation<void, number>({
+      query: (id: number) => ({
+        url: `/Movies/Favourite/${id}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 

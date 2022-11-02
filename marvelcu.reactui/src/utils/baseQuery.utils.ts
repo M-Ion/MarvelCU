@@ -7,6 +7,7 @@ const baseQuery = fetchBaseQuery({
 
     return headers;
   },
+  credentials: "include",
 });
 
 export default baseQuery;

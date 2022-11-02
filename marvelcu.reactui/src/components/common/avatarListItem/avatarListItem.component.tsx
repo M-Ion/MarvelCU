@@ -1,17 +1,19 @@
 import { Box, Grid, Typography } from "@mui/material";
 import { FC } from "react";
+import { Link } from "react-router-dom";
 
 import { StyledAvatar } from "./avatarListItem.styles";
 
 type Props = {
   title: string;
+  link: string;
 };
 
-const AvatarListItem: FC<Props> = ({ title }) => {
+const AvatarListItem: FC<Props> = ({ link, title }) => {
   return (
-    <Box>
+    <Box component={Link} to={link}>
       <Grid container flexDirection="column" alignItems="center">
-        <StyledAvatar />
+        <StyledAvatar src="/marvelLogo.jpg" />
         <Typography>{title}</Typography>
       </Grid>
     </Box>

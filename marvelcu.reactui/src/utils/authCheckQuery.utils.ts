@@ -16,6 +16,7 @@ const baseQuery = fetchBaseQuery({
 
     return headers;
   },
+  credentials: "include",
 });
 
 const baseQueryWithAuthCheck = async (
@@ -38,6 +39,8 @@ const baseQueryWithAuthCheck = async (
       api.dispatch(
         setCredentials({ ...(resultOnRefresh.data as { token: string }), user })
       );
+
+      result = await baseQuery(args, api, extraOptions);
     } else {
       // Logout in case of refresh token expired
       api.dispatch(logOut());

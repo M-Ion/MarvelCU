@@ -7,11 +7,13 @@ import IFilter from "../../../types/processing/IFilter.model";
 import Op from "../../../types/processing/Op";
 
 type Props = {
+  prop: string;
+  operation: Op;
   filters: IFilter[];
   setFilters: (value: SetStateAction<IFilter[]>) => void;
 };
 
-const SearchBar: FC<Props> = ({ filters, setFilters }) => {
+const SearchBar: FC<Props> = ({ prop, operation, filters, setFilters }) => {
   const [timer, setTimer] = useState<NodeJS.Timeout | undefined>(undefined);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -21,8 +23,8 @@ const SearchBar: FC<Props> = ({ filters, setFilters }) => {
 
     const newTimer = setTimeout(() => {
       let searchFilter: IFilter = {
-        prop: "name",
-        operation: Op.Ct,
+        prop,
+        operation,
         value: input,
       };
       setFilters(AddInFiltersState(filters, searchFilter, true));

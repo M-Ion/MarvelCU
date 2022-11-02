@@ -38,6 +38,7 @@ public class MapperConfig : Profile
 
         CreateMap<User, RegisterUserDto>().ReverseMap();
         CreateMap<User, UserDto>().ReverseMap();
+        CreateMap<User, GetUserDto>().ReverseMap();
     }
 }
 

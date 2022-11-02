@@ -23,7 +23,7 @@ const LoginForm = () => {
       .then((data) => {
         dispatch(
           setCredentials({
-            user: { id: data.userId },
+            user: data.user,
             token: data.token,
           })
         );

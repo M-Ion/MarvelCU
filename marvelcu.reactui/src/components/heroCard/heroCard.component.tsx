@@ -1,5 +1,6 @@
-import { CardActionsProps } from "@mui/material";
+import { Button, CardActions } from "@mui/material";
 import { FC } from "react";
+import { Link } from "react-router-dom";
 
 import IGetBlob from "../../types/blob/IGetBlob.model";
 import IGetHero from "../../types/hero/IGetHero.mode";
@@ -16,8 +17,12 @@ const HeroCard: FC<Props> = ({ dto }) => {
   };
 
   return (
-    <Card heading={""} description={""} blobData={blobData}>
-      {}
+    <Card heading={dto.name} description={""} blobData={blobData}>
+      <CardActions>
+        <Button component={Link} to={`${dto.id}`} size="small">
+          View
+        </Button>
+      </CardActions>
     </Card>
   );
 };

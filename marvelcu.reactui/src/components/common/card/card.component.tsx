@@ -14,8 +14,9 @@ type Props = {
 };
 
 const Card: FC<Props> = ({ blobData, children, description, heading }) => {
-  const { data } = blobService.useFetchBlobQuery(blobData);
-  const imageurl = data?.blob ?? "/marvelLogo.jpg";
+  // const { data } = blobService.useFetchBlobQuery(blobData);
+  // const imageurl = data?.blob ?? "/marvelLogo.jpg";
+  const imageurl = "/marvelLogo.jpg";
 
   return (
     <Grid item xs={12} sm={6} md={3}>

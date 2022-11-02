@@ -1,23 +1,37 @@
 import {
   AppBar,
+  Avatar,
   Box,
   Container,
   IconButton,
   Menu,
   MenuItem,
   Toolbar,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-
-import { useState } from "react";
-import { LogoIcon, HeaderBox, HeaderButton } from "./header.styles";
 import { Link } from "react-router-dom";
 
-const pages: string[] = ["movies", "heroes", "actors", "news"];
+import { LogoIcon, HeaderBox, HeaderButton } from "./header.styles";
+import {
+  selectCurrentUser,
+  setCredentials,
+} from "../../store/reducers/user.slice";
+import { useSelector } from "react-redux";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import authService from "../../services/auth.service";
+
+const pages: string[] = ["Movies", "Heroes", "Actors", "News"];
 
 const Header = () => {
+  const dispatch = useDispatch();
+  const currentUser = useSelector(selectCurrentUser);
+  const [logout] = authService.useLogoutMutation();
+
   const [anchorElNav, setAnchorElNav] = useState<HTMLElement | null>(null);
+  const [anchorElUser, setAnchorElUser] = useState<HTMLElement | null>(null);
 
   const handleOpenNavMenu = (e: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(e.currentTarget);
@@ -25,6 +39,20 @@ const Header = () => {
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+  };
+
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  const handleLogout = async () => {
+    const res = await logout(undefined);
+    console.log(res);
+    dispatch(setCredentials({ user: null, token: null }));
   };
 
   return (
@@ -84,6 +112,51 @@ const Header = () => {
           </Box>
 
           <HeaderBox />
+          {currentUser && (
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Remy Sharp">{currentUser.firstName[0]}</Avatar>
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                <MenuItem
+                  key={"Profile"}
+                  onClick={handleCloseUserMenu}
+                  component={Link}
+                  to="/profile"
+                >
+                  <Typography textAlign="center">{"Profile"}</Typography>
+                </MenuItem>
+                <MenuItem
+                  key={"Logout"}
+                  onClick={async () => {
+                    handleCloseUserMenu();
+                    await handleLogout();
+                  }}
+                  component={Link}
+                  to="/login"
+                >
+                  <Typography textAlign="center">{"Logout"}</Typography>
+                </MenuItem>
+              </Menu>
+            </Box>
+          )}
         </Toolbar>
       </Container>
     </AppBar>

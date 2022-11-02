@@ -142,7 +142,12 @@ const MoviesPage = () => {
             sx={{ marginBottom: 2 }}
           />
           <Button onClick={() => setShowSidebar(!showSidebar)}>Filters</Button>
-          <SearchBar filters={filters} setFilters={setFilters} />
+          <SearchBar
+            prop={"name"}
+            operation={Op.Ct}
+            filters={filters}
+            setFilters={setFilters}
+          />
         </Grid>
 
         {/*  Items grid */}

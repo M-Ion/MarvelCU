@@ -1,5 +1,6 @@
 ﻿using MarvelCU.Bll.Interfaces;
 using MarvelCU.Common.Dtos.Actor;
+using MarvelCU.Common.Models.Processing;
 using MarvelCU.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -37,6 +38,26 @@ public class ActorsController : ControllerBase
         await _actorService.CreateActor(createActorDto);
         return Ok();
     }
+
+    [HttpPost("Favourite/{id}")]
+    [Authorize]
+    public async Task<ActionResult> AddActorToFavourites(int id)
+    {
+        await _actorService.AddActorToFavourites(id);
+        return NoContent();
+    }
+
+    [HttpPost("Filter")]
+    public async Task<ActionResult<IList<GetActorDto>>> GetActorsByFilters(
+        [FromQuery] PagingRequest paging,
+        [FromQuery] SortingRequest sorting,
+        [FromBody] IList<Filter> filters
+        )
+    {
+        var actors = await _actorService.GetActors(paging, sorting, filters);
+        return Ok(actors);
+    }
+
 
     [HttpPut("Movies/{id}/{movieId}")]
     [Authorize(Roles = "Admin")]

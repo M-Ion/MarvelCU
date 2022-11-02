@@ -44,6 +44,22 @@ public class MoviesController : ControllerBase
         return Ok(movies);
     }
 
+    [HttpPost("Favourite/{id}")]
+    [Authorize]
+    public async Task<ActionResult> AddMovieToFavourites(int id)
+    {
+        await _movieService.AddMovieToFavourites(id);
+        return NoContent();
+    }
+
+    [HttpDelete("Favourite/{id}")]
+    [Authorize]
+    public async Task<ActionResult> RemoveMovieFromFavourites(int id)
+    {
+        await _movieService.RemoveFromFavourites(id);
+        return NoContent();
+    }
+
     [HttpGet]
     [Route("{id}")]
     public async Task<ActionResult<MovieDto>> GetMovie(int id)

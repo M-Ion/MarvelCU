@@ -29,7 +29,7 @@ public class GenericRepository<T> : IRepository<T> where T : BaseEntity
     public async Task<T> Exists(int id)
     {
         var entity = await GetAsync(id);
-        return entity ?? throw new IdNotFoundException($"{typeof(T)} not found with that id!");
+        return entity ?? throw new IdNotFoundException($"{typeof(T).Name} not found with that id!");
     }
 
     public async Task<List<T>> GetAllAsync()
@@ -70,11 +70,6 @@ public class GenericRepository<T> : IRepository<T> where T : BaseEntity
     {
         _context.Update(entity);
         await _context.SaveChangesAsync();
-    }
-
-    public async Task<ProcessedResult<T>> GetPagedResult(ProcessedRequest pagedRequest)
-    {
-        throw new NotImplementedException();
     }
 
     private IQueryable<T> IncludeProperties(params Expression<Func<T, object>>[] properties)
