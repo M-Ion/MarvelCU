@@ -1,9 +1,11 @@
 ﻿using MarvelCU.Common.Dtos.User;
+using MarvelCU.Common.Exceptions;
 using MarvelCU.Dal.Interfaces;
 using MarvelCU.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -54,14 +56,14 @@ public class AuthManager : IAuthManager
 
         if (user is null)
         {
-            return null;
+            throw new ValidationException("Incorrect email");
         }
 
         bool valid = await _userManager.CheckPasswordAsync(user, loginUserDto.Password);
 
         if (!valid)
         {
-            return null;
+            throw new ValidationException("Incorrect password");
         }
 
         return user;
@@ -74,6 +76,17 @@ public class AuthManager : IAuthManager
         if (result.Succeeded)
         {
             await _userManager.AddToRoleAsync(user, "User");
+        }
+
+        foreach (IdentityError error in result.Errors)
+        {
+            switch (error.Code)
+            {
+                case "DuplicateUserName":
+                    throw new ValidationException("The email is already taken, try another one");
+                default:
+                    throw new ValidationException(error.Description);
+            }
         }
 
         return result.Errors;

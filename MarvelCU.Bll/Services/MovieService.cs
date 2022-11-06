@@ -88,5 +88,18 @@ public class MovieService : IMovieService
 
         return result;
     }
+
+    public async Task AddBoughtMovie(int id)
+    {
+        var movie = await _movieRepository.Exists(id);
+
+        var user = await _userManager.FindByIdAsync(_currentUser.Id);
+
+        if (user is not null)
+        {
+            user.BoughtMovies.Add(movie);
+            await _userManager.UpdateAsync(user);
+        }
+    }
 }
 

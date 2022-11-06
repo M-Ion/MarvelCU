@@ -24,16 +24,16 @@ public class AuthController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<TokenRequestDto>> GetAuthCookies()
     {
-        var reponse = Task.Run(() => _authService.GetAuthCookies());
-        return Ok(await reponse);
+        var reponse = await _authService.GetAuthCookies();
+        return Ok(reponse);
     }
 
-    [HttpGet("Check")]
+    [HttpGet("Session")]
     [Authorize]
-    public async Task<ActionResult<UserDto>> CheckUser()
+    public async Task<ActionResult<AuthResponseDto>> CheckUser()
     {
-        UserDto userDto = await _authService.CheckUser();
-        return Ok(userDto);
+        AuthResponseDto responseDto = await _authService.CheckUserSession();
+        return Ok(responseDto);
     }
 
     [HttpPost]

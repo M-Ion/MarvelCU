@@ -16,6 +16,8 @@ public interface IMovieService
 
     Task RemoveFromFavourites(int movieId);
 
+    Task AddBoughtMovie(int id);
+
     Task<ProcessedResult<GetMovieDto>> GetMovies(PagingRequest pagingRequest, SortingRequest sortingRequest, IList<Filter> filters);
 
     Task CreateMovie(CreateMovieDto createMovieDto);

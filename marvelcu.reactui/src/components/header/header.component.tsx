@@ -112,7 +112,7 @@ const Header = () => {
           </Box>
 
           <HeaderBox />
-          {currentUser && (
+          {currentUser ? (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -156,6 +156,10 @@ const Header = () => {
                 </MenuItem>
               </Menu>
             </Box>
+          ) : (
+            <Link style={{ textDecoration: "none" }} to={`/login`}>
+              <HeaderButton>Login</HeaderButton>
+            </Link>
           )}
         </Toolbar>
       </Container>

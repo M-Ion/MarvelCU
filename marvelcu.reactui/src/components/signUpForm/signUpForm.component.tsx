@@ -1,10 +1,11 @@
-import { Alert, Button, Grid, Link, TextField } from "@mui/material";
+import { Alert, Button, Grid, Link } from "@mui/material";
 import { useFormik } from "formik";
 import { Link as RouteLink } from "react-router-dom";
 
 import { Form } from "./signUpForm.styles";
-import signUpSchema from "./signUpForm.validation";
 import authService from "../../services/auth.service";
+import FormInput from "../formInput/formInput.component";
+import signUpSchema from "./signUpForm.validation";
 
 type Values = {
   firstName: string;
@@ -34,77 +35,50 @@ const SignUpForm = () => {
     <Form onSubmit={formik.handleSubmit}>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
-          <TextField
-            id="firstName"
-            name="firstName"
-            label="First Name"
-            margin="normal"
-            value={formik.values.firstName}
-            onChange={formik.handleChange}
-            error={formik.touched.firstName && Boolean(formik.errors.firstName)}
-            helperText={formik.touched.firstName && formik.errors.firstName}
-            onBlur={formik.handleBlur}
+          <FormInput
+            formik={formik}
+            label={"First Name"}
+            prop={"firstName"}
             fullWidth
+            margin="normal"
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <TextField
-            id="lastName"
-            name="lastName"
-            label="Last Name"
-            margin="normal"
-            value={formik.values.lastName}
-            onChange={formik.handleChange}
-            error={formik.touched.lastName && Boolean(formik.errors.lastName)}
-            helperText={formik.touched.lastName && formik.errors.lastName}
-            onBlur={formik.handleBlur}
+          <FormInput
+            formik={formik}
+            label={"Last Name"}
+            prop={"lastName"}
             fullWidth
+            margin="normal"
           />
         </Grid>
       </Grid>
-      <TextField
-        id="email-signup"
-        name="email"
-        label="Email"
-        margin="normal"
-        value={formik.values.email}
-        onChange={formik.handleChange}
-        error={formik.touched.email && Boolean(formik.errors.email)}
-        helperText={formik.touched.email && formik.errors.email}
-        onBlur={formik.handleBlur}
+      <FormInput
+        formik={formik}
+        label={"Email"}
+        prop={"email"}
         fullWidth
+        margin="normal"
       />
-      <TextField
-        id="password-signup"
-        name="password"
-        label="Password"
+
+      <FormInput
+        formik={formik}
+        label={"Password"}
+        prop={"password"}
         type="password"
-        margin="normal"
-        value={formik.values.password}
-        onChange={formik.handleChange}
-        error={formik.touched.password && Boolean(formik.errors.password)}
-        helperText={formik.touched.password && formik.errors.password}
-        onBlur={formik.handleBlur}
         fullWidth
+        margin="normal"
       />
-      <TextField
-        id="confirmPassword"
-        name="confirmPassword"
-        label="Confirm Password"
+
+      <FormInput
+        formik={formik}
+        label={"Confirm Password"}
+        prop={"confirmPassword"}
         type="password"
-        margin="normal"
-        value={formik.values.confirmPassword}
-        onChange={formik.handleChange}
-        error={
-          formik.touched.confirmPassword &&
-          Boolean(formik.errors.confirmPassword)
-        }
-        helperText={
-          formik.touched.confirmPassword && formik.errors.confirmPassword
-        }
-        onBlur={formik.handleBlur}
         fullWidth
+        margin="normal"
       />
+
       <Button
         type="submit"
         variant="contained"

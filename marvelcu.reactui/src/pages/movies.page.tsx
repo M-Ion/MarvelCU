@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Container,
   Grid,
   Pagination,
@@ -14,6 +15,7 @@ import {
   AddInFiltersState,
   RemoveFromFiltersState,
 } from "../utils/setFiltersState.utils";
+import { movieSortingFields } from "../utils/sorting";
 import CheckBoxFilter from "../components/common/checkBoxFilter/checkBoxFilter.component";
 import FilterBox from "../components/common/filterBox/filterBox.component";
 import FilterSidebar from "../components/common/filterSidebar/filterSidebar.component";
@@ -27,6 +29,7 @@ import movieFilters from "../utils/filters/movie.filters";
 import movieService from "../services/movie.service";
 import Op from "../types/processing/Op";
 import SearchBar from "../components/common/searchBar/searchBar.component";
+import SortSelector from "../components/common/sortSelector/sortSelector.component";
 import usePagingReques from "../hooks/usePaging.hook";
 
 const MoviesPage = () => {
@@ -43,10 +46,12 @@ const MoviesPage = () => {
     sorting,
     filters,
     setFilters,
+    setSorting,
   } = usePagingReques<IGetMovie>();
 
   // Query for filtered movie request
-  const [fetchFilteredData] = movieService.useGetFilteredMoviesMutation();
+  const [fetchFilteredData, { isLoading }] =
+    movieService.useGetFilteredMoviesMutation();
 
   const fetchMovies = async () => {
     let request: IProcessedRequest = { paging, sorting, filters };
@@ -70,7 +75,7 @@ const MoviesPage = () => {
   useEffect(() => {
     fetchMovies();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paging.pageIndex, filters]);
+  }, [paging.pageIndex, filters, sorting]);
 
   const handlePageChange = (event: ChangeEvent<unknown>, page: number) => {
     setPaging({ pageIndex: page - 1, pageSize: paging.pageSize });
@@ -134,7 +139,7 @@ const MoviesPage = () => {
         disableGutters
         sx={{ padding: theme.spacing(8, 0, 6) }}
       >
-        <Grid container alignItems="flex-start" sx={{ gap: 2 }}>
+        <Grid container alignItems="center" sx={{ gap: 2 }}>
           <Pagination
             color="secondary"
             count={Math.ceil(total.current / (paging.pageSize as number))}
@@ -142,6 +147,11 @@ const MoviesPage = () => {
             sx={{ marginBottom: 2 }}
           />
           <Button onClick={() => setShowSidebar(!showSidebar)}>Filters</Button>
+          <SortSelector
+            setSort={setSorting}
+            sort={sorting}
+            sortFields={movieSortingFields}
+          />
           <SearchBar
             prop={"name"}
             operation={Op.Ct}
@@ -151,11 +161,17 @@ const MoviesPage = () => {
         </Grid>
 
         {/*  Items grid */}
-        <Grid container spacing={4}>
-          {data.map((el) => (
-            <MovieCard key={el.id} dto={el} />
-          ))}
-        </Grid>
+        {isLoading ? (
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Grid container spacing={4}>
+            {data.map((el) => (
+              <MovieCard key={el.id} dto={el} />
+            ))}
+          </Grid>
+        )}
       </Container>
       <Footer />
     </Box>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MarvelCU.Domain;
 
@@ -20,5 +21,7 @@ public class User : IdentityUser
     public virtual ICollection<Movie> FavouriteMovies { get; set; }
 
     public virtual ICollection<Hero> FavouriteHeroes { get; set; }
+
+    public virtual ICollection<Movie> BoughtMovies { get; set; }
 }
 

@@ -16,7 +16,7 @@ public static class QueryableExtension
 
         int total = await query.CountAsync();
 
-        query = query.Paging(processedRequest.Paging).Sort(processedRequest.Sorting);
+        query = query.Sort(processedRequest.Sorting).Paging(processedRequest.Paging);
 
         ProcessedResult<TDto> result = new()
         {
@@ -58,15 +58,15 @@ public static class QueryableExtension
 
     public static IQueryable<T> Sort<T>(this IQueryable<T> query, SortingRequest sorting)
     {
-        if (sorting.Prop is null)
+        if (sorting.Sort is null)
         {
             return query;
         }
 
         ParameterExpression param = Expression.Parameter(typeof(T));
-        MemberExpression member = Expression.Property(param, sorting.Prop);
+        MemberExpression member = Expression.Property(param, sorting.Sort);
 
-        Expression<Func<T, object>> lambda = Expression.Lambda<Func<T, object>>(member, param);
+        Expression<Func<T, object>> lambda = Expression.Lambda<Func<T, object>>(Expression.Convert(member, typeof(object)), param);
 
         query = query.OrderBy(lambda);
 

@@ -4,10 +4,7 @@ import { useParams } from "react-router-dom";
 import AvatarListItem from "../../components/common/avatarListItem/avatarListItem.component";
 import ScrollableStack from "../../components/common/scrollableStack/scrollableStack.component";
 import actorService from "../../services/actor.service";
-import {
-  StyledCard,
-  StyledCardContent,
-} from "../movieEntity/movieEntity.styles";
+import { StyledCard, StyledCardContent } from "../common/entity.styles";
 
 interface IActorEntityPageProps {}
 

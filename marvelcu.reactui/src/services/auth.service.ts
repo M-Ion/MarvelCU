@@ -20,9 +20,9 @@ const authService = createApi({
       }),
     }),
 
-    checkUser: build.mutation<IUser, undefined>({
+    checkUser: build.mutation<IAuthResponse, undefined>({
       query: () => ({
-        url: "/Auth/Check",
+        url: "/Auth/Session",
         method: "GET",
       }),
     }),

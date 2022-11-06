@@ -7,6 +7,7 @@ import IPostMovie from "../types/movie/IPostMovie.model";
 import IProcessedRequest from "../types/processing/IProcessedRequest.model";
 import IProcessedResult from "../types/processing/IProcessedResult.model";
 import prepareRequestParams from "../utils/prepareParams.utils";
+import Payment from "../types/payment.model";
 
 const movieService = createApi({
   reducerPath: "movie/service",
@@ -55,6 +56,14 @@ const movieService = createApi({
       query: (id: number) => ({
         url: `/Movies/Favourite/${id}`,
         method: "DELETE",
+      }),
+    }),
+
+    buyMovie: build.mutation<void, { id: number; body: Payment }>({
+      query: (args) => ({
+        url: `/Movies/Buy/${args.id}`,
+        method: "POST",
+        body: args.body,
       }),
     }),
   }),

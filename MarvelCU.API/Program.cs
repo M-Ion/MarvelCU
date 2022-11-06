@@ -123,7 +123,7 @@ app.UseCors("AllowLocalhost");
 app.UseAuthentication();
 app.UseAuthorization();
 
-//app.UseJwtBlackList();
+app.UseJwtBlackList();
 
 app.UseDbTransaction();
 

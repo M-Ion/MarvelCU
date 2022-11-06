@@ -11,7 +11,7 @@ type Props = {
 
 const AvatarListItem: FC<Props> = ({ link, title }) => {
   return (
-    <Box component={Link} to={link}>
+    <Box component={Link} to={link} sx={{ textDecoration: "none" }}>
       <Grid container flexDirection="column" alignItems="center">
         <StyledAvatar src="/marvelLogo.jpg" />
         <Typography>{title}</Typography>

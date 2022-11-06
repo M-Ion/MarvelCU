@@ -1,5 +1,7 @@
 ﻿using MarvelCU.Common.Exceptions;
 using MarvelCU.Common.Models;
+using Stripe;
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 
 namespace MarvelCU.API.Infrastructure.Middlewares;
@@ -45,6 +47,12 @@ public class ExceptionHandlingMiddleware
             case InvalidRefreshTokenException:
                 errDetails.StatusCode = (int)HttpStatusCode.BadRequest;
                 errDetails.Type = "Not valid Refresh Token";
+                break;
+            case ValidationException:
+                errDetails.StatusCode = (int)HttpStatusCode.BadRequest;
+                break;
+            case StripeException:
+                errDetails.StatusCode = (int)HttpStatusCode.BadRequest;
                 break;
             default:
                 break;

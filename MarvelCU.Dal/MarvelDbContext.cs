@@ -30,6 +30,7 @@ public class MarvelDbContext : IdentityDbContext<User>
         modelBuilder.ApplyConfiguration(new HeroConfig());
         modelBuilder.ApplyConfiguration(new NewsConfig());
         modelBuilder.ApplyConfiguration(new ReviewConfig());
+        modelBuilder.ApplyConfiguration(new UserConfig());
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

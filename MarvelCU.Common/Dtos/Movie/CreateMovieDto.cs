@@ -18,6 +18,7 @@ namespace MarvelCU.API.Models.Movie
         [Required]
         public Sagas McuSaga { get; set; }
 
-        public string BlobFilePath { get; set; }
+        public string YouTubeTrailerId { get; set; }
+
     }
 }

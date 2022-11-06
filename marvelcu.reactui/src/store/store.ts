@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
 // RTK Query services
 import actorService from "../services/actor.service";
+import alertsReducer from "./reducers/alerts.slice";
 import authService from "../services/auth.service";
 import blobService from "../services/blob.services";
 import heroService from "../services/hero.service";
@@ -15,6 +16,7 @@ import userReducer from "../store/reducers/user.slice";
 
 const root = combineReducers({
   currentUser: userReducer,
+  alerts: alertsReducer,
   [actorService.reducerPath]: actorService.reducer,
   [authService.reducerPath]: authService.reducer,
   [blobService.reducerPath]: blobService.reducer,

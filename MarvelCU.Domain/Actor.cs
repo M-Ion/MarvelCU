@@ -9,13 +9,13 @@ public class Actor : BaseEntity
     private ICollection<User> _users;
 
     [Required]
-    [MaxLength(25)]
+    [MaxLength(50)]
     public string FirstName { get; set; }
 
-    [MaxLength(25)]
+    [MaxLength(50)]
     public string MiddleName { get; set; }
 
-    [MaxLength(25)]
+    [MaxLength(50)]
     public string LastName { get; set; }
 
     public virtual ICollection<Hero> Heroes { get; set; }

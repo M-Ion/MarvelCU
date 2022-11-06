@@ -20,8 +20,8 @@ export default function usePagingReques<T>(pageSize: number = 8) {
 
   // Sorting
   const [sorting, setSorting] = useState<ISortingRequest>({
-    prop: null,
-    direction: SortDirection.Desc,
+    sort: null,
+    direction: SortDirection.Asc,
   });
 
   // Filters

@@ -2,6 +2,7 @@
 using MarvelCU.API.Models.Movie;
 using MarvelCU.Bll.Interfaces;
 using MarvelCU.Common.Dtos.Movie;
+using MarvelCU.Common.Dtos.Payment;
 using MarvelCU.Common.Extensions;
 using MarvelCU.Common.Models;
 using MarvelCU.Common.Models.Processing;
@@ -18,10 +19,12 @@ namespace MarvelCU.API.Controllers;
 public class MoviesController : ControllerBase
 {
     private readonly IMovieService _movieService;
+    private readonly IPaymentService _paymentService;
 
-    public MoviesController(IMovieService movieService)
+    public MoviesController(IMovieService movieService, IPaymentService paymentService)
     {
         _movieService = movieService;
+        _paymentService = paymentService;
     }
 
     [HttpGet]
@@ -74,6 +77,20 @@ public class MoviesController : ControllerBase
     {
         await _movieService.CreateMovie(createMovieDto);
         return Ok();
+    }
+
+    [HttpPost("Buy/{id}")]
+    [Authorize]
+    public async Task<ActionResult> Buy(int id, [FromBody] PaymentDto paymentDto)
+    {
+        var charged = await _paymentService.ProcessPayment(paymentDto);
+        if (charged)
+        {
+            await _movieService.AddBoughtMovie(id);
+            return NoContent();
+        }
+
+        return BadRequest();
     }
 }
 

@@ -1,5 +1,12 @@
 import GroupsIcon from "@mui/icons-material/Groups";
-import { Box, Container, Grid, Pagination, useTheme } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Container,
+  Grid,
+  Pagination,
+  useTheme,
+} from "@mui/material";
 import { ChangeEvent, useEffect } from "react";
 
 import Footer from "../components/footer/footer.component";
@@ -26,7 +33,8 @@ const HeroesPage = () => {
     setFilters,
   } = usePagingReques<IGetHero>();
 
-  const [fetchFilteredData] = heroService.useGetFilteredHeroesMutation();
+  const [fetchFilteredData, { isLoading }] =
+    heroService.useGetFilteredHeroesMutation();
 
   const fetchHeroes = async () => {
     let request: IProcessedRequest = { paging, sorting, filters };
@@ -85,11 +93,17 @@ const HeroesPage = () => {
         </Grid>
 
         {/*  Items grid */}
-        <Grid container spacing={4}>
-          {data.map((el, index) => (
-            <HeroCard key={index} dto={el} />
-          ))}
-        </Grid>
+        {isLoading ? (
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Grid container spacing={4}>
+            {data.map((el, index) => (
+              <HeroCard key={index} dto={el} />
+            ))}
+          </Grid>
+        )}
       </Container>
       <Footer />
     </Box>

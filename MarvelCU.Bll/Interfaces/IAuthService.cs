@@ -13,10 +13,10 @@ public interface IAuthService
 
     Task<AuthResponseDto> RefreshToken();
 
-    Task<UserDto> CheckUser();
+    Task<TokenRequestDto> GetAuthCookies();
+
+    Task<AuthResponseDto> CheckUserSession();
 
     Task Logout();
-
-    public TokenRequestDto GetAuthCookies();
 }
 

@@ -2,7 +2,7 @@
 
 public class SortingRequest
 {
-    public string Prop { get; set; }
+    public string Sort { get; set; }
 
     public SortDirection Direction { get; set; } = SortDirection.Asc;
 }

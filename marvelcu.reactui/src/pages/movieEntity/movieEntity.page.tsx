@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   CardMedia,
   Container,
   Grid,
@@ -7,9 +8,11 @@ import {
   Rating,
   Typography,
 } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import DownloadIcon from "@mui/icons-material/Download";
 
-import { StyledCard, StyledCardContent } from "./movieEntity.styles";
+import { StyledCard, StyledCardContent } from "../common/entity.styles";
 import AvatarListItem from "../../components/common/avatarListItem/avatarListItem.component";
 import Footer from "../../components/footer/footer.component";
 import IMovie from "../../types/movie/IMovie.model";
@@ -23,6 +26,7 @@ import { selectCurrentUser } from "../../store/reducers/user.slice";
 import UpdateReviewForm from "../../components/updateReviewForm/updateReviewForm.component";
 import IGetReview from "../../types/review/IGetReview.model";
 import { useEffect, useState } from "react";
+import NotFoundPage from "../notFound.page";
 
 const fields: readonly (keyof IMovie)[] = ["premiere", "mcuPhase", "mcuSaga"];
 const defaultDescription: string = `Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis optio accusamus adipisci, officia est consequuntur obcaecati veritatis ratione magni temporibus voluptates maxime sed corporis ad. Repellat excepturi eos est suscipit id sunt accusamus consequuntur saepe voluptatum, nam velit eveniet ipsa.`;
@@ -46,7 +50,9 @@ const MovieEntityPage = () => {
   let params = useParams<string>();
   const id = +(params.movieId as string);
 
-  const { data } = movieService.useFetchMovieQuery(id);
+  const bought = Boolean(currentUser?.boughtMovies.find((el) => el.id === id));
+
+  const { data, isError } = movieService.useFetchMovieQuery(id);
 
   useEffect(() => {
     setReviews(data?.reviews);
@@ -56,7 +62,7 @@ const MovieEntityPage = () => {
     }
   }, [data, currentUser]);
 
-  return (
+  return !isError ? (
     <Box>
       {/* Heading */}
       <Container sx={{ marginTop: 4 }}>
@@ -82,6 +88,31 @@ const MovieEntityPage = () => {
                 ))}
               <Rating defaultValue={3} readOnly />
             </StyledCardContent>
+            {!bought ? (
+              <Button
+                sx={{ width: 200 }}
+                variant="contained"
+                color="secondary"
+                startIcon={<ShoppingCartIcon />}
+                component={Link}
+                to="/Checkout"
+                state={{ productId: id, productName: data?.name, amount: 25 }}
+              >
+                Buy
+              </Button>
+            ) : (
+              <Button
+                sx={{ width: 200 }}
+                variant="contained"
+                color="secondary"
+                startIcon={<DownloadIcon />}
+                component="a"
+                download
+                href={`${process.env.REACT_APP_API_BASE_URL}/Blobs/Download/videos/Wakanda.mp4`}
+              >
+                Download
+              </Button>
+            )}
           </Grid>
         </StyledCard>
 
@@ -159,6 +190,8 @@ const MovieEntityPage = () => {
 
       <Footer />
     </Box>
+  ) : (
+    <NotFoundPage />
   );
 };
 

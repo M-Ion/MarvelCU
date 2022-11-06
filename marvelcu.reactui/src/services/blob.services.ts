@@ -12,6 +12,12 @@ const blobService = createApi({
         url: `/Blobs/Blob/${params.container}/${params.blob}`,
       }),
     }),
+    downloadBlob: build.mutation<any, {}>({
+      query: () => ({
+        url: `/Blobs/Download/videos/${"Wakanda"}.mp4`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 

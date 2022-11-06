@@ -9,4 +9,6 @@ export default interface IUser {
   favouriteMovies: IGetMovie[];
   favouriteHeroes: IGetHero[];
   favouriteActors: IGetActor[];
+  boughtMovies: IGetMovie[];
+  token: string;
 }

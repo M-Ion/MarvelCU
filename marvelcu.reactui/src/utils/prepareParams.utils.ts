@@ -3,7 +3,7 @@ import IProcessedRequest from "../types/processing/IProcessedRequest.model";
 type Params = {
   pageIndex?: number;
   pageSize?: number;
-  prop?: string;
+  sort?: string;
 };
 
 const prepareRequestParams = (arg: IProcessedRequest) => {
@@ -12,12 +12,12 @@ const prepareRequestParams = (arg: IProcessedRequest) => {
   const isPaging = Boolean(
     Boolean(paging.pageIndex || paging.pageIndex === 0) && paging.pageSize
   );
-  const isSorting = Boolean(sorting.prop);
+  const isSorting = Boolean(sorting.sort);
 
   let params: Params = {
     pageIndex: undefined,
     pageSize: undefined,
-    prop: undefined,
+    sort: undefined,
   };
 
   if (isPaging) {
@@ -31,7 +31,7 @@ const prepareRequestParams = (arg: IProcessedRequest) => {
   if (isSorting) {
     params = {
       ...params,
-      prop: sorting.prop as string,
+      sort: sorting.sort as string,
     };
   }
 

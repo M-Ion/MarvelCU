@@ -20,5 +20,7 @@ public class UserDto
     public virtual ICollection<GetMovieDto> FavouriteMovies { get; set; }
 
     public virtual ICollection<GetHeroDto> FavouriteHeroes { get; set; }
+
+    public virtual ICollection<GetMovieDto> BoughtMovies { get; set; }
 }
 

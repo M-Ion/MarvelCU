@@ -107,16 +107,16 @@ namespace MarvelCU.Dal.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LastName")
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("MiddleName")
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -132,11 +132,13 @@ namespace MarvelCU.Dal.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(600)
+                        .HasColumnType("nvarchar(600)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.HasKey("Id");
 
@@ -152,7 +154,8 @@ namespace MarvelCU.Dal.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Descritpion")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(600)
+                        .HasColumnType("nvarchar(600)");
 
                     b.Property<short>("McuPhase")
                         .HasColumnType("smallint");
@@ -162,14 +165,21 @@ namespace MarvelCU.Dal.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("Premiere")
                         .HasColumnType("date");
 
+                    b.Property<long>("Price")
+                        .HasColumnType("bigint");
+
                     b.Property<float>("Rating")
                         .HasColumnType("real");
+
+                    b.Property<string>("YouTubeTrailerId")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.HasKey("Id");
 
@@ -185,7 +195,9 @@ namespace MarvelCU.Dal.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(2500)
+                        .HasColumnType("nvarchar(2500)");
 
                     b.Property<DateTime>("Posted")
                         .ValueGeneratedOnAdd()
@@ -199,7 +211,8 @@ namespace MarvelCU.Dal.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<DateTime>("Updated")
                         .ValueGeneratedOnUpdate()
@@ -231,12 +244,15 @@ namespace MarvelCU.Dal.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("JwtId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Token")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -509,6 +525,21 @@ namespace MarvelCU.Dal.Migrations
                     b.ToTable("MovieUser");
                 });
 
+            modelBuilder.Entity("MovieUser1", b =>
+                {
+                    b.Property<int>("BoughtMoviesId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CustomersId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("BoughtMoviesId", "CustomersId");
+
+                    b.HasIndex("CustomersId");
+
+                    b.ToTable("BoughtMoviesUsers", (string)null);
+                });
+
             modelBuilder.Entity("ActorHero", b =>
                 {
                     b.HasOne("MarvelCU.Domain.Actor", null)
@@ -665,6 +696,21 @@ namespace MarvelCU.Dal.Migrations
                     b.HasOne("MarvelCU.Domain.User", null)
                         .WithMany()
                         .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MovieUser1", b =>
+                {
+                    b.HasOne("MarvelCU.Domain.Movie", null)
+                        .WithMany()
+                        .HasForeignKey("BoughtMoviesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MarvelCU.Domain.User", null)
+                        .WithMany()
+                        .HasForeignKey("CustomersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

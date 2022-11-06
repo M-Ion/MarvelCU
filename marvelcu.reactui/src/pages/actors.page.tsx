@@ -1,4 +1,11 @@
-import { Box, Container, Grid, Pagination, useTheme } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Container,
+  Grid,
+  Pagination,
+  useTheme,
+} from "@mui/material";
 import { ChangeEvent, useEffect } from "react";
 import TheaterComedyIcon from "@mui/icons-material/TheaterComedy";
 
@@ -25,7 +32,8 @@ const ActorsPage = () => {
     setFilters,
   } = usePagingReques<IGetActor>();
 
-  const [fetchFilteredData] = actorService.useGetFilteredActorsMutation();
+  const [fetchFilteredData, { isLoading }] =
+    actorService.useGetFilteredActorsMutation();
 
   const fecthActors = async () => {
     let request: IProcessedRequest = { paging, sorting, filters };
@@ -84,11 +92,17 @@ const ActorsPage = () => {
         </Grid>
 
         {/*  Items grid */}
-        <Grid container spacing={4}>
-          {data.map((el) => (
-            <ActorCard key={el.id} dto={el} />
-          ))}
-        </Grid>
+        {isLoading ? (
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Grid container spacing={4}>
+            {data.map((el) => (
+              <ActorCard key={el.id} dto={el} />
+            ))}
+          </Grid>
+        )}
       </Container>
       <Footer />
     </Box>

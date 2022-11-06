@@ -3,15 +3,16 @@ import IGetHero from "../hero/IGetHero.mode";
 import IGetReview from "../review/IGetReview.model";
 
 export default interface IMovie {
-  id: number;
-  name: string;
-  premiere: Date;
+  actors: IGetActor[];
+  blob?: string;
   description: string;
-  rating: number;
+  heroes: IGetHero[];
+  id: number;
   mcuPhase: number;
   mcuSaga: number;
-  blob?: string;
-  actors: IGetActor[];
-  heroes: IGetHero[];
+  name: string;
+  premiere: Date;
+  rating: number;
   reviews: IGetReview[];
+  youTubeTrailerId: string | null;
 }

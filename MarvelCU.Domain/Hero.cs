@@ -9,8 +9,10 @@ public class Hero : BaseEntity
     private ICollection<User> _users;
 
     [Required]
+    [MaxLength(150)]
     public string Name { get; set; }
 
+    [MaxLength(600)]
     public string Description { get; set; }
 
     public virtual ICollection<Actor> Actors { get; set; }

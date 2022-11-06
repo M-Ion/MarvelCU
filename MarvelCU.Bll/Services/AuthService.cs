@@ -96,22 +96,28 @@ public class AuthService : IAuthService
         return authResponse;
     }
 
-    public TokenRequestDto GetAuthCookies()
+    public async Task<TokenRequestDto> GetAuthCookies()
     {
-        return new TokenRequestDto()
+        TokenRequestDto tokensdto = await Task.Run(() => new TokenRequestDto()
         {
             Token = _currentCookies.Jwt,
             RefreshToken = _currentCookies.RefreshToken,
-        };
+        });
+
+        return tokensdto;
     }
 
-    public async Task<UserDto> CheckUser()
+    public async Task<AuthResponseDto> CheckUserSession()
     {
         User user = await _userManager.FindByIdAsync(_currentUser.Id);
+        AuthResponseDto authResponseDto = new()
+        {
+            Token = _currentCookies.Jwt,
+            RefreshToken = _currentCookies.RefreshToken,
+            User = _mapper.Map<UserDto>(user)
+        };
 
-        UserDto userDto = _mapper.Map<UserDto>(user);
-
-        return userDto;
+        return authResponseDto;
     }
 
 }
