@@ -4,6 +4,7 @@ using MarvelCU.Common.Dtos.Blob;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using MarvelCU.Common.Constants;
 
 namespace MarvelCU.API.Controllers
 {
@@ -80,16 +81,17 @@ namespace MarvelCU.API.Controllers
             return BadRequest();
         }
 
-        [HttpGet("Download/{container}/{blobName}")]
-        public async Task<ActionResult> DownloadBlob([FromRoute] string container, [FromRoute] string blobName)
+        [HttpGet("Download/Video/{id}")]
+        public async Task<ActionResult> DownloadBlob([FromRoute] string id)
         {
-            MemoryStream stream = await _cloudService.DownloadBlob(new GetBlobRequestDto() { Container = container, Blob = blobName });
+            MemoryStream stream = await _cloudService.DownloadBlob(new GetBlobRequestDto() { Container = AzureBlobContainers.Videos, Blob = $"{id}.mp4" });
+
             if (stream is null)
             {
                 return NotFound();
             }
 
-            return File(stream, "video/mp4", blobName);
+            return File(stream, "video/mp4", $"{id}.mp4");
         }
     }
 }
