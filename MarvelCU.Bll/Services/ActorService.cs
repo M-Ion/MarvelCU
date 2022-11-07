@@ -58,9 +58,6 @@ public class ActorService : IActorService
     {
         var actor = _mapper.Map<Actor>(createActorDto);
         var entity = await _actorRepository.AddAsync(actor);
-
-        // Upload actor's image if presented
-        //await _cloudStorageManager.UploadBlob(entity.Id.ToString(), AzureBlobContainers.ActorsImages, createActorDto.BlobFilePath);
     }
 
     public async Task SupplyCollection(int id, int entityId)
@@ -81,12 +78,33 @@ public class ActorService : IActorService
         await _userManager.UpdateAsync(user);
     }
 
+    public async Task RemoveFromFavourites(int actorId)
+    {
+        User user = await _userManager.FindByIdAsync(_currentUser.Id);
+
+        Actor actor = user.FavouriteActors.FirstOrDefault(m => m.Id == actorId);
+
+        if (actor is not null)
+        {
+            user.FavouriteActors.Remove(actor);
+            await _userManager.UpdateAsync(user);
+        }
+    }
+
     public async Task<ProcessedResult<GetActorDto>> GetActors(PagingRequest pagingRequest, SortingRequest sortingRequest, IList<Filter> filters)
     {
         ProcessedRequest request = new() { Paging = pagingRequest, Sorting = sortingRequest, Filters = filters };
         ProcessedResult<GetActorDto> result = await _actorRepository.GetAllAsyncProcessed<GetActorDto>(request, _mapper);
 
         return result;
+    }
+
+    public async Task SetBlob(int id, string uri)
+    {
+        Actor actor = await _actorRepository.Exists(id);
+        actor.Blob = uri;
+
+        await _actorRepository.UpdateAsync(actor);
     }
 }
 

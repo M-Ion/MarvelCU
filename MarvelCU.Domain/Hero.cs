@@ -15,6 +15,8 @@ public class Hero : BaseEntity
     [MaxLength(600)]
     public string Description { get; set; }
 
+    public string Blob { get; set; }
+
     public virtual ICollection<Actor> Actors { get; set; }
 
     public virtual ICollection<Movie> Movies { get; set; }

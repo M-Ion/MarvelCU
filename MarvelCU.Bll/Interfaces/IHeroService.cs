@@ -14,6 +14,10 @@ public interface IHeroService
 
     Task AddHeroToFavourites(int heroId);
 
+    Task RemoveFromFavourites(int heroId);
+
+    Task SetBlob(int id, string uri);
+
     Task CreateHero(CreateHeroDto createHeroDto);
 }
 

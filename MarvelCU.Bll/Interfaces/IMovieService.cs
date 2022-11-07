@@ -18,6 +18,8 @@ public interface IMovieService
 
     Task AddBoughtMovie(int id);
 
+    Task SetBlob(int id, string uri);
+
     Task<ProcessedResult<GetMovieDto>> GetMovies(PagingRequest pagingRequest, SortingRequest sortingRequest, IList<Filter> filters);
 
     Task CreateMovie(CreateMovieDto createMovieDto);

@@ -33,6 +33,7 @@ public class ActorsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult> CreateActor([FromBody] CreateActorDto createActorDto)
     {
         await _actorService.CreateActor(createActorDto);
@@ -44,6 +45,14 @@ public class ActorsController : ControllerBase
     public async Task<ActionResult> AddActorToFavourites(int id)
     {
         await _actorService.AddActorToFavourites(id);
+        return NoContent();
+    }
+
+    [HttpDelete("Favourite/{id}")]
+    [Authorize]
+    public async Task<ActionResult> RemoveHeroFromFavourites(int id)
+    {
+        await _actorService.RemoveFromFavourites(id);
         return NoContent();
     }
 

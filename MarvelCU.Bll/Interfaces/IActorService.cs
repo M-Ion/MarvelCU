@@ -14,8 +14,12 @@ public interface IActorService
 
     Task AddActorToFavourites(int actorId);
 
+    Task RemoveFromFavourites(int actorId);
+
     Task CreateActor(CreateActorDto createActorDto);
 
     Task SupplyCollection(int id, int entityId);
+
+    Task SetBlob(int id, string uri);
 }
 

@@ -2,12 +2,12 @@
 
 public static class AzureBlobContainers
 {
-    public static readonly string ActorsImages = "actor-images";
+    public const string ActorsImages = "actor-images";
 
-    public static readonly string MoviesImages = "movie-images";
+    public const string MoviesImages = "movie-images";
 
-    public static readonly string HeroesImages = "hero-images";
+    public const string HeroesImages = "hero-images";
 
-    public static readonly string Videos = "videos";
+    public const string Videos = "videos";
 }
 

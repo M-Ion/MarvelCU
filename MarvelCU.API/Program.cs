@@ -9,7 +9,10 @@ using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Stripe;
+using System.Diagnostics;
 using System.Text;
+
+//Process.Start(@"C:\Users\User\Downloads\Redis\redis-server.exe");
 
 var builder = WebApplication.CreateBuilder(args);
 

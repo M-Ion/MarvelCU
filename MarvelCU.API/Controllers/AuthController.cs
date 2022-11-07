@@ -22,9 +22,9 @@ public class AuthController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<TokenRequestDto>> GetAuthCookies()
+    public ActionResult<TokenRequestDto> GetAuthCookies()
     {
-        var reponse = await _authService.GetAuthCookies();
+        var reponse = _authService.GetAuthCookies();
         return Ok(reponse);
     }
 

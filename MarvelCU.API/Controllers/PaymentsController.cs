@@ -1,6 +1,7 @@
 ﻿using MarvelCU.Bll.Interfaces;
 using MarvelCU.Common.Dtos.Payment;
 using MarvelCU.Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MarvelCU.API.Controllers;
@@ -17,8 +18,7 @@ public class PaymentsController : ControllerBase
     }
 
     [HttpPost("Pay")]
-    //[Authorize]
-    //[ServiceFilter(typeof(CurrentUserValidationFilter))]
+    [Authorize]
     public async Task<ActionResult> Pay([FromBody] PaymentDto paymentDto)
     {
         var charged = await _paymentService.ProcessPayment(paymentDto);

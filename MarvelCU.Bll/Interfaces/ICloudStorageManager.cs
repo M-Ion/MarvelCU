@@ -8,7 +8,7 @@ public interface ICloudStorageManager
 
     Task<List<string>> AllBlobs(string containerName);
 
-    Task<bool> UploadBlob(string containerName, string blobName, IFormFile file);
+    Task<string> UploadBlob(string containerName, string blobName, IFormFile file);
 
     Task<MemoryStream> DownloadBlob(string containerName, string blobName);
 }

@@ -18,8 +18,10 @@ public class Movie : BaseEntity
     [MaxLength(600)]
     public string Descritpion { get; set; }
 
+    public string Blob { get; set; }
+
     [MaxLength(150)]
-    public string? YouTubeTrailerId { get; set; }
+    public string YouTubeTrailerId { get; set; }
 
     [Column(TypeName = "date")]
     public DateTime Premiere { get; set; }

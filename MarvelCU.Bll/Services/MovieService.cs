@@ -53,9 +53,6 @@ public class MovieService : IMovieService
     {
         var movie = _mapper.Map<Movie>(createMovieDto);
         var entity = await _movieRepository.AddAsync(movie);
-
-        // Upload movie's image if presented
-        //await _cloudStorageManager.UploadBlob(entity.Id.ToString(), AzureBlobContainers.MoviesImages, createMovieDto.BlobFilePath);
     }
 
     public async Task AddMovieToFavourites(int movieId)
@@ -100,6 +97,14 @@ public class MovieService : IMovieService
             user.BoughtMovies.Add(movie);
             await _userManager.UpdateAsync(user);
         }
+    }
+
+    public async Task SetBlob(int id, string uri)
+    {
+        Movie movie = await _movieRepository.Exists(id);
+        movie.Blob = uri;
+
+        await _movieRepository.UpdateAsync(movie);
     }
 }
 

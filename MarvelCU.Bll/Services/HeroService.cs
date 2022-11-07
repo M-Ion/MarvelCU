@@ -50,15 +50,10 @@ public class HeroService : IHeroService
         return _mapper.Map<HeroDto>(hero);
     }
 
-
-
     public async Task CreateHero(CreateHeroDto createHeroDto)
     {
         var hero = _mapper.Map<Hero>(createHeroDto);
         var entity = await _heroRepository.AddAsync(hero);
-
-        // Upload hero's image if presented
-        //await _cloudStorageManager.UploadBlob(entity.Id.ToString(), AzureBlobContainers.HerosImages, createHeroDto.BlobFilePath);
     }
 
     public async Task AddHeroToFavourites(int heroId)
@@ -71,12 +66,33 @@ public class HeroService : IHeroService
         await _userManager.UpdateAsync(user);
     }
 
+    public async Task RemoveFromFavourites(int heroId)
+    {
+        User user = await _userManager.FindByIdAsync(_currentUser.Id);
+
+        Hero hero = user.FavouriteHeroes.FirstOrDefault(m => m.Id == heroId);
+
+        if (hero is not null)
+        {
+            user.FavouriteHeroes.Remove(hero);
+            await _userManager.UpdateAsync(user);
+        }
+    }
+
     public async Task<ProcessedResult<GetHeroDto>> GetAllHeroes(PagingRequest pagingRequest, SortingRequest sortingRequest, IList<Filter> filters)
     {
         ProcessedRequest request = new() { Paging = pagingRequest, Sorting = sortingRequest, Filters = filters };
         ProcessedResult<GetHeroDto> result = await _heroRepository.GetAllAsyncProcessed<GetHeroDto>(request, _mapper);
 
         return result;
+    }
+
+    public async Task SetBlob(int id, string uri)
+    {
+        Hero hero = await _heroRepository.Exists(id);
+        hero.Blob = uri;
+
+        await _heroRepository.UpdateAsync(hero);
     }
 }
 

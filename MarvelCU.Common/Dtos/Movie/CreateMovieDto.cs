@@ -13,6 +13,9 @@ namespace MarvelCU.API.Models.Movie
         public string Descritpion { get; set; }
 
         [Required]
+        public uint Price { get; set; }
+
+        [Required]
         public sbyte McuPhase { get; set; }
 
         [Required]

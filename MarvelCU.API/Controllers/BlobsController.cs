@@ -3,6 +3,7 @@ using MarvelCU.Bll.Interfaces;
 using MarvelCU.Common.Dtos.Blob;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MarvelCU.API.Controllers
 {
@@ -11,37 +12,65 @@ namespace MarvelCU.API.Controllers
     public class BlobsController : ControllerBase
     {
         private readonly ICloudStorageService _cloudService;
+        private readonly IMovieService _movieService;
+        private readonly IHeroService _heroService;
+        private readonly IActorService _actorService;
 
-        public BlobsController(ICloudStorageService cloudService)
+        public BlobsController(
+            ICloudStorageService cloudService, 
+            IMovieService movieService, 
+            IHeroService heroService, 
+            IActorService actorService
+            )
         {
             _cloudService = cloudService;
+            _movieService = movieService;
+            _heroService = heroService;
+            _actorService = actorService;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IList<GetBlobDto>>> GetAllBlobs([FromBody] BaseBlobDto blobDto)
+        [HttpPost("Movie")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> UploadMovieBlob([FromForm] IFormFile file)
         {
-            var blobs = await _cloudService.GetAllBlobs(blobDto);
-            return Ok(blobs);
-        }
+            bool uploaded = await _cloudService.UploadBlob(
+                new UploadBlobDto() { Container = "movie-images", File = file },
+                _movieService.SetBlob
+                );
 
-        [HttpGet("Blob/{container}/{blobName}")]
-        public async Task<ActionResult<GetBlobDto>> GetBlob([FromRoute] string container, [FromRoute] string blobName)
-        {
-            var blob = await _cloudService.GetBlob(new GetBlobRequestDto() { Container = container, Blob = blobName });
-
-            if (blob is null)
+            if (uploaded)
             {
-                return NotFound();
+                return Ok();
             }
 
-            return Ok(blob);
+            return BadRequest();
         }
 
-        [HttpPost("Upload/{container}/{blobName}")]
-        public async Task<ActionResult> UploadBlob([FromForm] IFormFile file, [FromRoute] string container, [FromRoute] string blobName)
+        [HttpPost("Hero")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> UploadHeroBlob([FromForm] IFormFile file)
         {
+            bool uploaded = await _cloudService.UploadBlob(
+                new UploadBlobDto() { Container = "hero-images", File = file },
+                _heroService.SetBlob
+                );
 
-            bool uploaded = await _cloudService.UploadBlob(new UploadBlobDto() { Container = container, Blob = blobName, File = file });
+            if (uploaded)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+
+        [HttpPost("Actor")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> UploadActorBlob([FromForm] IFormFile file)
+        {
+            bool uploaded = await _cloudService.UploadBlob(
+                new UploadBlobDto() { Container = "actor-images", File = file },
+                _actorService.SetBlob
+                );
 
             if (uploaded)
             {
@@ -60,7 +89,6 @@ namespace MarvelCU.API.Controllers
                 return NotFound();
             }
 
-            stream.Position = 0;
             return File(stream, "video/mp4", blobName);
         }
     }

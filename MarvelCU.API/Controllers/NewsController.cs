@@ -36,6 +36,7 @@ public class NewsController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult> UpdateNews(int id, [FromBody] UpdateNewsDto updateNewsDto)
     {
         await _newsService.UpdateNews(id, updateNewsDto);
@@ -43,6 +44,7 @@ public class NewsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult> RemoveNews(int id)
     {
         await _newsService.DeleteNews(id);

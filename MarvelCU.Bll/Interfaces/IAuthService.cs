@@ -13,7 +13,7 @@ public interface IAuthService
 
     Task<AuthResponseDto> RefreshToken();
 
-    Task<TokenRequestDto> GetAuthCookies();
+    TokenRequestDto GetAuthCookies();
 
     Task<AuthResponseDto> CheckUserSession();
 

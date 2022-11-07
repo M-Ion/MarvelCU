@@ -18,6 +18,8 @@ public class Actor : BaseEntity
     [MaxLength(50)]
     public string LastName { get; set; }
 
+    public string Blob { get; set; }
+
     public virtual ICollection<Hero> Heroes { get; set; }
 
     public virtual ICollection<Movie> Movies { get; set; }

@@ -13,6 +13,8 @@ public class UserDto
 
     public string LastName { get; set; }
 
+    public  IList<string> Roles { get; set; }
+
     public virtual ICollection<MarvelCU.Domain.Review> Reviews { get; set; }
 
     public virtual ICollection<GetActorDto> FavouriteActors { get; set; }

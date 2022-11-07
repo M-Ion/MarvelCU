@@ -40,7 +40,7 @@ public class CloudStorageManager : ICloudStorageManager
         return files;
     }
 
-    public async Task<bool> UploadBlob(string containerName, string blobName, IFormFile file)
+    public async Task<string> UploadBlob(string containerName, string blobName, IFormFile file)
     {
         var container = _blobServiceClient.GetBlobContainerClient(containerName);
 
@@ -55,11 +55,11 @@ public class CloudStorageManager : ICloudStorageManager
 
             if (res != null)
             {
-                return true;
+                return blob.Uri.AbsoluteUri;
             }
         }
 
-        return false;
+        return null;
     }
 
     public async Task<MemoryStream> DownloadBlob(string containerName, string blobName)

@@ -57,9 +57,8 @@ public class AuthService : IAuthService
             await _tokenManager.RevokeRefreshToken(refreshToken);
         }
 
-        UserDto userDto = _mapper.Map<UserDto>(user);
         AuthResponseDto authResponse = await _tokenManager.GenerateTokens(user);
-        authResponse.User = userDto;
+        authResponse.User = await PrepareUserData(user);
 
         return authResponse;
     }
@@ -87,22 +86,24 @@ public class AuthService : IAuthService
     {
         TokenRequestDto tokenRequestDto = new() { Token = _currentCookies.Jwt, RefreshToken = _currentCookies.RefreshToken };
 
-        User user = await _userManager.FindByIdAsync(_currentUser.Id);
-        UserDto userDto = _mapper.Map<UserDto>(user);
-
         AuthResponseDto authResponse = await _tokenManager.RefreshToken(tokenRequestDto);
-        authResponse.User = userDto;
+
+        RefreshToken stored = await _tokenManager.GetRefreshToken(authResponse.RefreshToken);
+        User user = await _userManager.FindByIdAsync(stored.UserId);
+
+        authResponse.User = await PrepareUserData(user);
 
         return authResponse;
     }
 
-    public async Task<TokenRequestDto> GetAuthCookies()
+    public TokenRequestDto GetAuthCookies()
     {
-        TokenRequestDto tokensdto = await Task.Run(() => new TokenRequestDto()
+        // Remove async
+        TokenRequestDto tokensdto = new TokenRequestDto()
         {
             Token = _currentCookies.Jwt,
             RefreshToken = _currentCookies.RefreshToken,
-        });
+        };
 
         return tokensdto;
     }
@@ -114,10 +115,21 @@ public class AuthService : IAuthService
         {
             Token = _currentCookies.Jwt,
             RefreshToken = _currentCookies.RefreshToken,
-            User = _mapper.Map<UserDto>(user)
+            User = await PrepareUserData(user)
         };
 
         return authResponseDto;
+    }
+
+    private async Task<UserDto> PrepareUserData(User user)
+    {
+        UserDto userDto = _mapper.Map<UserDto>(user);
+
+        IList<string> roles = await _userManager.GetRolesAsync(user);
+
+        userDto.Roles = roles;
+
+        return userDto;
     }
 
 }

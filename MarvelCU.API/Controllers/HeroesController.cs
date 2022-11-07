@@ -60,5 +60,13 @@ namespace MarvelCU.API.Controllers
             await _heroService.AddHeroToFavourites(id);
             return NoContent();
         }
+
+        [HttpDelete("Favourite/{id}")]
+        [Authorize]
+        public async Task<ActionResult> RemoveHeroFromFavourites(int id)
+        {
+            await _heroService.RemoveFromFavourites(id);
+            return NoContent();
+        }
     }
 }
