@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MarvelCU.Bll.Interfaces;
+using MarvelCU.Common;
 using MarvelCU.Common.Constants;
 using MarvelCU.Common.Dtos.Hero;
 using MarvelCU.Common.Models.Processing;
@@ -50,10 +51,26 @@ public class HeroService : IHeroService
         return _mapper.Map<HeroDto>(hero);
     }
 
-    public async Task CreateHero(CreateHeroDto createHeroDto)
+    public async Task<IdDto> CreateHero(CreateHeroDto createHeroDto)
     {
         var hero = _mapper.Map<Hero>(createHeroDto);
         var entity = await _heroRepository.AddAsync(hero);
+
+        return new IdDto() { Id = entity.Id };
+    }
+
+    public async Task UpdateHero(UpdateHeroDto dto, int id)
+    {
+        Hero entity = await _heroRepository.Exists(id);
+        _mapper.Map(dto, entity);
+
+        await _heroRepository.UpdateAsync(entity);
+    }
+
+    public async Task DeleteHero(int id)
+    {
+        Hero entity = await _heroRepository.Exists(id);
+        await _heroRepository.RemoveAsync(entity);
     }
 
     public async Task AddHeroToFavourites(int heroId)

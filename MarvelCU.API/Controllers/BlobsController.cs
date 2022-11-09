@@ -31,6 +31,8 @@ namespace MarvelCU.API.Controllers
         }
 
         [HttpPost("Movie")]
+        [Consumes("multipart/form-data")]
+        [Authorize]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> UploadMovieBlob([FromForm] IFormFile file)
         {

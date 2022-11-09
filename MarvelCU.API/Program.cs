@@ -1,15 +1,18 @@
 using Azure.Storage.Blobs;
 using MarvelCU.API.Infrastructure.Extensions;
+using MarvelCU.API.Infrastructure.Middlewares;
 using MarvelCU.Common.Configurations;
 using MarvelCU.Dal;
 using MarvelCU.Domain;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Stripe;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
 //Process.Start(@"C:\Users\User\Downloads\Redis\redis-server.exe");
@@ -65,6 +68,8 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddCustomServices();
 
+builder.Services.AddSingleton(new JwtSecurityTokenHandler());
+
 builder.Services.AddHttpContextAccessor();
 
 TokenValidationParameters tokenValidationParameters = new()
@@ -104,6 +109,9 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 
 StripeConfiguration.ApiKey = builder.Configuration["StripeConfig:SecretKey"];
 
+builder.Services.AddScoped<
+    IAuthorizationMiddlewareResultHandler, SampleAuthorizationMiddlewareResultHandler>();
+
 var app = builder.Build();
 
 await app.SeedData();
@@ -129,7 +137,6 @@ app.UseAuthorization();
 app.UseJwtBlackList();
 
 app.UseDbTransaction();
-
 
 app.MapControllers();
 

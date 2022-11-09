@@ -4,9 +4,8 @@ namespace MarvelCU.API.Infrastructure.Extensions;
 
 public static class ActionResultAuthCookiesExtension
 {
-    public static ActionResult SetCookie(
-        this ActionResult actionResult, 
-        HttpResponse httpResponse, 
+    public static void SetCookie(
+        this HttpResponse httpResponse, 
         string cookieName, 
         string cookieValue,
         DateTime cookieExpires)
@@ -21,13 +20,10 @@ public static class ActionResultAuthCookiesExtension
         };
 
         httpResponse.Cookies.Append(cookieName, cookieValue, options);
-
-        return actionResult;
     }
 
-    public static ActionResult ClearCookie(
-        this ActionResult actionResult,
-        HttpResponse httpResponse, 
+    public static void ClearCookie(
+        this HttpResponse httpResponse, 
         string cookie)
     { 
         httpResponse.Cookies.Delete(cookie, new CookieOptions()
@@ -37,8 +33,6 @@ public static class ActionResultAuthCookiesExtension
             Secure = true,
             SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None,
         });
-
-        return actionResult;
     }
 }
 

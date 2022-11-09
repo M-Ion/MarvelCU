@@ -17,14 +17,24 @@ public class MapperConfig : Profile
         CreateMap<Actor, ActorDto>().ReverseMap();
         CreateMap<Actor, GetActorDto>().ReverseMap();
         CreateMap<Actor, CreateActorDto>().ReverseMap();
+        CreateMap<Actor, UpdateActorDto>()
+            .ReverseMap()
+            .ForAllMembers(opt => opt.Condition(IgnoreNullAndDefault));
 
         CreateMap<Hero, HeroDto>().ReverseMap();
         CreateMap<Hero, GetHeroDto>().ReverseMap();
         CreateMap<Hero, CreateHeroDto>().ReverseMap();
+        CreateMap<Hero, UpdateHeroDto>()
+            .ReverseMap()
+            .ForAllMembers(opt => opt.Condition(IgnoreNullAndDefault));
 
         CreateMap<Movie, MovieDto>().ReverseMap();
         CreateMap<Movie, GetMovieDto>().ReverseMap();
         CreateMap<Movie, CreateMovieDto>().ReverseMap();
+        CreateMap<Movie, UpdateMovieDto>()
+            .ReverseMap()
+            .ForAllMembers(opt => opt.Condition(IgnoreNullAndDefault));
+
 
         CreateMap<News, CreateNewsDto>().ReverseMap();
         CreateMap<News, UpdateNewsDto>()
@@ -39,6 +49,25 @@ public class MapperConfig : Profile
         CreateMap<User, RegisterUserDto>().ReverseMap();
         CreateMap<User, UserDto>().ReverseMap();
         CreateMap<User, GetUserDto>().ReverseMap();
+    }
+
+    private bool IgnoreNullAndDefault<TSrc, TDest>(TSrc src, TDest des, object srcMember, object destMember)
+    {
+        object srcDefaultValue = null;
+
+        if (srcMember != null)
+        {
+            Type srcType = srcMember.GetType();
+
+            if (srcType.IsValueType)
+            {
+                srcDefaultValue = Activator.CreateInstance(srcType);
+            }
+        }
+
+        bool srcHasNoValue = Object.Equals(srcMember, srcDefaultValue);
+
+        return !srcHasNoValue;
     }
 }
 

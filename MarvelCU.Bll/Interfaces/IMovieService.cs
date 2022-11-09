@@ -1,4 +1,5 @@
 ﻿using MarvelCU.API.Models.Movie;
+using MarvelCU.Common;
 using MarvelCU.Common.Dtos.Movie;
 using MarvelCU.Common.Models;
 using MarvelCU.Common.Models.Processing;
@@ -14,6 +15,10 @@ public interface IMovieService
 
     Task AddMovieToFavourites(int movieId);
 
+    Task UpdateMovie(UpdateMovieDto dto, int id);
+
+    Task DeleteMovie(int id);
+
     Task RemoveFromFavourites(int movieId);
 
     Task AddBoughtMovie(int id);
@@ -22,6 +27,6 @@ public interface IMovieService
 
     Task<ProcessedResult<GetMovieDto>> GetMovies(PagingRequest pagingRequest, SortingRequest sortingRequest, IList<Filter> filters);
 
-    Task CreateMovie(CreateMovieDto createMovieDto);
+    Task<IdDto> CreateMovie(CreateMovieDto createMovieDto);
 }
 

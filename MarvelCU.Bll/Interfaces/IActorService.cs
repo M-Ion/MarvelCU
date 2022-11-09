@@ -1,4 +1,5 @@
-﻿using MarvelCU.Common.Dtos.Actor;
+﻿using MarvelCU.Common;
+using MarvelCU.Common.Dtos.Actor;
 using MarvelCU.Common.Models.Processing;
 using MarvelCU.Domain;
 
@@ -12,11 +13,15 @@ public interface IActorService
 
     Task<ActorDto> GetActorDetails(int id);
 
+    Task DeleteActor(int id);
+
+    Task UpdateActor(UpdateActorDto dto, int id);
+
     Task AddActorToFavourites(int actorId);
 
     Task RemoveFromFavourites(int actorId);
 
-    Task CreateActor(CreateActorDto createActorDto);
+    Task<IdDto> CreateActor(CreateActorDto createActorDto);
 
     Task SupplyCollection(int id, int entityId);
 

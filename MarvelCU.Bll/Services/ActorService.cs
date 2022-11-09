@@ -6,6 +6,7 @@ using MarvelCU.Domain;
 using MarvelCU.Common.Constants;
 using MarvelCU.Common.Models.Processing;
 using Microsoft.AspNetCore.Identity;
+using MarvelCU.Common;
 
 namespace MarvelCU.Bll.Services;
 
@@ -54,10 +55,26 @@ public class ActorService : IActorService
         return _mapper.Map<ActorDto>(actor); ;
     }
 
-    public async Task CreateActor(CreateActorDto createActorDto)
+    public async Task<IdDto> CreateActor(CreateActorDto createActorDto)
     {
         var actor = _mapper.Map<Actor>(createActorDto);
         var entity = await _actorRepository.AddAsync(actor);
+
+        return new IdDto { Id = entity.Id };
+    }
+
+    public async Task UpdateActor(UpdateActorDto dto, int id)
+    {
+        Actor entity = await _actorRepository.Exists(id);
+        _mapper.Map(dto, entity);
+
+        await _actorRepository.UpdateAsync(entity);
+    }
+
+    public async Task DeleteActor(int id)
+    {
+        Actor entity = await _actorRepository.Exists(id);
+        await _actorRepository.RemoveAsync(entity);
     }
 
     public async Task SupplyCollection(int id, int entityId)

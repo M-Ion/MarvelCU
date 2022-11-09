@@ -16,7 +16,7 @@ public class Movie : BaseEntity
     public string Name { get; set; }
 
     [MaxLength(600)]
-    public string Descritpion { get; set; }
+    public string Description { get; set; }
 
     public string Blob { get; set; }
 

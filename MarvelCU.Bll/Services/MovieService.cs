@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MarvelCU.API.Models.Movie;
 using MarvelCU.Bll.Interfaces;
+using MarvelCU.Common;
 using MarvelCU.Common.Constants;
 using MarvelCU.Common.Dtos.Movie;
 using MarvelCU.Common.Extensions;
@@ -28,6 +29,11 @@ public class MovieService : IMovieService
         _currentUser = currentUser;
         _userManager = userManager;
     }
+    public async Task<IList<GetMovieDto>> GetMovies()
+    {
+        var movies = await _movieRepository.GetAllAsync();
+        return _mapper.Map<IList<GetMovieDto>>(movies);
+    }
 
     public async Task<MovieDto> GetMovieDetails(int id)
     {
@@ -43,16 +49,34 @@ public class MovieService : IMovieService
         return _mapper.Map<MovieDto>(movie);
     }
 
-    public async Task<IList<GetMovieDto>> GetMovies()
-    {
-        var movies = await _movieRepository.GetAllAsync();
-        return _mapper.Map<IList<GetMovieDto>>(movies);
-    }
 
-    public async Task CreateMovie(CreateMovieDto createMovieDto)
+    public async Task<IdDto> CreateMovie(CreateMovieDto createMovieDto)
     {
         var movie = _mapper.Map<Movie>(createMovieDto);
         var entity = await _movieRepository.AddAsync(movie);
+
+        return new IdDto { Id = entity.Id };
+    }
+
+    public async Task UpdateMovie(UpdateMovieDto dto, int id)
+    {
+        Movie entity = await _movieRepository.Exists(id);
+        _mapper.Map(dto, entity);
+
+        await _movieRepository.UpdateAsync(entity);
+    }
+
+    public async Task DeleteMovie(int id)
+    {
+        Movie entity = await _movieRepository.Exists(id);
+        await _movieRepository.RemoveAsync(entity);
+    }
+    public async Task<ProcessedResult<GetMovieDto>> GetMovies(PagingRequest pagingRequest, SortingRequest sortingRequest, IList<Filter> filters)
+    {
+        ProcessedRequest request = new() { Paging = pagingRequest, Sorting = sortingRequest, Filters = filters };
+        ProcessedResult<GetMovieDto> result = await _movieRepository.GetAllAsyncProcessed<GetMovieDto>(request, _mapper);
+
+        return result;
     }
 
     public async Task AddMovieToFavourites(int movieId)
@@ -78,13 +102,6 @@ public class MovieService : IMovieService
         }
     } 
 
-    public async Task<ProcessedResult<GetMovieDto>> GetMovies(PagingRequest pagingRequest, SortingRequest sortingRequest, IList<Filter> filters)
-    {
-        ProcessedRequest request = new() { Paging = pagingRequest, Sorting = sortingRequest, Filters = filters };
-        ProcessedResult<GetMovieDto> result = await _movieRepository.GetAllAsyncProcessed<GetMovieDto>(request, _mapper);
-
-        return result;
-    }
 
     public async Task AddBoughtMovie(int id)
     {

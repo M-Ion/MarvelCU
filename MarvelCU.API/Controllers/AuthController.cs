@@ -61,9 +61,10 @@ public class AuthController : ControllerBase
             return BadRequest();
         }
 
-        return Ok(authResponse)
-            .SetCookie(Response, "jwt", authResponse.Token, DateTime.UtcNow.AddMonths(Convert.ToInt32(_configuration["JwtConfig:RefreshTokenDurationInMonths"])))
-            .SetCookie(Response, "refreshToken", authResponse.RefreshToken, DateTime.UtcNow.AddMonths(Convert.ToInt32(_configuration["JwtConfig:RefreshTokenDurationInMonths"])));
+        Response.SetCookie("jwt", authResponse.Token, DateTime.UtcNow.AddMonths(Convert.ToInt32(_configuration["JwtConfig:RefreshTokenDurationInMonths"])));
+        Response.SetCookie("refreshToken", authResponse.RefreshToken, DateTime.UtcNow.AddMonths(Convert.ToInt32(_configuration["JwtConfig:RefreshTokenDurationInMonths"])));
+
+        return Ok(authResponse);
     }
 
     [HttpPost]
@@ -72,9 +73,10 @@ public class AuthController : ControllerBase
     {
         await _authService.Logout();
 
-        return Ok()
-            .ClearCookie(Response, "jwt")
-            .ClearCookie(Response, "refreshToken");
+        Response.ClearCookie("jwt");
+        Response.ClearCookie("refreshToken");
+
+        return Ok();
     }
 
     [HttpGet]
@@ -82,9 +84,11 @@ public class AuthController : ControllerBase
     public async Task<ActionResult<AuthResponseDto>> RefreshToken()
     {
         var authResponse = await _authService.RefreshToken();
-        return Ok(authResponse)
-            .SetCookie(Response, "jwt", authResponse.Token, DateTime.UtcNow.AddMonths(Convert.ToInt32(_configuration["JwtConfig:RefreshTokenDurationInMonths"])))
-            .SetCookie(Response, "refreshToken", authResponse.RefreshToken, DateTime.UtcNow.AddMonths(Convert.ToInt32(_configuration["JwtConfig:RefreshTokenDurationInMonths"]))); ;
+
+        Response.SetCookie("jwt", authResponse.Token, DateTime.UtcNow.AddMonths(Convert.ToInt32(_configuration["JwtConfig:RefreshTokenDurationInMonths"])));
+        Response.SetCookie("refreshToken", authResponse.RefreshToken, DateTime.UtcNow.AddMonths(Convert.ToInt32(_configuration["JwtConfig:RefreshTokenDurationInMonths"])));
+
+        return Ok(authResponse);
     }
 }
 

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MarvelCU.API.Models.Movie;
 using MarvelCU.Bll.Interfaces;
+using MarvelCU.Common;
 using MarvelCU.Common.Dtos.Movie;
 using MarvelCU.Common.Dtos.Payment;
 using MarvelCU.Common.Extensions;
@@ -34,6 +35,39 @@ public class MoviesController : ControllerBase
         return Ok(movies);
     }
 
+    [HttpGet]
+    [Route("{id}")]
+    public async Task<ActionResult<MovieDto>> GetMovie(int id)
+    {
+        var movie = await _movieService.GetMovieDetails(id);
+        return Ok(movie);
+    }
+
+    [HttpPost]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult<IdDto>> CreateMovie([FromBody] CreateMovieDto createMovieDto)
+    {
+        IdDto dto = await _movieService.CreateMovie(createMovieDto);
+        return Ok(dto);
+    }
+
+    [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult> UpdateMovie([FromBody] UpdateMovieDto updateMovieDto, [FromRoute] int id)
+    {
+        await _movieService.UpdateMovie(updateMovieDto, id);
+        return NoContent();
+    }
+
+    [HttpDelete]
+    [Route("{id}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult> DeleteMovie(int id)
+    {
+        await _movieService.DeleteMovie(id);
+        return NoContent();
+    }
+
     // For processing request
     [HttpPost]
     [Route("Filter")]
@@ -56,27 +90,11 @@ public class MoviesController : ControllerBase
     }
 
     [HttpDelete("Favourite/{id}")]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult> RemoveMovieFromFavourites(int id)
     {
         await _movieService.RemoveFromFavourites(id);
         return NoContent();
-    }
-
-    [HttpGet]
-    [Route("{id}")]
-    public async Task<ActionResult<MovieDto>> GetMovie(int id)
-    {
-        var movie = await _movieService.GetMovieDetails(id);
-        return Ok(movie);
-    }
-
-    [HttpPost]
-    [Authorize(Roles = "Admin")]
-    public async Task<ActionResult> CreateMovie([FromBody] CreateMovieDto createMovieDto)
-    {
-        await _movieService.CreateMovie(createMovieDto);
-        return Ok();
     }
 
     [HttpPost("Buy/{id}")]

@@ -1,4 +1,5 @@
 ﻿using MarvelCU.Bll.Interfaces;
+using MarvelCU.Common;
 using MarvelCU.Common.Dtos.Hero;
 using MarvelCU.Common.Models.Processing;
 using MarvelCU.Domain;
@@ -32,6 +33,31 @@ namespace MarvelCU.API.Controllers
             return Ok(hero);
         }
 
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<IdDto>> CreateHero([FromBody] CreateHeroDto createHeroDto)
+        {
+            IdDto res = await _heroService.CreateHero(createHeroDto);
+            return Ok(res);
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> DeleteHero(int id)
+        {
+            await _heroService.DeleteHero(id);
+            return NoContent();
+        }
+
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> UpdateMovie([FromBody] UpdateHeroDto updateHeroDto, [FromRoute] int id)
+        {
+            await _heroService.UpdateHero(updateHeroDto, id);
+            return NoContent();
+        }
+
         // For processing request
         [HttpPost]
         [Route("Filter")]
@@ -45,13 +71,7 @@ namespace MarvelCU.API.Controllers
             return Ok(movies);
         }
 
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> CreateHero([FromBody] CreateHeroDto createHeroDto)
-        {
-            await _heroService.CreateHero(createHeroDto);
-            return NoContent();
-        }
+
 
         [HttpPost("Favourite/{id}")]
         [Authorize]

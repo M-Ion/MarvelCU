@@ -10,7 +10,7 @@ namespace MarvelCU.API.Models.Movie
     public class CreateMovieDto : BaseMovieDto
     {
         [Required]
-        public string Descritpion { get; set; }
+        public string Description { get; set; }
 
         [Required]
         public uint Price { get; set; }

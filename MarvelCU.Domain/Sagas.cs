@@ -2,7 +2,7 @@
 
 public enum Sagas : sbyte
 {
-    Infinity,
+    Infinity = 1,
     Multiverse
 }
 

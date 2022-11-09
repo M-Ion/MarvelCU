@@ -1,4 +1,5 @@
 ﻿using MarvelCU.Bll.Interfaces;
+using MarvelCU.Common;
 using MarvelCU.Common.Dtos.Actor;
 using MarvelCU.Common.Models.Processing;
 using MarvelCU.Domain;
@@ -34,10 +35,26 @@ public class ActorsController : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult> CreateActor([FromBody] CreateActorDto createActorDto)
+    public async Task<ActionResult<IdDto>> CreateActor([FromBody] CreateActorDto createActorDto)
     {
-        await _actorService.CreateActor(createActorDto);
-        return Ok();
+        IdDto res = await _actorService.CreateActor(createActorDto);
+        return Ok(res);
+    }
+
+    [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult> UpdateActor([FromBody] UpdateActorDto updateActorDto, [FromRoute] int id)
+    {
+        await _actorService.UpdateActor(updateActorDto, id);
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult> DeleteActor(int id)
+    {
+        await _actorService.DeleteActor(id);
+        return NoContent();
     }
 
     [HttpPost("Favourite/{id}")]
