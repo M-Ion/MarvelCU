@@ -3,14 +3,15 @@ import { useFormik } from "formik";
 
 import reviewSchema from "./reviewForm.validation";
 import reviewService from "../../services/reviews.service";
+import { FC } from "react";
 
 type Values = {
   opinion: string;
   rating: number;
 };
 
-const ReviewForm = () => {
-  const [postReview, { error }] = reviewService.usePostReviewMutation();
+const ReviewForm: FC<{ movieId: number }> = ({ movieId }) => {
+  const [postReview] = reviewService.usePostReviewMutation();
 
   const formik = useFormik<Values>({
     initialValues: {
@@ -18,7 +19,7 @@ const ReviewForm = () => {
       rating: 1,
     },
     onSubmit: async (values: Values) => {
-      await postReview({ fields: values, movieId: 2 });
+      await postReview({ fields: values, movieId });
     },
     validationSchema: reviewSchema,
   });
@@ -40,9 +41,8 @@ const ReviewForm = () => {
         <Rating
           defaultValue={0}
           name="rating"
-          onBlur={formik.handleBlur}
           onChange={formik.handleChange}
-          value={formik.values.rating as number}
+          value={+formik.values.rating}
         />
         <Button type="submit" variant="text">
           Comment

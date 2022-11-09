@@ -1,21 +1,30 @@
 import { createApi } from "@reduxjs/toolkit/dist/query/react";
-import IGetBlob from "../types/blob/IGetBlob.model";
 
-import baseQueryWithAuthCheck from "../utils/authCheckQuery.utils";
+import { baseQueryWithCookieCheck } from "../utils/authCheckQuery.utils";
 
 const blobService = createApi({
   reducerPath: "blob/service",
-  baseQuery: baseQueryWithAuthCheck,
+  baseQuery: baseQueryWithCookieCheck(""),
   endpoints: (build) => ({
-    fetchBlob: build.query<{ blob: string }, IGetBlob>({
-      query: (params: IGetBlob) => ({
-        url: `/Blobs/Blob/${params.container}/${params.blob}`,
+    uploadMovieBlob: build.mutation<void, FormData>({
+      query: (arg: FormData) => ({
+        url: `/Blobs/Movie`,
+        body: arg,
+        method: "POST",
       }),
     }),
-    downloadBlob: build.mutation<any, {}>({
-      query: () => ({
-        url: `/Blobs/Download/videos/${"Wakanda"}.mp4`,
-        method: "GET",
+    uploadHeroBlob: build.mutation<void, FormData>({
+      query: (arg: FormData) => ({
+        url: `/Blobs/Hero`,
+        body: arg,
+        method: "POST",
+      }),
+    }),
+    uploadActorBlob: build.mutation<void, FormData>({
+      query: (arg: FormData) => ({
+        url: `/Blobs/Actor`,
+        body: arg,
+        method: "POST",
       }),
     }),
   }),

@@ -11,13 +11,13 @@ import TheaterComedyIcon from "@mui/icons-material/TheaterComedy";
 
 import ActorCard from "../components/actorCard/actorCard.component";
 import actorService from "../services/actor.service";
+import Footer from "../components/footer/footer.component";
 import HeadingBg from "../components/common/headingBg/headingBg.component";
 import IGetActor from "../types/actor/IGetActor.model";
 import IProcessedRequest from "../types/processing/IProcessedRequest.model";
-import usePagingReques from "../hooks/usePaging.hook";
-import SearchBar from "../components/common/searchBar/searchBar.component";
 import Op from "../types/processing/Op";
-import Footer from "../components/footer/footer.component";
+import SearchBar from "../components/common/searchBar/searchBar.component";
+import usePagingReques from "../hooks/usePaging.hook";
 
 const ActorsPage = () => {
   const theme = useTheme();
@@ -76,7 +76,7 @@ const ActorsPage = () => {
         disableGutters
         sx={{ padding: theme.spacing(8, 0, 6) }}
       >
-        <Grid container alignItems="flex-start" sx={{ gap: 2 }}>
+        <Grid container alignItems="center" sx={{ gap: 5 }}>
           <Pagination
             color="secondary"
             count={Math.ceil(total.current / (paging.pageSize as number))}

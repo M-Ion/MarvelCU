@@ -1,5 +1,5 @@
 import { Button, Link } from "@mui/material";
-import { Link as RouteLink } from "react-router-dom";
+import { Link as RouteLink, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
 
@@ -16,6 +16,7 @@ type Values = {
 
 const LoginForm = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [login] = authService.useLoginMutation();
 
   const handleSubmit = async (values: Values) => {
@@ -28,6 +29,8 @@ const LoginForm = () => {
             token: data.token,
           })
         );
+
+        navigate("/movies");
       });
   };
 

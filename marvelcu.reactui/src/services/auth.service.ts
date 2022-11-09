@@ -2,13 +2,12 @@ import { createApi } from "@reduxjs/toolkit/dist/query/react";
 
 import IAuthRegister from "../types/auth/authRegister.model";
 import IAuthResponse from "../types/auth/authResponse.model";
-import IUser from "../types/user.model";
-import baseQueryWithAuthCheck from "../utils/authCheckQuery.utils";
+import { baseQueryWithCookieCheck } from "../utils/authCheckQuery.utils";
 // import baseQuery from "../utils/baseQuery.utils";
 
 const authService = createApi({
   reducerPath: "auth/service",
-  baseQuery: baseQueryWithAuthCheck,
+  baseQuery: baseQueryWithCookieCheck(),
   endpoints: (build) => ({
     checkAuthCookies: build.mutation<
       { token: string; refreshToken: string },

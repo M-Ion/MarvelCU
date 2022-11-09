@@ -22,6 +22,7 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import authService from "../../services/auth.service";
+import { findElement } from "../../utils/findElement";
 
 const pages: string[] = ["Movies", "Heroes", "Actors", "News"];
 
@@ -50,8 +51,7 @@ const Header = () => {
   };
 
   const handleLogout = async () => {
-    const res = await logout(undefined);
-    console.log(res);
+    await logout(undefined);
     dispatch(setCredentials({ user: null, token: null }));
   };
 
@@ -109,6 +109,15 @@ const Header = () => {
                 <HeaderButton key={page}>{page}</HeaderButton>
               </Link>
             ))}
+            {currentUser &&
+              findElement(
+                currentUser?.roles,
+                process.env.REACT_APP_ADMIN_ROLE as string
+              ) && (
+                <Link style={{ textDecoration: "none" }} to={`/admin`}>
+                  <HeaderButton>Admin</HeaderButton>
+                </Link>
+              )}
           </Box>
 
           <HeaderBox />

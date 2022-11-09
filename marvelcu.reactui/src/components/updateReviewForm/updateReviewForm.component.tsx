@@ -15,7 +15,7 @@ type Values = {
 };
 
 const UpdateReviewForm: FC<Props> = ({ review: { opinion, rating, id } }) => {
-  const [updateReview, { error }] = reviewService.useUpdateReviewMutation();
+  const [updateReview] = reviewService.useUpdateReviewMutation();
 
   const formik = useFormik<Values>({
     initialValues: {
@@ -47,7 +47,7 @@ const UpdateReviewForm: FC<Props> = ({ review: { opinion, rating, id } }) => {
           name="rating"
           onBlur={formik.handleBlur}
           onChange={formik.handleChange}
-          value={formik.values.rating as number}
+          value={+formik.values.rating as number}
         />
         <Button type="submit" variant="text">
           Update

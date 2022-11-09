@@ -1,7 +1,9 @@
 export default interface IPostMovie {
-  name: string;
-  premiere: Date;
+  description: string;
   mcuPhase: number;
   mcuSaga: number;
-  blob?: string;
+  name: string;
+  premiere: Date;
+  price: number;
+  youTubeTrailerId: string | null;
 }

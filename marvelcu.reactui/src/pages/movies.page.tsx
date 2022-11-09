@@ -139,7 +139,7 @@ const MoviesPage = () => {
         disableGutters
         sx={{ padding: theme.spacing(8, 0, 6) }}
       >
-        <Grid container alignItems="center" sx={{ gap: 2 }}>
+        <Grid container alignItems="center" sx={{ gap: 5 }}>
           <Pagination
             color="secondary"
             count={Math.ceil(total.current / (paging.pageSize as number))}

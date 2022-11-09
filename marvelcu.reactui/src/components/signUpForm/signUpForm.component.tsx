@@ -1,11 +1,13 @@
 import { Alert, Button, Grid, Link } from "@mui/material";
 import { useFormik } from "formik";
-import { Link as RouteLink } from "react-router-dom";
+import { Link as RouteLink, useNavigate } from "react-router-dom";
 
 import { Form } from "./signUpForm.styles";
 import authService from "../../services/auth.service";
 import FormInput from "../formInput/formInput.component";
 import signUpSchema from "./signUpForm.validation";
+import { useDispatch } from "react-redux";
+import { setAlert } from "../../store/reducers/alerts.slice";
 
 type Values = {
   firstName: string;
@@ -16,7 +18,9 @@ type Values = {
 };
 
 const SignUpForm = () => {
-  const [register, { error }] = authService.useRegisterMutation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [register, { error, isSuccess }] = authService.useRegisterMutation();
 
   const formik = useFormik<Values>({
     initialValues: {
@@ -28,7 +32,19 @@ const SignUpForm = () => {
     },
     onSubmit: async (values: Values) => {
       await register(values);
+
+      if (isSuccess) {
+        dispatch(
+          setAlert({
+            type: "success",
+            message: "Account created successfully",
+          })
+        );
+
+        setTimeout(() => navigate("/login"), 2000);
+      }
     },
+
     validationSchema: signUpSchema,
   });
   return (

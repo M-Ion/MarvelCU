@@ -11,22 +11,25 @@ import {
 import { Link, useParams } from "react-router-dom";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import DownloadIcon from "@mui/icons-material/Download";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-import { StyledCard, StyledCardContent } from "../common/entity.styles";
-import AvatarListItem from "../../components/common/avatarListItem/avatarListItem.component";
-import Footer from "../../components/footer/footer.component";
-import IMovie from "../../types/movie/IMovie.model";
-import movieService from "../../services/movie.service";
-import Review from "../../components/common/review/review.component";
-import ScrollableStack from "../../components/common/scrollableStack/scrollableStack.component";
-import YouTubeVideo from "../../components/common/youTubeVideo/youTubeVideo.component";
-import ReviewForm from "../../components/reviewForm/reviewForm.component";
+import { StyledCard, StyledCardContent } from "./common/entity.styles";
+import AvatarListItem from "../components/common/avatarListItem/avatarListItem.component";
+import Footer from "../components/footer/footer.component";
+import IMovie from "../types/movie/IMovie.model";
+import movieService from "../services/movie.service";
+import Review from "../components/common/review/review.component";
+import ScrollableStack from "../components/common/scrollableStack/scrollableStack.component";
+import YouTubeVideo from "../components/common/youTubeVideo/youTubeVideo.component";
+import ReviewForm from "../components/reviewForm/reviewForm.component";
 import { useSelector } from "react-redux";
-import { selectCurrentUser } from "../../store/reducers/user.slice";
-import UpdateReviewForm from "../../components/updateReviewForm/updateReviewForm.component";
-import IGetReview from "../../types/review/IGetReview.model";
+import { selectCurrentUser } from "../store/reducers/user.slice";
+import UpdateReviewForm from "../components/updateReviewForm/updateReviewForm.component";
+import IGetReview from "../types/review/IGetReview.model";
 import { useEffect, useState } from "react";
-import NotFoundPage from "../notFound.page";
+import NotFoundPage from "./notFound.page";
+import DialogWindow from "../components/common/dialogWindow/dialogWindow.component";
+import { findElement } from "../utils/findElement";
 
 const fields: readonly (keyof IMovie)[] = ["premiere", "mcuPhase", "mcuSaga"];
 const defaultDescription: string = `Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis optio accusamus adipisci, officia est consequuntur obcaecati veritatis ratione magni temporibus voluptates maxime sed corporis ad. Repellat excepturi eos est suscipit id sunt accusamus consequuntur saepe voluptatum, nam velit eveniet ipsa.`;
@@ -45,6 +48,10 @@ const MovieEntityPage = () => {
   const [foundReview, setFoundReview] = useState<IGetReview | undefined>(
     undefined
   );
+
+  const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false);
+  const [deleteMovie] = movieService.useDeleteMovieMutation();
+
   const [reviews, setReviews] = useState<IGetReview[] | undefined>(undefined);
 
   let params = useParams<string>();
@@ -125,11 +132,7 @@ const MovieEntityPage = () => {
           >
             {/* YouTube trailer */}
             <Grid item flexBasis={"60%"}>
-              <YouTubeVideo
-                sourceId={
-                  "v=j60ClcNYWu4&list=RD1gKZk0O2jPU&index=5&ab_channel=ImagineDragonsVEVO"
-                }
-              />
+              <YouTubeVideo sourceId={data?.youTubeTrailerId ?? ""} />
             </Grid>
 
             {/* About section */}
@@ -148,7 +151,7 @@ const MovieEntityPage = () => {
         {/* Reviews */}
         <ScrollableStack direction="column" title="Comments">
           {!foundReview ? (
-            <ReviewForm />
+            <ReviewForm movieId={id} />
           ) : (
             <UpdateReviewForm review={foundReview} />
           )}
@@ -187,6 +190,35 @@ const MovieEntityPage = () => {
             ))}
         </ScrollableStack>
       </Container>
+
+      {currentUser &&
+        findElement(currentUser.roles, process.env.REACT_APP_ADMIN_ROLE) && (
+          <>
+            <Grid container alignItems="flex-end" justifyContent="flex-end">
+              <Button
+                variant="outlined"
+                color="secondary"
+                sx={{ marginY: 8, marginLeft: "auto" }}
+                startIcon={<DeleteIcon />}
+                onClick={() => setOpenDeleteDialog(true)}
+              >
+                Delete
+              </Button>
+            </Grid>
+
+            <DialogWindow
+              open={openDeleteDialog}
+              setOpen={setOpenDeleteDialog}
+              title={`Delete movie ${data?.name}`}
+              context="Are you sure want to delete the movie, all data related to movie also will be deleted"
+              action={async () => {
+                if (data?.id) {
+                  await deleteMovie(data?.id);
+                }
+              }}
+            />
+          </>
+        )}
 
       <Footer />
     </Box>

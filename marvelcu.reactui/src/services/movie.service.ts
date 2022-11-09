@@ -1,6 +1,5 @@
 import { createApi } from "@reduxjs/toolkit/dist/query/react";
 
-import baseQueryWithAuthCheck from "../utils/authCheckQuery.utils";
 import IGetMovie from "../types/movie/IGetMovie.model";
 import IMovie from "../types/movie/IMovie.model";
 import IPostMovie from "../types/movie/IPostMovie.model";
@@ -8,10 +7,11 @@ import IProcessedRequest from "../types/processing/IProcessedRequest.model";
 import IProcessedResult from "../types/processing/IProcessedResult.model";
 import prepareRequestParams from "../utils/prepareParams.utils";
 import Payment from "../types/payment.model";
+import { baseQueryWithCookieCheck } from "../utils/authCheckQuery.utils";
 
 const movieService = createApi({
   reducerPath: "movie/service",
-  baseQuery: baseQueryWithAuthCheck,
+  baseQuery: baseQueryWithCookieCheck(),
   endpoints: (build) => ({
     fetchMovies: build.query<IGetMovie[], undefined>({
       query: () => ({
@@ -25,11 +25,18 @@ const movieService = createApi({
       }),
     }),
 
-    postMovie: build.mutation<void, IPostMovie>({
+    postMovie: build.mutation<{ id: number }, IPostMovie>({
       query: (movie: IPostMovie) => ({
         url: "/Movies",
         method: "POST",
         body: movie,
+      }),
+    }),
+
+    deleteMovie: build.mutation<void, number>({
+      query: (id) => ({
+        url: `/Movies/${id}`,
+        method: "DELETE",
       }),
     }),
 

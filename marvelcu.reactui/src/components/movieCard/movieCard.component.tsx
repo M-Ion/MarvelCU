@@ -6,7 +6,6 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 
 import { selectCurrentUser } from "../../store/reducers/user.slice";
 import Card from "../common/card/card.component";
-import IGetBlob from "../../types/blob/IGetBlob.model";
 import IGetMovie from "../../types/movie/IGetMovie.model";
 import IUser from "../../types/user.model";
 import movieService from "../../services/movie.service";
@@ -34,11 +33,6 @@ const MovieCard: FC<Props> = ({ dto }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
 
-  const blobData: IGetBlob = {
-    blob: `${dto.id}.jpg`,
-    container: "movie-images",
-  };
-
   const handleChangeFavourite = async () => {
     if (!isFavourite) {
       await addToFavourites(dto.id);
@@ -51,7 +45,6 @@ const MovieCard: FC<Props> = ({ dto }) => {
 
   return (
     <Card
-      blobData={blobData}
       heading={dto.name}
       description={`Saga ${dto.mcuSaga} Phase ${dto.mcuPhase}`}
     >
@@ -62,12 +55,14 @@ const MovieCard: FC<Props> = ({ dto }) => {
           View
         </Button>
 
-        <IconButton
-          aria-label="add to favorites"
-          onClick={handleChangeFavourite}
-        >
-          <FavoriteIcon color={isFavourite ? "secondary" : "primary"} />
-        </IconButton>
+        {currentUser && (
+          <IconButton
+            aria-label="add to favorites"
+            onClick={handleChangeFavourite}
+          >
+            <FavoriteIcon color={isFavourite ? "secondary" : "primary"} />
+          </IconButton>
+        )}
       </CardActions>
     </Card>
   );

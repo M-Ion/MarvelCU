@@ -1,7 +1,5 @@
-export default interface IGetActor {
-  id: number;
+export default interface IPostActor {
   firstName: string;
   middleName: string | null;
   lastName: string | null;
-  blob: string | null;
 }

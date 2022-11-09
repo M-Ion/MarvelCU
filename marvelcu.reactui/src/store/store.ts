@@ -8,7 +8,6 @@ import blobService from "../services/blob.services";
 import heroService from "../services/hero.service";
 import movieService from "../services/movie.service";
 import newsService from "../services/news.service";
-import paymentService from "../services/payment.service";
 import reviewService from "../services/reviews.service";
 
 // Redux Toolkit reducers
@@ -23,7 +22,6 @@ const root = combineReducers({
   [heroService.reducerPath]: heroService.reducer,
   [movieService.reducerPath]: movieService.reducer,
   [newsService.reducerPath]: newsService.reducer,
-  [paymentService.reducerPath]: paymentService.reducer,
   [reviewService.reducerPath]: reviewService.reducer,
 });
 
@@ -37,7 +35,6 @@ export const store = configureStore({
       heroService.middleware,
       movieService.middleware,
       newsService.middleware,
-      paymentService.middleware,
       reviewService.middleware,
     ]),
 });

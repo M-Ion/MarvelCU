@@ -1,5 +1,5 @@
 export default interface IGetMovie {
-  blob?: string;
+  blob: string | null;
   id: number;
   mcuPhase: number;
   mcuSaga: number;

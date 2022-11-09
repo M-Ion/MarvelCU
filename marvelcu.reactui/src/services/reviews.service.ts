@@ -2,11 +2,11 @@ import { createApi } from "@reduxjs/toolkit/dist/query/react";
 import IPostReview from "../types/review/IPostReview.model";
 import IUpdateReview from "../types/review/IUpdateReview.model";
 
-import baseQueryWithAuthCheck from "../utils/authCheckQuery.utils";
+import { baseQueryWithCookieCheck } from "../utils/authCheckQuery.utils";
 
 const reviewService = createApi({
   reducerPath: "review/service",
-  baseQuery: baseQueryWithAuthCheck,
+  baseQuery: baseQueryWithCookieCheck(),
   endpoints: (build) => ({
     postReview: build.mutation<void, { fields: IPostReview; movieId: number }>({
       query: ({

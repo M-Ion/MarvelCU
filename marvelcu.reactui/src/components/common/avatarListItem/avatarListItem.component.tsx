@@ -13,7 +13,7 @@ const AvatarListItem: FC<Props> = ({ link, title }) => {
   return (
     <Box component={Link} to={link} sx={{ textDecoration: "none" }}>
       <Grid container flexDirection="column" alignItems="center">
-        <StyledAvatar src="/marvelLogo.jpg" />
+        <StyledAvatar src="/marvelLogo.jpg" sx={{ marginX: 10 }} />
         <Typography>{title}</Typography>
       </Grid>
     </Box>

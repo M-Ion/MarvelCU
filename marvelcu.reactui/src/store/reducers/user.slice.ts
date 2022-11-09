@@ -24,13 +24,16 @@ const userSlice = createSlice({
       state.user = payload.user;
       state.token = payload.token;
     },
+    setToken: (state: IUserState, { payload }: PayloadAction<string>) => {
+      state.token = payload;
+    },
     logOut: (state: IUserState) => {
       state = { ...initialState };
     },
   },
 });
 
-export const { setCredentials, logOut } = userSlice.actions;
+export const { setCredentials, setToken, logOut } = userSlice.actions;
 
 export const selectCredentials = (state: RootState) => state.currentUser;
 export const selectCurrentUser = (state: RootState) => state.currentUser.user;

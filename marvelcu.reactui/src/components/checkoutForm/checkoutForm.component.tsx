@@ -1,11 +1,14 @@
 import { Checkbox, FormControlLabel, Grid, TextField } from "@mui/material";
 import { useFormik } from "formik";
 
-import { StyledButton } from "./checkoutForm.styles";
 import checkoutSchema from "./checkoutForm.validation";
 import FormInput from "../formInput/formInput.component";
 import movieService from "../../services/movie.service";
 import { FC } from "react";
+import { useDispatch } from "react-redux";
+import { setAlert } from "../../store/reducers/alerts.slice";
+import { useNavigate } from "react-router-dom";
+import { StyledButton } from "./checkoutForm.styles";
 
 type Values = {
   cardNumber: string;
@@ -22,11 +25,23 @@ type Props = {
 };
 
 const CheckoutForm: FC<Props> = ({ movieId, amount }) => {
-  const [checkout] = movieService.useBuyMovieMutation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [checkout, { isLoading, isSuccess }] =
+    movieService.useBuyMovieMutation();
 
   const handleSubmit = async (values: Values) => {
-    const res = await checkout({ id: movieId, body: values });
-    console.log(res);
+    const resp = await checkout({ id: movieId, body: values });
+    console.log(resp);
+
+    if (isSuccess) {
+      dispatch(setAlert({ type: "success", message: "Payment successfully" }));
+
+      setTimeout(() => {
+        navigate(`/movies/${movieId}`);
+      }, 2000);
+    }
   };
 
   const formik = useFormik<Values>({
@@ -101,7 +116,12 @@ const CheckoutForm: FC<Props> = ({ movieId, amount }) => {
             label="Remember credit card details for next time"
           />
         </Grid>
-        <StyledButton variant="contained" color="primary" type="submit">
+        <StyledButton
+          loading={isLoading}
+          variant="contained"
+          color="primary"
+          type="submit"
+        >
           Place order
         </StyledButton>
       </Grid>

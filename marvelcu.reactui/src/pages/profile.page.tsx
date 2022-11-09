@@ -1,9 +1,9 @@
 import { Avatar, Box, Container, Typography, useTheme } from "@mui/material";
 import * as React from "react";
 import { useSelector } from "react-redux";
-import AvatarListItem from "../../components/common/avatarListItem/avatarListItem.component";
-import ScrollableStack from "../../components/common/scrollableStack/scrollableStack.component";
-import { selectCurrentUser } from "../../store/reducers/user.slice";
+import AvatarListItem from "../components/common/avatarListItem/avatarListItem.component";
+import ScrollableStack from "../components/common/scrollableStack/scrollableStack.component";
+import { selectCurrentUser } from "../store/reducers/user.slice";
 
 interface IProfilePageProps {}
 

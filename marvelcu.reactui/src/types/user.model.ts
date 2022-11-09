@@ -11,4 +11,5 @@ export default interface IUser {
   favouriteActors: IGetActor[];
   boughtMovies: IGetMovie[];
   token: string;
+  roles: readonly string[];
 }
