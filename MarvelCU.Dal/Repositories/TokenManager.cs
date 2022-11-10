@@ -139,7 +139,7 @@ public class TokenManager : ITokenManager
         _tokenValidationParameters.ValidateLifetime = true;
 
         var token = await GenerateToken(user);
-        storedRefreshToken.Token = await _userManager.GenerateUserTokenAsync(user, TokenUtils.TokenProvider, TokenUtils.RefreshTokenPurpose);
+        //storedRefreshToken.Token = await _userManager.GenerateUserTokenAsync(user, TokenUtils.TokenProvider, TokenUtils.RefreshTokenPurpose);
         storedRefreshToken.JwtId = token.Id;
 
         await _context.SaveChangesAsync();

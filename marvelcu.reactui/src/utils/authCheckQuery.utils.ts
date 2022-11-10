@@ -8,6 +8,7 @@ import {
   BaseQueryApi,
   BaseQueryFn,
 } from "@reduxjs/toolkit/dist/query/baseQueryTypes";
+import { setAlert } from "../store/reducers/alerts.slice";
 import { logOut, setToken } from "../store/reducers/user.slice";
 
 import { RootState } from "../store/store";
@@ -52,6 +53,12 @@ export const baseQueryWithCookieCheck =
 
     if (queryCookiesResult?.data) {
       const cookies = queryCookiesResult?.data as { token: string };
+      // api.dispatch(
+      //   setAlert({
+      //     type: "success",
+      //     message: "Operation completed successfully",
+      //   })
+      // );
       api.dispatch(setToken(cookies.token));
     } else {
       api.dispatch(logOut());

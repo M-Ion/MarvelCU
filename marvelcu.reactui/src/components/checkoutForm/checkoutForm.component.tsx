@@ -2,7 +2,7 @@ import { Checkbox, FormControlLabel, Grid, TextField } from "@mui/material";
 import { useFormik } from "formik";
 
 import checkoutSchema from "./checkoutForm.validation";
-import FormInput from "../formInput/formInput.component";
+import FormInput from "../common/formInput/formInput.component";
 import movieService from "../../services/movie.service";
 import { FC } from "react";
 import { useDispatch } from "react-redux";
@@ -32,8 +32,7 @@ const CheckoutForm: FC<Props> = ({ movieId, amount }) => {
     movieService.useBuyMovieMutation();
 
   const handleSubmit = async (values: Values) => {
-    const resp = await checkout({ id: movieId, body: values });
-    console.log(resp);
+    await checkout({ id: movieId, body: values });
 
     if (isSuccess) {
       dispatch(setAlert({ type: "success", message: "Payment successfully" }));

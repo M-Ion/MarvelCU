@@ -1,5 +1,5 @@
 import { Container, Grid, Typography, useTheme } from "@mui/material";
-import Post from "../components/post/post.component";
+import Post from "../components/newsRelated/post/post.component";
 
 const NewsPage = () => {
   const theme = useTheme();

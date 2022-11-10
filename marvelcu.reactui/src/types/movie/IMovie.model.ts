@@ -9,9 +9,10 @@ export default interface IMovie {
   heroes: IGetHero[];
   id: number;
   mcuPhase: number;
-  mcuSaga: number;
+  mcuSaga: 1 | 2;
   name: string;
   premiere: Date;
+  price: number;
   rating: number;
   reviews: IGetReview[];
   youTubeTrailerId: string | null;

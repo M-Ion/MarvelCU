@@ -24,7 +24,7 @@ import HeadingBg from "../components/common/headingBg/headingBg.component";
 import IFilter from "../types/processing/IFilter.model";
 import IGetMovie from "../types/movie/IGetMovie.model";
 import IProcessedRequest from "../types/processing/IProcessedRequest.model";
-import MovieCard from "../components/movieCard/movieCard.component";
+import MovieCard from "../components/movieRelated/movieCard/movieCard.component";
 import movieFilters from "../utils/filters/movie.filters";
 import movieService from "../services/movie.service";
 import Op from "../types/processing/Op";

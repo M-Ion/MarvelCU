@@ -7,7 +7,7 @@ import { Form } from "./loginForm.styles";
 import { setCredentials } from "../../store/reducers/user.slice";
 import authService from "../../services/auth.service";
 import loginSchema from "./loginForm.validation";
-import FormInput from "../formInput/formInput.component";
+import FormInput from "../common/formInput/formInput.component";
 
 type Values = {
   email: string;

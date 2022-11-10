@@ -1,34 +1,34 @@
 import { Button, CardActions, IconButton } from "@mui/material";
 import { FC, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import heroService from "../../../services/hero.service";
+import { selectCurrentUser } from "../../../store/reducers/user.slice";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 
-import Card from "../common/card/card.component";
-import IGetActor from "../../types/actor/IGetActor.model";
-import { Link } from "react-router-dom";
-import actorService from "../../services/actor.service";
-import { useSelector } from "react-redux";
-import { selectCurrentUser } from "../../store/reducers/user.slice";
-import IUser from "../../types/user.model";
+import IGetHero from "../../../types/hero/IGetHero.mode";
+import Card from "../../common/card/card.component";
+import IUser from "../../../types/user.model";
 
 type Props = {
-  dto: IGetActor;
+  dto: IGetHero;
 };
 
-const isActorFavourite = (user: IUser | null, actor: IGetActor): boolean => {
+const isHeroFavourite = (user: IUser | null, hero: IGetHero): boolean => {
   if (user == null) return false;
 
-  const found = user.favouriteActors.find((a) => a.id === actor.id);
+  const found = user.favouriteHeroes.find((h) => h.id === hero.id);
   return Boolean(found);
 };
 
-const ActorCard: FC<Props> = ({ dto }) => {
+const HeroCard: FC<Props> = ({ dto }) => {
   const currentUser = useSelector(selectCurrentUser);
   const [isFavourite, setFavourite] = useState<boolean>(false);
-  const [addToFavourites] = actorService.useAddToFavouritesMutation();
-  const [removeFromFavourites] = actorService.useRemoveFromFavouriteMutation();
+  const [addToFavourites] = heroService.useAddToFavouritesMutation();
+  const [removeFromFavourites] = heroService.useRemoveFromFavouriteMutation();
 
   useEffect(() => {
-    const found = isActorFavourite(currentUser, dto);
+    const found = isHeroFavourite(currentUser, dto);
     setFavourite(found);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
@@ -43,11 +43,8 @@ const ActorCard: FC<Props> = ({ dto }) => {
     }
   };
 
-  const { firstName, middleName, lastName } = dto;
-  const fullName = `${firstName} ${middleName ?? ""} ${lastName ?? ""}`;
-
   return (
-    <Card heading={fullName} description={""}>
+    <Card heading={dto.name} description={""}>
       <CardActions>
         <Button component={Link} to={`${dto.id}`} size="small">
           View
@@ -66,4 +63,4 @@ const ActorCard: FC<Props> = ({ dto }) => {
   );
 };
 
-export default ActorCard;
+export default HeroCard;

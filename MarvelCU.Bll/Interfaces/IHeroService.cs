@@ -13,7 +13,7 @@ public interface IHeroService
 
     Task<HeroDto> GetHeroDetails(int id);
 
-    Task UpdateHero(UpdateHeroDto dto, int id)
+    Task UpdateHero(UpdateHeroDto dto, int id);
 
     Task DeleteHero(int id);
 

@@ -1,34 +1,34 @@
-import { Button, CardActions, IconButton, Rating } from "@mui/material";
+import { Button, CardActions, IconButton } from "@mui/material";
 import { FC, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 
-import { selectCurrentUser } from "../../store/reducers/user.slice";
-import Card from "../common/card/card.component";
-import IGetMovie from "../../types/movie/IGetMovie.model";
-import IUser from "../../types/user.model";
-import movieService from "../../services/movie.service";
+import Card from "../../common/card/card.component";
+import IGetActor from "../../../types/actor/IGetActor.model";
+import { Link } from "react-router-dom";
+import actorService from "../../../services/actor.service";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../../store/reducers/user.slice";
+import IUser from "../../../types/user.model";
 
 type Props = {
-  dto: IGetMovie;
+  dto: IGetActor;
 };
 
-const isMovieFavourite = (user: IUser | null, movie: IGetMovie): boolean => {
+const isActorFavourite = (user: IUser | null, actor: IGetActor): boolean => {
   if (user == null) return false;
 
-  const found = user.favouriteMovies.find((m) => m.id === movie.id);
+  const found = user.favouriteActors.find((a) => a.id === actor.id);
   return Boolean(found);
 };
 
-const MovieCard: FC<Props> = ({ dto }) => {
+const ActorCard: FC<Props> = ({ dto }) => {
   const currentUser = useSelector(selectCurrentUser);
   const [isFavourite, setFavourite] = useState<boolean>(false);
-  const [addToFavourites] = movieService.useAddToFavouritesMutation();
-  const [removeFromFavourites] = movieService.useRemoveFromFavouriteMutation();
+  const [addToFavourites] = actorService.useAddToFavouritesMutation();
+  const [removeFromFavourites] = actorService.useRemoveFromFavouriteMutation();
 
   useEffect(() => {
-    const found = isMovieFavourite(currentUser, dto);
+    const found = isActorFavourite(currentUser, dto);
     setFavourite(found);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
@@ -43,14 +43,12 @@ const MovieCard: FC<Props> = ({ dto }) => {
     }
   };
 
-  return (
-    <Card
-      heading={dto.name}
-      description={`Saga ${dto.mcuSaga} Phase ${dto.mcuPhase}`}
-    >
-      <CardActions>
-        <Rating value={dto.rating ?? 0} readOnly />
+  const { firstName, middleName, lastName } = dto;
+  const fullName = `${firstName} ${middleName ?? ""} ${lastName ?? ""}`;
 
+  return (
+    <Card heading={fullName} description={""}>
+      <CardActions>
         <Button component={Link} to={`${dto.id}`} size="small">
           View
         </Button>
@@ -68,4 +66,4 @@ const MovieCard: FC<Props> = ({ dto }) => {
   );
 };
 
-export default MovieCard;
+export default ActorCard;

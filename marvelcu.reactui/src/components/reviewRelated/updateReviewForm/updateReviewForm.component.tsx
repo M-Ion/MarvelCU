@@ -1,25 +1,29 @@
 import { Button, Grid, Rating, TextField } from "@mui/material";
 import { useFormik } from "formik";
 
-import reviewSchema from "./reviewForm.validation";
-import reviewService from "../../services/reviews.service";
+import reviewSchema from "../reviewForm/reviewForm.validation";
+import reviewService from "../../../services/reviews.service";
 import { FC } from "react";
+import IGetReview from "../../../types/review/IGetReview.model";
 
+type Props = {
+  review: IGetReview;
+};
 type Values = {
   opinion: string;
   rating: number;
 };
 
-const ReviewForm: FC<{ movieId: number }> = ({ movieId }) => {
-  const [postReview] = reviewService.usePostReviewMutation();
+const UpdateReviewForm: FC<Props> = ({ review: { opinion, rating, id } }) => {
+  const [updateReview] = reviewService.useUpdateReviewMutation();
 
   const formik = useFormik<Values>({
     initialValues: {
-      opinion: "",
-      rating: 1,
+      opinion,
+      rating,
     },
     onSubmit: async (values: Values) => {
-      await postReview({ fields: values, movieId });
+      await updateReview({ fields: values, id });
     },
     validationSchema: reviewSchema,
   });
@@ -41,15 +45,16 @@ const ReviewForm: FC<{ movieId: number }> = ({ movieId }) => {
         <Rating
           defaultValue={0}
           name="rating"
+          onBlur={formik.handleBlur}
           onChange={formik.handleChange}
-          value={+formik.values.rating}
+          value={+formik.values.rating as number}
         />
         <Button type="submit" variant="text">
-          Comment
+          Update
         </Button>
       </Grid>
     </form>
   );
 };
 
-export default ReviewForm;
+export default UpdateReviewForm;

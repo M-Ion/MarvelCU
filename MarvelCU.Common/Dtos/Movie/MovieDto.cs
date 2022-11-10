@@ -11,7 +11,9 @@ public class MovieDto : BaseMovieDto
 {
     public int Id { get; set; }
 
-    public string Descritpion { get; set; }
+    public string Description { get; set; }
+
+    public float Price { get; set; }
 
     [Range(1, 5)]
     public sbyte Rating { get; set; }

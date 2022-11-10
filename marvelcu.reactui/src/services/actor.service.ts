@@ -42,6 +42,17 @@ const actorService = createApi({
       }),
     }),
 
+    updateActor: build.mutation<
+      { id: number },
+      { id: number; actor: IPostActor }
+    >({
+      query: (args: { id: number; actor: IPostActor }) => ({
+        url: `/Actors/${args.id}`,
+        method: "PUT",
+        body: args.actor,
+      }),
+    }),
+
     deleteActor: build.mutation<void, number>({
       query: (id) => ({
         url: `/Actors/${id}`,

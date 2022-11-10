@@ -4,6 +4,7 @@ import {
   CardMedia,
   Container,
   Grid,
+  IconButton,
   Paper,
   Rating,
   Typography,
@@ -12,24 +13,27 @@ import { Link, useParams } from "react-router-dom";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import DownloadIcon from "@mui/icons-material/Download";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
 import { StyledCard, StyledCardContent } from "./common/entity.styles";
 import AvatarListItem from "../components/common/avatarListItem/avatarListItem.component";
 import Footer from "../components/footer/footer.component";
 import IMovie from "../types/movie/IMovie.model";
 import movieService from "../services/movie.service";
-import Review from "../components/common/review/review.component";
+import Review from "../components/reviewRelated/review/review.component";
 import ScrollableStack from "../components/common/scrollableStack/scrollableStack.component";
 import YouTubeVideo from "../components/common/youTubeVideo/youTubeVideo.component";
-import ReviewForm from "../components/reviewForm/reviewForm.component";
+import ReviewForm from "../components/reviewRelated/reviewForm/reviewForm.component";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../store/reducers/user.slice";
-import UpdateReviewForm from "../components/updateReviewForm/updateReviewForm.component";
+import UpdateReviewForm from "../components/reviewRelated/updateReviewForm/updateReviewForm.component";
 import IGetReview from "../types/review/IGetReview.model";
 import { useEffect, useState } from "react";
 import NotFoundPage from "./notFound.page";
 import DialogWindow from "../components/common/dialogWindow/dialogWindow.component";
 import { findElement } from "../utils/findElement";
+import FormDialog from "../components/common/formDialog/formDialog.component";
+import UpdateMovieForm from "../components/movieRelated/updateMovieForm/updateMovieForm.component";
 
 const fields: readonly (keyof IMovie)[] = ["premiere", "mcuPhase", "mcuSaga"];
 const defaultDescription: string = `Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis optio accusamus adipisci, officia est consequuntur obcaecati veritatis ratione magni temporibus voluptates maxime sed corporis ad. Repellat excepturi eos est suscipit id sunt accusamus consequuntur saepe voluptatum, nam velit eveniet ipsa.`;
@@ -45,14 +49,18 @@ const findReviewByUser = (
 
 const MovieEntityPage = () => {
   const currentUser = useSelector(selectCurrentUser);
+  const isAdmin =
+    currentUser &&
+    findElement(currentUser.roles, process.env.REACT_APP_ADMIN_ROLE);
+
+  const [reviews, setReviews] = useState<IGetReview[] | undefined>(undefined);
   const [foundReview, setFoundReview] = useState<IGetReview | undefined>(
     undefined
   );
-
   const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false);
-  const [deleteMovie] = movieService.useDeleteMovieMutation();
+  const [openUpdateForm, setOpenUpdateForm] = useState<boolean>(false);
 
-  const [reviews, setReviews] = useState<IGetReview[] | undefined>(undefined);
+  const [deleteMovie] = movieService.useDeleteMovieMutation();
 
   let params = useParams<string>();
   const id = +(params.movieId as string);
@@ -83,6 +91,16 @@ const MovieEntityPage = () => {
 
           {/* Movie details */}
           <Grid container flexDirection={"column"}>
+            {isAdmin && (
+              <IconButton
+                component="span"
+                sx={{ alignSelf: "flex-end" }}
+                onClick={() => setOpenUpdateForm(true)}
+              >
+                <EditIcon />
+              </IconButton>
+            )}
+
             <StyledCardContent>
               <Typography variant="h4" component="div">
                 {data && data.name}
@@ -115,7 +133,7 @@ const MovieEntityPage = () => {
                 startIcon={<DownloadIcon />}
                 component="a"
                 download
-                href={`${process.env.REACT_APP_API_BASE_URL}/Blobs/Download/videos/Wakanda.mp4`}
+                href={`${process.env.REACT_APP_API_BASE_URL}/Blobs/Download/Video/Wakanda`}
               >
                 Download
               </Button>
@@ -191,34 +209,45 @@ const MovieEntityPage = () => {
         </ScrollableStack>
       </Container>
 
-      {currentUser &&
-        findElement(currentUser.roles, process.env.REACT_APP_ADMIN_ROLE) && (
-          <>
-            <Grid container alignItems="flex-end" justifyContent="flex-end">
-              <Button
-                variant="outlined"
-                color="secondary"
-                sx={{ marginY: 8, marginLeft: "auto" }}
-                startIcon={<DeleteIcon />}
-                onClick={() => setOpenDeleteDialog(true)}
-              >
-                Delete
-              </Button>
-            </Grid>
+      {isAdmin && (
+        <>
+          <Grid container alignItems="flex-end" justifyContent="flex-end">
+            <Button
+              variant="outlined"
+              color="secondary"
+              sx={{ marginY: 8, marginLeft: "auto" }}
+              startIcon={<DeleteIcon />}
+              onClick={() => setOpenDeleteDialog(true)}
+            >
+              Delete
+            </Button>
+          </Grid>
 
-            <DialogWindow
-              open={openDeleteDialog}
-              setOpen={setOpenDeleteDialog}
-              title={`Delete movie ${data?.name}`}
-              context="Are you sure want to delete the movie, all data related to movie also will be deleted"
-              action={async () => {
-                if (data?.id) {
-                  await deleteMovie(data?.id);
-                }
-              }}
+          <DialogWindow
+            open={openDeleteDialog}
+            setOpen={setOpenDeleteDialog}
+            title={`Delete movie ${data?.name}`}
+            context="Are you sure want to delete the movie, all data related to movie also will be deleted"
+            action={async () => {
+              if (data?.id) {
+                await deleteMovie(data?.id);
+              }
+            }}
+          />
+
+          <FormDialog
+            open={openUpdateForm}
+            setOpen={setOpenUpdateForm}
+            title={""}
+          >
+            <UpdateMovieForm
+              open={openUpdateForm}
+              setOpen={setOpenUpdateForm}
+              movie={data as IMovie}
             />
-          </>
-        )}
+          </FormDialog>
+        </>
+      )}
 
       <Footer />
     </Box>

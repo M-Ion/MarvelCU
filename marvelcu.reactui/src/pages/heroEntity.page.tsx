@@ -4,11 +4,13 @@ import {
   CardMedia,
   Container,
   Grid,
+  IconButton,
   Typography,
 } from "@mui/material";
 import * as React from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import EditIcon from "@mui/icons-material/Edit";
 import AvatarListItem from "../components/common/avatarListItem/avatarListItem.component";
 import DialogWindow from "../components/common/dialogWindow/dialogWindow.component";
 import ScrollableStack from "../components/common/scrollableStack/scrollableStack.component";
@@ -17,6 +19,9 @@ import { selectCurrentUser } from "../store/reducers/user.slice";
 import { findElement } from "../utils/findElement";
 import { StyledCard, StyledCardContent } from "./common/entity.styles";
 import DeleteIcon from "@mui/icons-material/Delete";
+import FormDialog from "../components/common/formDialog/formDialog.component";
+import UpdateHeroForm from "../components/heroRelated/updateHeroForm/updateHeroForm.component";
+import IHero from "../types/hero/IHero.mode";
 
 interface IHeroEntityPageProps {}
 
@@ -24,8 +29,13 @@ const HeroEntityPage: React.FunctionComponent<IHeroEntityPageProps> = (
   props
 ) => {
   const currentUser = useSelector(selectCurrentUser);
+  const isAdmin =
+    currentUser &&
+    findElement(currentUser.roles, process.env.REACT_APP_ADMIN_ROLE);
+
   const [openDeleteDialog, setOpenDeleteDialog] =
     React.useState<boolean>(false);
+  const [openUpdateForm, setOpenUpdateForm] = React.useState<boolean>(false);
 
   const [deleteHero] = heroService.useDeleteHeroMutation();
 
@@ -44,28 +54,39 @@ const HeroEntityPage: React.FunctionComponent<IHeroEntityPageProps> = (
             sx={{ width: 400 }}
           />
 
-          {/* Movie details */}
-          <Grid container width="100%" flexDirection={"row"} spacing={3}>
-            <Grid item flexDirection={"column"} sx={{ flexGrow: 0 }}>
-              <StyledCardContent>
-                <Typography variant="h4" component="div">
-                  {data && data.name}
+          <Grid container flexDirection={"column"}>
+            {isAdmin && (
+              <IconButton
+                component="span"
+                sx={{ alignSelf: "flex-end" }}
+                onClick={() => setOpenUpdateForm(true)}
+              >
+                <EditIcon />
+              </IconButton>
+            )}
+
+            <Grid container width="100%" spacing={3}>
+              <Grid item flexDirection={"column"} sx={{ flexGrow: 0 }}>
+                <StyledCardContent>
+                  <Typography variant="h4" component="div">
+                    {data && data.name}
+                  </Typography>
+                </StyledCardContent>
+              </Grid>
+              <Grid
+                item
+                sx={{ padding: 4 }}
+                width="50%"
+                textAlign={"start"}
+                alignSelf="center"
+              >
+                <Typography>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Libero, culpa quisquam delectus in animi temporibus nihil
+                  natus! Enim explicabo error impedit excepturi, rem harum a
+                  inventore, molestias magni laboriosam doloremque?
                 </Typography>
-              </StyledCardContent>
-            </Grid>
-            <Grid
-              item
-              sx={{ padding: 4 }}
-              width="50%"
-              textAlign={"start"}
-              alignSelf="center"
-            >
-              <Typography>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero,
-                culpa quisquam delectus in animi temporibus nihil natus! Enim
-                explicabo error impedit excepturi, rem harum a inventore,
-                molestias magni laboriosam doloremque?
-              </Typography>
+              </Grid>
             </Grid>
           </Grid>
         </StyledCard>
@@ -125,6 +146,18 @@ const HeroEntityPage: React.FunctionComponent<IHeroEntityPageProps> = (
                   }
                 }}
               />
+
+              <FormDialog
+                open={openUpdateForm}
+                setOpen={setOpenUpdateForm}
+                title={""}
+              >
+                <UpdateHeroForm
+                  open={openUpdateForm}
+                  setOpen={setOpenUpdateForm}
+                  hero={data as IHero}
+                />
+              </FormDialog>
             </>
           )}
       </Container>

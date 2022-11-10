@@ -31,6 +31,16 @@ const heroService = createApi({
       }),
     }),
 
+    updateHero: build.mutation<{ id: number }, { id: number; hero: IPostHero }>(
+      {
+        query: (args: { id: number; hero: IPostHero }) => ({
+          url: `/Heroes/${args.id}`,
+          method: "PUT",
+          body: args.hero,
+        }),
+      }
+    ),
+
     deleteHero: build.mutation<void, number>({
       query: (id) => ({
         url: `/Heroes/${id}`,

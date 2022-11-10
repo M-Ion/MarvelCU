@@ -33,6 +33,17 @@ const movieService = createApi({
       }),
     }),
 
+    updateMovie: build.mutation<
+      { id: number },
+      { id: number; movie: IPostMovie }
+    >({
+      query: (arg: { id: number; movie: IPostMovie }) => ({
+        url: `/Movies/${arg.id}`,
+        method: "PUT",
+        body: arg.movie,
+      }),
+    }),
+
     deleteMovie: build.mutation<void, number>({
       query: (id) => ({
         url: `/Movies/${id}`,
