@@ -23,5 +23,9 @@ namespace MarvelCU.API.Models.Movie
 
         public string YouTubeTrailerId { get; set; }
 
+        public IList<int> ActorsIds { get; set; }
+
+        public IList<int> HeroesIds { get; set; }
+
     }
 }

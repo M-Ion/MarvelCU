@@ -6,6 +6,7 @@ using MarvelCU.Dal.Interfaces;
 using MarvelCU.Domain;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace MarvelCU.Dal.Repositories;
 
@@ -37,7 +38,7 @@ public class GenericRepository<T> : IRepository<T> where T : BaseEntity
         return await _context.Set<T>().ToListAsync();
     }
 
-    public async Task<ProcessedResult<TDto>> GetAllAsyncProcessed<TDto>(ProcessedRequest processedRequest, IMapper mapper) where TDto: class
+    public async Task<ProcessedResult<TDto>> GetAllAsyncProcessed<TDto>(ProcessedRequest processedRequest, IMapper mapper) where TDto : class
     {
         return await _context.Set<T>().Query<T, TDto>(processedRequest, mapper);
     }
@@ -72,12 +73,46 @@ public class GenericRepository<T> : IRepository<T> where T : BaseEntity
         await _context.SaveChangesAsync();
     }
 
+    public async Task<T> UpdateCollection<TColl>(T entity, IList<int> ids, string prop, bool add = true) where TColl : BaseEntity
+    {
+        IList<TColl> entities = await _context.Set<TColl>().Where(e => ids.Contains(e.Id)).ToListAsync();
+
+        PropertyInfo collProp = entity.GetType().GetProperty(prop);
+
+        if (entities.Any() && collProp is not null)
+        {
+            object coll = collProp.GetValue(entity, null);
+
+            if (coll is null || !add)
+            {
+                collProp.SetValue(entity, entities);
+
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+
+            if (coll is IList<TColl> list)
+            {
+                foreach (TColl el in entities)
+                {
+                    list.Add(el);
+                }
+
+                collProp.SetValue(entity, list);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        return entity;
+    }
+
     private IQueryable<T> IncludeProperties(params Expression<Func<T, object>>[] properties)
     {
         IQueryable<T> query = _context.Set<T>();
 
-        foreach(var property in properties) query = query.Include(property);
-      
+        foreach (var property in properties) query = query.Include(property);
+
         return query;
     }
 

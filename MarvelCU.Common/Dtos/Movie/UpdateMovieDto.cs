@@ -25,5 +25,9 @@ namespace MarvelCU.Common.Dtos.Movie
         public sbyte? McuPhase { get; set; }
 
         public sbyte? McuSaga { get; set; }
+
+        public IList<int> ActorsIds { get; set; }
+
+        public IList<int> HeroesIds { get; set; }
     }
 }

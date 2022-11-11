@@ -17,5 +17,9 @@ namespace MarvelCU.Common.Dtos.Actor
 
         [MaxLength(50)]
         public string LastName { get; set; }
+
+        public IList<int> MoviesIds { get; set; }
+
+        public IList<int> HeroesIds { get; set; }
     }
 }

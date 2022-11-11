@@ -14,5 +14,7 @@ namespace MarvelCU.Common.Dtos.Hero
 
         [MaxLength(600)]
         public string Description { get; set; }
+
+        public IList<int> MoviesIds { get; set; }
     }
 }

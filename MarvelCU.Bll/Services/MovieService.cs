@@ -50,10 +50,20 @@ public class MovieService : IMovieService
     }
 
 
-    public async Task<IdDto> CreateMovie(CreateMovieDto createMovieDto)
+    public async Task<IdDto> CreateMovie(CreateMovieDto dto)
     {
-        var movie = _mapper.Map<Movie>(createMovieDto);
+        var movie = _mapper.Map<Movie>(dto);
         var entity = await _movieRepository.AddAsync(movie);
+
+        if (dto.ActorsIds is not null && dto.ActorsIds.Any())
+        {
+            entity = await _movieRepository.UpdateCollection<Actor>(entity, dto.ActorsIds, nameof(entity.Actors));
+        }
+
+        if (dto.HeroesIds is not null && dto.HeroesIds.Any())
+        {
+            entity = await _movieRepository.UpdateCollection<Hero>(entity, dto.HeroesIds, nameof(entity.Heroes));
+        }
 
         return new IdDto { Id = entity.Id };
     }
@@ -62,6 +72,16 @@ public class MovieService : IMovieService
     {
         Movie entity = await _movieRepository.Exists(id);
         _mapper.Map(dto, entity);
+
+        if (dto.ActorsIds is not null && dto.ActorsIds.Any())
+        {
+            entity = await _movieRepository.UpdateCollection<Actor>(entity, dto.ActorsIds, nameof(entity.Actors));
+        }
+
+        if (dto.HeroesIds is not null && dto.HeroesIds.Any())
+        {
+            entity = await _movieRepository.UpdateCollection<Hero>(entity, dto.HeroesIds, nameof(entity.Heroes));
+        }
 
         await _movieRepository.UpdateAsync(entity);
     }
@@ -86,7 +106,7 @@ public class MovieService : IMovieService
 
         user.FavouriteMovies.Add(movie);
         await _userManager.UpdateAsync(user);
-        
+
     }
 
     public async Task RemoveFromFavourites(int movieId)
@@ -100,7 +120,7 @@ public class MovieService : IMovieService
             user.FavouriteMovies.Remove(movie);
             await _userManager.UpdateAsync(user);
         }
-    } 
+    }
 
 
     public async Task AddBoughtMovie(int id)

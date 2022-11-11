@@ -12,5 +12,9 @@ public class CreateActorDto
     public string LastName { get; set; }
 
     public string BlobFilePath { get; set; }
+
+    public IList<int> MoviesIds { get; set; }
+
+    public IList<int> HeroesIds { get; set; }
 }
 

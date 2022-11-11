@@ -30,7 +30,9 @@ public class MapperConfig : Profile
 
         CreateMap<Movie, MovieDto>().ReverseMap();
         CreateMap<Movie, GetMovieDto>().ReverseMap();
-        CreateMap<Movie, CreateMovieDto>().ReverseMap();
+        CreateMap<Movie, CreateMovieDto>()
+            .ReverseMap();
+
         CreateMap<Movie, UpdateMovieDto>()
             .ReverseMap()
             .ForAllMembers(opt => opt.Condition(IgnoreNullAndDefault));

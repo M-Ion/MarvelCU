@@ -29,7 +29,7 @@ public class Movie : BaseEntity
     [Required]
     public uint Price { get; set; } = 0;
 
-    public virtual ICollection<Actor> Actors { get; set; }
+    public virtual IList<Actor> Actors { get; set; }
 
     [Range(1, 5)]
     public float Rating { get; set; } = 0;

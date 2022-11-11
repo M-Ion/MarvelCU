@@ -51,10 +51,15 @@ public class HeroService : IHeroService
         return _mapper.Map<HeroDto>(hero);
     }
 
-    public async Task<IdDto> CreateHero(CreateHeroDto createHeroDto)
+    public async Task<IdDto> CreateHero(CreateHeroDto dto)
     {
-        var hero = _mapper.Map<Hero>(createHeroDto);
+        var hero = _mapper.Map<Hero>(dto);
         var entity = await _heroRepository.AddAsync(hero);
+
+        if (dto.MoviesIds is not null && dto.MoviesIds.Any())
+        {
+            entity = await _heroRepository.UpdateCollection<Movie>(entity, dto.MoviesIds, nameof(entity.Movies));
+        }
 
         return new IdDto() { Id = entity.Id };
     }
@@ -63,6 +68,11 @@ public class HeroService : IHeroService
     {
         Hero entity = await _heroRepository.Exists(id);
         _mapper.Map(dto, entity);
+
+        if (dto.MoviesIds is not null && dto.MoviesIds.Any())
+        {
+            entity = await _heroRepository.UpdateCollection<Movie>(entity, dto.MoviesIds, nameof(entity.Movies));
+        }
 
         await _heroRepository.UpdateAsync(entity);
     }

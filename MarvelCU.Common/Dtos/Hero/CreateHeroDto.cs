@@ -10,5 +10,7 @@ public class CreateHeroDto
     public string Description { get; set; }
 
     public string BlobFilePath { get; set; }
+
+    public IList<int> MoviesIds { get; set; }
 }
 

@@ -23,6 +23,8 @@ public interface IRepository<T> where T : BaseEntity
 
     Task<T> GetEntityDetails(int id, params Expression<Func<T, object>>[] properties);
 
+    Task<T> UpdateCollection<TColl>(T entity, IList<int> ids, string prop, bool add = true) where TColl : BaseEntity;
+
     Task Supply<E>(ICollection<E> collection, E entityToAdd) where E : BaseEntity;
 }
 

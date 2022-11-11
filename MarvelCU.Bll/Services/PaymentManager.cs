@@ -25,12 +25,12 @@ public class PaymentManager : IPaymentManager
         // If charge was successful
         if (charge.Paid)
         {
-            bool saveCredentials = user.CustomerId is null && paymentDto.Save;
+            //bool saveCredentials = user.CustomerId is null && paymentDto.Save;
 
-            if (saveCredentials)
-            {
-                user.CustomerId = options.Customer;
-            }
+            //if (saveCredentials)
+            //{
+            //    user.CustomerId = options.Customer;
+            //}
         }
 
         return charge.Paid;
@@ -49,13 +49,13 @@ public class PaymentManager : IPaymentManager
 
         var stripeToken = await paymentDto.GenerateStripeToken();
 
-        if (paymentDto.Save)
-        {
-            Customer customer = await CreateStripeCustomer(user.Email, stripeToken);
-            options.Customer = customer.Id;
+        //if (paymentDto.Save)
+        //{
+        //    Customer customer = await CreateStripeCustomer(user.Email, stripeToken);
+        //    options.Customer = customer.Id;
 
-            return options;
-        }
+        //    return options;
+        //}
 
         options.Source = stripeToken.Id;
 
