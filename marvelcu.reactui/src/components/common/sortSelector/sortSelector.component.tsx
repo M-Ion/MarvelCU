@@ -23,6 +23,7 @@ const SortSelector: FC<Props> = ({ setSort, sort, sortFields }) => {
     };
 
     setSort(sortReq);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -36,19 +37,24 @@ const SortSelector: FC<Props> = ({ setSort, sort, sortFields }) => {
   return (
     <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
       <InputLabel id="demo-simple-select-label">Sort</InputLabel>
-      <Select
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
-        label="Sort"
-        value={sort.sort ?? "name"}
-        onChange={handleChange}
-      >
-        {sortFields.map((field, i) => (
-          <MenuItem key={i} value={field}>
-            {field}
-          </MenuItem>
-        ))}
-      </Select>
+      {sortFields && (
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          label="Sort"
+          value={sort.sort ?? "name"}
+          onChange={handleChange}
+          defaultValue=""
+        >
+          {/* For disable MUI warning */}
+          <MenuItem value="name" sx={{ display: "none" }} />
+          {sortFields.map((field, i) => (
+            <MenuItem key={i} value={field}>
+              {field}
+            </MenuItem>
+          ))}
+        </Select>
+      )}
     </FormControl>
   );
 };

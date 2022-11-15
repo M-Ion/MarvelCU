@@ -1,13 +1,8 @@
 import { ThemeProvider } from "@emotion/react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { useSelector } from "react-redux";
 import "./App.css";
 
-import {
-  logOut,
-  selectCurrentUser,
-  setCredentials,
-} from "./store/reducers/user.slice";
+import { setCredentials } from "./store/reducers/user.slice";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import ActorEntityPage from "./pages/actorEntity.component";
@@ -29,42 +24,27 @@ import AdminPage from "./pages/admin.page";
 
 function App() {
   const dispatch = useDispatch();
-  const currentUser = useSelector(selectCurrentUser);
+  const [checkCurrentUser, { data }] =
+    authService.useCheckUserSessionMutation();
+  const [checkCookies] = authService.useCheckCookiesTokensMutation();
 
-  const [checkUser] = authService.useCheckUserMutation();
-  const [checkCookies] = authService.useCheckAuthCookiesMutation();
-
-  const setupUserSession = () => {
-    checkCookies(undefined)
-      .unwrap()
-      .then((cookies) => {
-        if (!cookies.token) {
-          dispatch(logOut());
-          return;
-        }
-
-        dispatch(setCredentials({ user: null, token: cookies.token }));
-
-        // Check user session after setup jwt
-        checkUser(undefined)
-          .unwrap()
-          .then((resp) => {
-            if (!resp.user) {
-              dispatch(logOut());
-              return;
-            }
-
-            dispatch(setCredentials({ user: resp.user, token: resp.token }));
-          })
-          .catch((err) => console.log(err));
-      })
-      .catch((err) => console.log(err));
+  const checkUserSession = async () => {
+    const cookies = await checkCookies().unwrap();
+    if (cookies.token) {
+      dispatch(setCredentials({ user: null, token: cookies.token }));
+    }
+    await checkCurrentUser();
   };
 
   useEffect(() => {
-    setupUserSession();
+    checkUserSession();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (data) dispatch(setCredentials(data));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -73,18 +53,7 @@ function App() {
           <AlertBar />
           <Header />
           <Routes>
-            <Route
-              path="/admin"
-              element={
-                currentUser?.roles.find(
-                  (r) => r === process.env.REACT_APP_ADMIN_ROLE
-                ) ? (
-                  <AdminPage />
-                ) : (
-                  <Navigate to={"/movies"} replace />
-                )
-              }
-            />
+            <Route path="/admin" element={<AdminPage />} />
             <Route path="/actors" element={<ActorsPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/heroes" element={<HeroesPage />} />

@@ -9,7 +9,7 @@ public class ReviewConfig : IEntityTypeConfiguration<Review>
     public void Configure(EntityTypeBuilder<Review> builder)
     {
         builder.Property(p => p.Posted).HasDefaultValueSql("GetUtcDate()");
-        builder.Property(p => p.Updated).ValueGeneratedOnUpdate();
+        builder.Property(p => p.Updated).HasDefaultValueSql("GetUtcDate()");
 
         builder.HasOne(r => r.User)
             .WithMany(u => u.Reviews)

@@ -4,7 +4,7 @@ import { Link as RouteLink, useNavigate } from "react-router-dom";
 
 import { Form } from "./signUpForm.styles";
 import authService from "../../services/auth.service";
-import FormInput from "../common/formInput/formInput.component";
+import FormInput from "../common/formInput.component";
 import signUpSchema from "./signUpForm.validation";
 import { useDispatch } from "react-redux";
 import { setAlert } from "../../store/reducers/alerts.slice";

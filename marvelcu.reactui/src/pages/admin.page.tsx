@@ -1,11 +1,11 @@
 import { Box, Container, Tab, Tabs } from "@mui/material";
 import * as React from "react";
 import AddActorForm from "../components/actorRelated/addActorForm.component";
-import AddNewsForm from "../components/newsRelated/newsForm/newsForm.component";
 
 import TabPanel from "../components/tabPanel/tabPanel.component";
-import AddMovieForm from "../components/movieRelated/addMovieForm/addMovieForm.component";
-import AddHeroForm from "../components/heroRelated/addHeroForm/addHeroForm.component";
+import AddMovieForm from "../components/movieRelated/addMovieForm.component";
+import AddHeroForm from "../components/heroRelated/addHeroForm.component";
+import AddNewsForm from "../components/newsRelated/addNewsForm.component";
 
 export default function Admin() {
   const [tab, setTab] = React.useState<number>(0);

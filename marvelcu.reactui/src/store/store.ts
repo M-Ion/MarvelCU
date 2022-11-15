@@ -6,36 +6,40 @@ import alertsReducer from "./reducers/alerts.slice";
 import authService from "../services/auth.service";
 import blobService from "../services/blob.services";
 import heroService from "../services/hero.service";
-import movieService from "../services/movie.service";
 import newsService from "../services/news.service";
-import reviewService from "../services/reviews.service";
 
 // Redux Toolkit reducers
 import userReducer from "../store/reducers/user.slice";
+import imdbService from "../services/imdb/imdb.service";
+import apiSlice from "../services/api.slice";
 
 const root = combineReducers({
   currentUser: userReducer,
   alerts: alertsReducer,
+  [apiSlice.reducerPath]: apiSlice.reducer,
   [actorService.reducerPath]: actorService.reducer,
   [authService.reducerPath]: authService.reducer,
   [blobService.reducerPath]: blobService.reducer,
   [heroService.reducerPath]: heroService.reducer,
-  [movieService.reducerPath]: movieService.reducer,
+  [imdbService.reducerPath]: imdbService.reducer,
+  // [movieService.reducerPath]: movieService.reducer,
   [newsService.reducerPath]: newsService.reducer,
-  [reviewService.reducerPath]: reviewService.reducer,
+  // [reviewService.reducerPath]: reviewService.reducer,
 });
 
 export const store = configureStore({
   reducer: root,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
+      apiSlice.middleware,
       actorService.middleware,
       authService.middleware,
       blobService.middleware,
       heroService.middleware,
-      movieService.middleware,
+      imdbService.middleware,
+      // movieService.middleware,
       newsService.middleware,
-      reviewService.middleware,
+      // reviewService.middleware,
     ]),
 });
 

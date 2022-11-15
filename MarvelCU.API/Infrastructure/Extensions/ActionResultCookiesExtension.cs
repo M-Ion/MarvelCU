@@ -8,16 +8,20 @@ public static class ActionResultAuthCookiesExtension
         this HttpResponse httpResponse, 
         string cookieName, 
         string cookieValue,
-        DateTime cookieExpires)
+        DateTime? cookieExpires)
     {
         CookieOptions options = new()
         {
-            Expires = cookieExpires,
             HttpOnly = true,
             IsEssential = true,
             Secure = true,
             SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None,
         };
+
+        if (cookieExpires is not null)
+        {
+            options.Expires = cookieExpires;
+        }
 
         httpResponse.Cookies.Append(cookieName, cookieValue, options);
     }

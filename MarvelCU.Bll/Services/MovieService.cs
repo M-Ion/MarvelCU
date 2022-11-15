@@ -55,12 +55,12 @@ public class MovieService : IMovieService
         var movie = _mapper.Map<Movie>(dto);
         var entity = await _movieRepository.AddAsync(movie);
 
-        if (dto.ActorsIds is not null && dto.ActorsIds.Any())
+        if (dto.ActorsIds is not null)
         {
             entity = await _movieRepository.UpdateCollection<Actor>(entity, dto.ActorsIds, nameof(entity.Actors));
         }
 
-        if (dto.HeroesIds is not null && dto.HeroesIds.Any())
+        if (dto.HeroesIds is not null)
         {
             entity = await _movieRepository.UpdateCollection<Hero>(entity, dto.HeroesIds, nameof(entity.Heroes));
         }
@@ -73,12 +73,12 @@ public class MovieService : IMovieService
         Movie entity = await _movieRepository.Exists(id);
         _mapper.Map(dto, entity);
 
-        if (dto.ActorsIds is not null && dto.ActorsIds.Any())
+        if (dto.ActorsIds is not null)
         {
             entity = await _movieRepository.UpdateCollection<Actor>(entity, dto.ActorsIds, nameof(entity.Actors));
         }
 
-        if (dto.HeroesIds is not null && dto.HeroesIds.Any())
+        if (dto.HeroesIds is not null)
         {
             entity = await _movieRepository.UpdateCollection<Hero>(entity, dto.HeroesIds, nameof(entity.Heroes));
         }

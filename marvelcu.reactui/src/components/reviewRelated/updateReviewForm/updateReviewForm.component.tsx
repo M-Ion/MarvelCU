@@ -1,10 +1,12 @@
 import { Button, Grid, Rating, TextField } from "@mui/material";
 import { useFormik } from "formik";
 
+import DeleteIcon from "@mui/icons-material/Delete";
 import reviewSchema from "../reviewForm/reviewForm.validation";
 import reviewService from "../../../services/reviews.service";
 import { FC } from "react";
 import IGetReview from "../../../types/review/IGetReview.model";
+import { LoadingButton } from "@mui/lab";
 
 type Props = {
   review: IGetReview;
@@ -14,8 +16,12 @@ type Values = {
   rating: number;
 };
 
-const UpdateReviewForm: FC<Props> = ({ review: { opinion, rating, id } }) => {
+const UpdateReviewForm: FC<Props> = ({
+  review: { opinion, rating, id, movie },
+}) => {
   const [updateReview] = reviewService.useUpdateReviewMutation();
+  const [deleteReview, { isLoading: isDeleting }] =
+    reviewService.useDeleteReviewMutation();
 
   const formik = useFormik<Values>({
     initialValues: {
@@ -49,9 +55,22 @@ const UpdateReviewForm: FC<Props> = ({ review: { opinion, rating, id } }) => {
           onChange={formik.handleChange}
           value={+formik.values.rating as number}
         />
-        <Button type="submit" variant="text">
-          Update
-        </Button>
+        <Grid item>
+          <LoadingButton
+            loading={isDeleting}
+            onClick={async () =>
+              await deleteReview({ reviewId: id, movieId: movie.id })
+            }
+            color="secondary"
+            startIcon={<DeleteIcon />}
+            variant="text"
+          >
+            Delete
+          </LoadingButton>
+          <Button type="submit" variant="text">
+            Update
+          </Button>
+        </Grid>
       </Grid>
     </form>
   );

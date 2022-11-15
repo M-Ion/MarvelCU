@@ -1,6 +1,7 @@
 ﻿using MarvelCU.Common.Dtos.Actor;
 using MarvelCU.Common.Dtos.Hero;
 using MarvelCU.Common.Dtos.Movie;
+using MarvelCU.Common.Dtos.Review;
 using MarvelCU.Domain;
 
 namespace MarvelCU.Common.Dtos.User;
@@ -15,7 +16,7 @@ public class UserDto
 
     public  IList<string> Roles { get; set; }
 
-    public virtual ICollection<MarvelCU.Domain.Review> Reviews { get; set; }
+    public virtual ICollection<GetReviewDto> Reviews { get; set; }
 
     public virtual ICollection<GetActorDto> FavouriteActors { get; set; }
 

@@ -69,7 +69,7 @@ public class HeroService : IHeroService
         Hero entity = await _heroRepository.Exists(id);
         _mapper.Map(dto, entity);
 
-        if (dto.MoviesIds is not null && dto.MoviesIds.Any())
+        if (dto.MoviesIds is not null)
         {
             entity = await _heroRepository.UpdateCollection<Movie>(entity, dto.MoviesIds, nameof(entity.Movies));
         }

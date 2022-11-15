@@ -19,6 +19,7 @@ public class TokenManager : ITokenManager
     private readonly MarvelDbContext _context;
     private readonly UserManager<User> _userManager;
     private readonly IConfiguration _configuration;
+    private readonly JwtSecurityTokenHandler _jwtSecurityTokenHandler;
     private readonly TokenValidationParameters _tokenValidationParameters;
     private readonly IDistributedCache _cache;
 
@@ -26,6 +27,7 @@ public class TokenManager : ITokenManager
         MarvelDbContext context,
         UserManager<User> userManager,
         IConfiguration configuration,
+        JwtSecurityTokenHandler jwtSecurityTokenHandler,
         TokenValidationParameters tokenValidationParameters,
         IDistributedCache cache
         )
@@ -33,6 +35,7 @@ public class TokenManager : ITokenManager
         _context = context;
         _userManager = userManager;
         _configuration = configuration;
+        _jwtSecurityTokenHandler = jwtSecurityTokenHandler;
         _tokenValidationParameters = tokenValidationParameters;
         _cache = cache;
     }
@@ -45,7 +48,7 @@ public class TokenManager : ITokenManager
 
         return new AuthResponseDto()
         {
-            Token = new JwtSecurityTokenHandler().WriteToken(token),
+            Token = _jwtSecurityTokenHandler.WriteToken(token),
             RefreshToken = refreshToken
         };
     }
@@ -75,7 +78,7 @@ public class TokenManager : ITokenManager
             issuer: _configuration["JwtConfig:Issuer"],
             audience: _configuration["JwtConfig:Audience"],
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(Convert.ToInt32(_configuration["JwtConfig:DurationInMinutes"])),
+            expires: DateTime.UtcNow.AddMonths(Convert.ToInt32(_configuration["JwtConfig:DurationInMinutes"])),
             signingCredentials: credentials
             );
 
@@ -110,7 +113,7 @@ public class TokenManager : ITokenManager
             // Validate jwt
             _tokenValidationParameters.ValidateLifetime = false;
 
-            tokenVerification = new JwtSecurityTokenHandler()
+            tokenVerification = _jwtSecurityTokenHandler
                 .ValidateToken(tokenRequestDto.Token, _tokenValidationParameters, out validatedToken);
         }
         catch (Exception e)
@@ -146,7 +149,7 @@ public class TokenManager : ITokenManager
 
         return new AuthResponseDto
         {
-            Token = new JwtSecurityTokenHandler().WriteToken(token),
+            Token = _jwtSecurityTokenHandler.WriteToken(token),
             RefreshToken = storedRefreshToken.Token
         };
     }
@@ -224,6 +227,12 @@ public class TokenManager : ITokenManager
     {
         string cacheToken = await _cache.GetStringAsync(token);
         return cacheToken == null;
+    }
+
+    public JwtSecurityToken ReadJwt (string token)
+    {
+        JwtSecurityToken jwt = _jwtSecurityTokenHandler.ReadJwtToken(token);
+        return jwt;
     }
 }
 

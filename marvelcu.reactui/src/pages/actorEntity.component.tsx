@@ -11,7 +11,7 @@ import * as React from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import AvatarListItem from "../components/common/avatarListItem/avatarListItem.component";
-import DialogWindow from "../components/common/dialogWindow/dialogWindow.component";
+import DialogWindow from "../components/common/dialogWindow.component";
 import ScrollableStack from "../components/common/scrollableStack/scrollableStack.component";
 import actorService from "../services/actor.service";
 import { selectCurrentUser } from "../store/reducers/user.slice";
@@ -19,7 +19,7 @@ import { findElement } from "../utils/findElement";
 import { StyledCard, StyledCardContent } from "./common/entity.styles";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import FormDialog from "../components/common/formDialog/formDialog.component";
+import FormDialog from "../components/common/formDialog.component";
 import IActor from "../types/actor/IActor.model";
 import UpdateActorForm from "../components/actorRelated/updateActorForm.component";
 
@@ -50,7 +50,7 @@ const ActorEntityPage: React.FunctionComponent<IActorEntityPageProps> = (
         <StyledCard>
           <CardMedia
             component="img"
-            image={"/marvelLogo.jpg"}
+            image={data?.blob ?? "/marvelLogo.jpg"}
             sx={{ width: 400 }}
           />
 
@@ -99,12 +99,13 @@ const ActorEntityPage: React.FunctionComponent<IActorEntityPageProps> = (
                   key={movie.id}
                   link={`/movies/${movie.id}`}
                   title={movie.name}
+                  blob={movie.blob}
                 />
               );
             })}
         </ScrollableStack>
 
-        <ScrollableStack direction="row" title="Movies">
+        <ScrollableStack direction="row" title="Heroes">
           {data &&
             data.heroes.map((hero) => {
               return (
@@ -112,6 +113,7 @@ const ActorEntityPage: React.FunctionComponent<IActorEntityPageProps> = (
                   key={hero.id}
                   link={`/heroes/${hero.id}`}
                   title={hero.name}
+                  blob={hero.blob}
                 />
               );
             })}

@@ -46,7 +46,8 @@ public class ExceptionHandlingMiddleware
                 break;
             case InvalidRefreshTokenException:
                 errDetails.StatusCode = (int)HttpStatusCode.BadRequest;
-                errDetails.Type = "Not valid Refresh Token";
+                errDetails.Type = "Token";
+                errDetails.Message = "You are not logged in!";
                 break;
             case ValidationException:
                 errDetails.StatusCode = (int)HttpStatusCode.BadRequest;

@@ -6,4 +6,6 @@ export default interface IPostMovie {
   premiere: Date;
   price: number;
   youTubeTrailerId: string | null;
+  actorsIds: number[];
+  heroesIds: number[];
 }

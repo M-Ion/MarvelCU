@@ -1,7 +1,8 @@
 export default interface IGetActor {
-  id: number;
-  firstName: string;
-  middleName: string | null;
-  lastName: string | null;
   blob: string | null;
+  firstName: string;
+  id: number;
+  lastName: string | null;
+  middleName: string | null;
+  name: string;
 }

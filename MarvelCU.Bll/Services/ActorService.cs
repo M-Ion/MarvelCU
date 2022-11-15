@@ -60,12 +60,12 @@ public class ActorService : IActorService
         var actor = _mapper.Map<Actor>(dto);
         var entity = await _actorRepository.AddAsync(actor);
 
-        if (dto.MoviesIds is not null && dto.MoviesIds.Any())
+        if (dto.MoviesIds is not null)
         {
             entity = await _actorRepository.UpdateCollection<Movie>(entity, dto.MoviesIds, nameof(entity.Movies));
         }
 
-        if (dto.HeroesIds is not null && dto.HeroesIds.Any())
+        if (dto.HeroesIds is not null)
         {
             entity = await _actorRepository.UpdateCollection<Hero>(entity, dto.HeroesIds, nameof(entity.Heroes));
         }
@@ -78,12 +78,12 @@ public class ActorService : IActorService
         Actor entity = await _actorRepository.Exists(id);
         _mapper.Map(dto, entity);
 
-        if (dto.MoviesIds is not null && dto.MoviesIds.Any())
+        if (dto.MoviesIds is not null)
         {
             entity = await _actorRepository.UpdateCollection<Movie>(entity, dto.MoviesIds, nameof(entity.Movies));
         }
 
-        if (dto.HeroesIds is not null && dto.HeroesIds.Any())
+        if (dto.HeroesIds is not null)
         {
             entity = await _actorRepository.UpdateCollection<Hero>(entity, dto.HeroesIds, nameof(entity.Heroes));
         }

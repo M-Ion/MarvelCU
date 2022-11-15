@@ -2,7 +2,7 @@ import { Checkbox, FormControlLabel, Grid, TextField } from "@mui/material";
 import { useFormik } from "formik";
 
 import checkoutSchema from "./checkoutForm.validation";
-import FormInput from "../common/formInput/formInput.component";
+import FormInput from "../common/formInput.component";
 import movieService from "../../services/movie.service";
 import { FC } from "react";
 import { useDispatch } from "react-redux";
@@ -102,7 +102,7 @@ const CheckoutForm: FC<Props> = ({ movieId, amount }) => {
             fullWidth
           />
         </Grid>
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <FormControlLabel
             control={
               <Checkbox
@@ -114,7 +114,7 @@ const CheckoutForm: FC<Props> = ({ movieId, amount }) => {
             }
             label="Remember credit card details for next time"
           />
-        </Grid>
+        </Grid> */}
         <StyledButton
           loading={isLoading}
           variant="contained"

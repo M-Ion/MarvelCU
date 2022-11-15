@@ -45,7 +45,7 @@ public class ReviewService : IReviewService
         return await _reviewRepository.AddAsync(review);
     }
 
-    public async Task<Review> UpdateReview(UpdateReviewDto updateReviewDto, int id)
+    public async Task<GetReviewDto> UpdateReview(UpdateReviewDto updateReviewDto, int id)
     {
         var review = await _reviewRepository.Exists(id);
 
@@ -55,10 +55,11 @@ public class ReviewService : IReviewService
         }
 
         _mapper.Map(updateReviewDto, review);
+        review.Updated = DateTime.Now;
 
         await _reviewRepository.UpdateAsync(review);
 
-        return review;
+        return _mapper.Map<GetReviewDto>(review);
     }
 
     public async Task<bool> DeleteReview(int id)

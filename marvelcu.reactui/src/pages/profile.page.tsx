@@ -32,6 +32,7 @@ const ProfilePage: React.FunctionComponent<IProfilePageProps> = (props) => {
                 key={movie.id}
                 link={`/movies/${movie.id}`}
                 title={movie.name}
+                blob={movie.blob}
               />
             ))}
         </ScrollableStack>
@@ -43,6 +44,7 @@ const ProfilePage: React.FunctionComponent<IProfilePageProps> = (props) => {
                 key={hero.id}
                 link={`/heroes/${hero.id}`}
                 title={hero.name}
+                blob={hero.blob}
               />
             ))}
         </ScrollableStack>
@@ -54,6 +56,7 @@ const ProfilePage: React.FunctionComponent<IProfilePageProps> = (props) => {
                 key={actor.id}
                 link={`/actors/${actor.id}`}
                 title={`${actor.firstName} ${actor.middleName} ${actor.lastName}`}
+                blob={actor.blob}
               />
             ))}
         </ScrollableStack>

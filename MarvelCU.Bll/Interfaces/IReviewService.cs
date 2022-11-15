@@ -9,6 +9,6 @@ public interface IReviewService
 
     Task<bool> DeleteReview(int id);
 
-    Task<Review> UpdateReview(UpdateReviewDto updateReviewDto, int id);
+    Task<GetReviewDto> UpdateReview(UpdateReviewDto updateReviewDto, int id);
 }
 

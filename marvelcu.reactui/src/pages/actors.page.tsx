@@ -9,7 +9,7 @@ import {
 import { ChangeEvent, useEffect } from "react";
 import TheaterComedyIcon from "@mui/icons-material/TheaterComedy";
 
-import ActorCard from "../components/actorRelated/actorCard/actorCard.component";
+import ActorCard from "../components/actorRelated/actorCard.component";
 import actorService from "../services/actor.service";
 import Footer from "../components/footer/footer.component";
 import HeadingBg from "../components/common/headingBg/headingBg.component";

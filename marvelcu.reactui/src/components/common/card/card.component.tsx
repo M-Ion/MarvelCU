@@ -7,10 +7,11 @@ type Props = {
   heading: string;
   description: string;
   children: ReactNode[] | ReactNode;
+  blob: string | null;
 };
 
-const Card: FC<Props> = ({ children, description, heading }) => {
-  const imageurl = "/marvelLogo.jpg";
+const Card: FC<Props> = ({ children, description, heading, blob }) => {
+  const imageurl = blob ?? "/marvelLogo.jpg";
 
   return (
     <Grid item xs={12} sm={6} md={3}>

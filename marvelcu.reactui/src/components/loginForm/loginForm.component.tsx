@@ -7,7 +7,7 @@ import { Form } from "./loginForm.styles";
 import { setCredentials } from "../../store/reducers/user.slice";
 import authService from "../../services/auth.service";
 import loginSchema from "./loginForm.validation";
-import FormInput from "../common/formInput/formInput.component";
+import FormInput from "../common/formInput.component";
 
 type Values = {
   email: string;
@@ -38,6 +38,8 @@ const LoginForm = () => {
     initialValues: { email: "", password: "" },
     onSubmit: handleSubmit,
     validationSchema: loginSchema,
+    validateOnBlur: true,
+    validateOnChange: true,
   });
 
   return (

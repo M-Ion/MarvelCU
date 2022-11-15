@@ -12,15 +12,15 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
 import AvatarListItem from "../components/common/avatarListItem/avatarListItem.component";
-import DialogWindow from "../components/common/dialogWindow/dialogWindow.component";
+import DialogWindow from "../components/common/dialogWindow.component";
 import ScrollableStack from "../components/common/scrollableStack/scrollableStack.component";
 import heroService from "../services/hero.service";
 import { selectCurrentUser } from "../store/reducers/user.slice";
 import { findElement } from "../utils/findElement";
 import { StyledCard, StyledCardContent } from "./common/entity.styles";
 import DeleteIcon from "@mui/icons-material/Delete";
-import FormDialog from "../components/common/formDialog/formDialog.component";
-import UpdateHeroForm from "../components/heroRelated/updateHeroForm/updateHeroForm.component";
+import FormDialog from "../components/common/formDialog.component";
+import UpdateHeroForm from "../components/heroRelated/updateHeroForm.component";
 import IHero from "../types/hero/IHero.mode";
 
 interface IHeroEntityPageProps {}
@@ -50,7 +50,7 @@ const HeroEntityPage: React.FunctionComponent<IHeroEntityPageProps> = (
         <StyledCard>
           <CardMedia
             component="img"
-            image={"/marvelLogo.jpg"}
+            image={data?.blob ?? "/marvelLogo.jpg"}
             sx={{ width: 400 }}
           />
 
@@ -102,6 +102,7 @@ const HeroEntityPage: React.FunctionComponent<IHeroEntityPageProps> = (
                   key={actor.id}
                   link={`/actors/${actor.id}`}
                   title={name}
+                  blob={actor.blob}
                 />
               );
             })}
@@ -115,6 +116,7 @@ const HeroEntityPage: React.FunctionComponent<IHeroEntityPageProps> = (
                   key={movie.id}
                   link={`/movies/${movie.id}`}
                   title={movie.name}
+                  blob={movie.blob}
                 />
               );
             })}

@@ -11,7 +11,8 @@ public class Review : BaseEntity
     [Required]
     public DateTime Posted { get; set; }
 
-    public DateTime Updated { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    public DateTime Updated { get; set; } = DateTime.Now;
 
     [Required]
     public virtual User User { get; set; }

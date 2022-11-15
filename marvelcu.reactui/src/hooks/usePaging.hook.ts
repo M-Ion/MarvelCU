@@ -27,6 +27,11 @@ export default function usePagingReques<T>(pageSize: number = 8) {
   // Filters
   const [filters, setFilters] = useState<IFilter[]>([]);
 
+  useEffect(() => {
+    setPaging({ pageIndex: 0, pageSize });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters]);
+
   return {
     total,
     data,

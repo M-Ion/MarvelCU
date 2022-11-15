@@ -24,7 +24,7 @@ import HeadingBg from "../components/common/headingBg/headingBg.component";
 import IFilter from "../types/processing/IFilter.model";
 import IGetMovie from "../types/movie/IGetMovie.model";
 import IProcessedRequest from "../types/processing/IProcessedRequest.model";
-import MovieCard from "../components/movieRelated/movieCard/movieCard.component";
+import MovieCard from "../components/movieRelated/movieCard.component";
 import movieFilters from "../utils/filters/movie.filters";
 import movieService from "../services/movie.service";
 import Op from "../types/processing/Op";
@@ -58,10 +58,10 @@ const MoviesPage = () => {
     await fetchFilteredData(request)
       .unwrap()
       .then((data) => {
-        const { items, pageIndex, pageSize } = data;
+        const { items } = data;
 
         // Set paging
-        setPaging({ pageIndex, pageSize });
+        // setPaging({ pageIndex, pageSize });
 
         // Set items
         setData(items);

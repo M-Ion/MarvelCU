@@ -294,8 +294,9 @@ namespace MarvelCU.Dal.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Updated")
-                        .ValueGeneratedOnUpdate()
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GetUtcDate()");
 
                     b.Property<string>("UserId")
                         .IsRequired()

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MarvelCU.API.Models.Movie;
+using MarvelCU.Common.Dtos;
 using MarvelCU.Common.Dtos.Actor;
 using MarvelCU.Common.Dtos.Hero;
 using MarvelCU.Common.Dtos.Movie;
@@ -51,6 +52,8 @@ public class MapperConfig : Profile
         CreateMap<User, RegisterUserDto>().ReverseMap();
         CreateMap<User, UserDto>().ReverseMap();
         CreateMap<User, GetUserDto>().ReverseMap();
+
+        CreateMap<RefreshToken, RefreshTokenDto>().ReverseMap();
     }
 
     private bool IgnoreNullAndDefault<TSrc, TDest>(TSrc src, TDest des, object srcMember, object destMember)

@@ -30,12 +30,12 @@ import UpdateReviewForm from "../components/reviewRelated/updateReviewForm/updat
 import IGetReview from "../types/review/IGetReview.model";
 import { useEffect, useState } from "react";
 import NotFoundPage from "./notFound.page";
-import DialogWindow from "../components/common/dialogWindow/dialogWindow.component";
+import DialogWindow from "../components/common/dialogWindow.component";
 import { findElement } from "../utils/findElement";
-import FormDialog from "../components/common/formDialog/formDialog.component";
-import UpdateMovieForm from "../components/movieRelated/updateMovieForm/updateMovieForm.component";
+import FormDialog from "../components/common/formDialog.component";
+import UpdateMovieForm from "../components/movieRelated/updateMovieForm.component";
+import Saga from "../types/movie/Sagas";
 
-const fields: readonly (keyof IMovie)[] = ["premiere", "mcuPhase", "mcuSaga"];
 const defaultDescription: string = `Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis optio accusamus adipisci, officia est consequuntur obcaecati veritatis ratione magni temporibus voluptates maxime sed corporis ad. Repellat excepturi eos est suscipit id sunt accusamus consequuntur saepe voluptatum, nam velit eveniet ipsa.`;
 
 const findReviewByUser = (
@@ -85,7 +85,7 @@ const MovieEntityPage = () => {
           {/* Movie image */}
           <CardMedia
             component="img"
-            image={"/marvelLogo.jpg"}
+            image={data?.blob ?? "/marvelLogo.jpg"}
             sx={{ width: 400 }}
           />
 
@@ -105,12 +105,16 @@ const MovieEntityPage = () => {
               <Typography variant="h4" component="div">
                 {data && data.name}
               </Typography>
-              {data &&
-                fields.map((el, index) => (
-                  <Typography key={index} variant="h6" component="div">
-                    {el} {data[el] as string}
-                  </Typography>
-                ))}
+              <Typography variant="h6" component="div">
+                Premiere {data && new Date(data.premiere).toLocaleDateString()}
+              </Typography>
+              <Typography variant="h6" component="div">
+                Saga {data && Saga[data.mcuSaga]}
+              </Typography>
+              <Typography variant="h6" component="div">
+                Phase {data && data.mcuPhase}
+              </Typography>
+
               <Rating defaultValue={3} readOnly />
             </StyledCardContent>
             {!bought ? (
@@ -121,7 +125,11 @@ const MovieEntityPage = () => {
                 startIcon={<ShoppingCartIcon />}
                 component={Link}
                 to="/Checkout"
-                state={{ productId: id, productName: data?.name, amount: 25 }}
+                state={{
+                  productId: id,
+                  productName: data?.name,
+                  amount: data?.price,
+                }}
               >
                 Buy
               </Button>
@@ -167,6 +175,7 @@ const MovieEntityPage = () => {
         </Paper>
 
         {/* Reviews */}
+
         <ScrollableStack direction="column" title="Comments">
           {!foundReview ? (
             <ReviewForm movieId={id} />
@@ -191,6 +200,7 @@ const MovieEntityPage = () => {
                   key={actor.id}
                   link={`/actors/${actor.id}`}
                   title={name}
+                  blob={actor.blob}
                 />
               );
             })}
@@ -204,6 +214,7 @@ const MovieEntityPage = () => {
                 key={hero.id}
                 link={`/heroes/${hero.id}`}
                 title={hero.name}
+                blob={hero.blob}
               />
             ))}
         </ScrollableStack>

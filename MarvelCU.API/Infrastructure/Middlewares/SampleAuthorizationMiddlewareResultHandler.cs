@@ -48,7 +48,7 @@ namespace MarvelCU.API.Infrastructure.Middlewares
 
                 var authResult = await _authorizationService.AuthorizeAsync(context.User, policy);
 
-                if (!authResult.Succeeded) 
+                if (!authResult.Succeeded)
                     authorizeResult = PolicyAuthorizationResult.Forbid();
             }
 
@@ -66,7 +66,6 @@ namespace MarvelCU.API.Infrastructure.Middlewares
         private void SetCookies(HttpResponse httpResponse, AuthResponseDto authResponse)
         {
             httpResponse.SetCookie("jwt", authResponse.Token, DateTime.UtcNow.AddMonths(Convert.ToInt32(_configuration["JwtConfig:RefreshTokenDurationInMonths"])));
-            httpResponse.SetCookie("refreshToken", authResponse.RefreshToken, DateTime.UtcNow.AddMonths(Convert.ToInt32(_configuration["JwtConfig:RefreshTokenDurationInMonths"])));
         }
     }
 }

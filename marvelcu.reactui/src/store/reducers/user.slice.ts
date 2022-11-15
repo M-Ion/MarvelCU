@@ -27,15 +27,19 @@ const userSlice = createSlice({
     setToken: (state: IUserState, { payload }: PayloadAction<string>) => {
       state.token = payload;
     },
+    setUser: (state: IUserState, { payload }: PayloadAction<IUser | null>) => {
+      state.user = payload;
+    },
     logOut: (state: IUserState) => {
       state = { ...initialState };
     },
   },
 });
 
-export const { setCredentials, setToken, logOut } = userSlice.actions;
+export const { setCredentials, setToken, logOut, setUser } = userSlice.actions;
 
 export const selectCredentials = (state: RootState) => state.currentUser;
 export const selectCurrentUser = (state: RootState) => state.currentUser.user;
+export const selectCurrentJwt = (state: RootState) => state.currentUser.token;
 
 export default userSlice.reducer;

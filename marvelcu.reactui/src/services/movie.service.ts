@@ -1,5 +1,3 @@
-import { createApi } from "@reduxjs/toolkit/dist/query/react";
-
 import IGetMovie from "../types/movie/IGetMovie.model";
 import IMovie from "../types/movie/IMovie.model";
 import IPostMovie from "../types/movie/IPostMovie.model";
@@ -7,11 +5,9 @@ import IProcessedRequest from "../types/processing/IProcessedRequest.model";
 import IProcessedResult from "../types/processing/IProcessedResult.model";
 import prepareRequestParams from "../utils/prepareParams.utils";
 import Payment from "../types/payment.model";
-import { baseQueryWithCookieCheck } from "../utils/authCheckQuery.utils";
+import apiSlice from "./api.slice";
 
-const movieService = createApi({
-  reducerPath: "movie/service",
-  baseQuery: baseQueryWithCookieCheck(),
+const movieService = apiSlice.injectEndpoints({
   endpoints: (build) => ({
     fetchMovies: build.query<IGetMovie[], undefined>({
       query: () => ({
@@ -23,6 +19,8 @@ const movieService = createApi({
       query: (id: number) => ({
         url: `/Movies/${id}`,
       }),
+
+      providesTags: (result) => [{ type: "Movie", id: result?.id }],
     }),
 
     postMovie: build.mutation<{ id: number }, IPostMovie>({
@@ -42,6 +40,7 @@ const movieService = createApi({
         method: "PUT",
         body: arg.movie,
       }),
+      invalidatesTags: (result) => [{ type: "Movie", id: result?.id }],
     }),
 
     deleteMovie: build.mutation<void, number>({

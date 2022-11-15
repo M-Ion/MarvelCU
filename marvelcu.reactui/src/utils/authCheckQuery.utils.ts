@@ -47,78 +47,53 @@ export const baseQueryWithCookieCheck =
   async (args: string | FetchArgs, api: BaseQueryApi, extraOptions: {}) => {
     const queryResult = await baseQuery(contentType)(args, api, extraOptions);
 
+    if (queryResult?.error) {
+      handleFetchError(queryResult.error, api);
+      return queryResult;
+    }
+
     const queryCookiesResult = await baseQuery(
       "application/json; charset=utf-8"
     )("/Auth", api, extraOptions);
 
     if (queryCookiesResult?.data) {
       const cookies = queryCookiesResult?.data as { token: string };
-      // api.dispatch(
-      //   setAlert({
-      //     type: "success",
-      //     message: "Operation completed successfully",
-      //   })
-      // );
       api.dispatch(setToken(cookies.token));
-    } else {
-      api.dispatch(logOut());
     }
 
     return queryResult;
   };
 
-// const baseQueryWithAuthCheck =
-//   (contentType: string = "application/json; charset=utf-8") =>
-//   async (args: string | FetchArgs, api: BaseQueryApi, extraOptions: {}) => {
-//     // Fetch base query
-//     let result = await baseQuery(contentType)(args, api, extraOptions);
-//     let customError: CustomError;
+const handleFetchError = (
+  errorResp: FetchBaseQueryError | CustomFetchError,
+  api: BaseQueryApi
+) => {
+  const customError = (errorResp as CustomFetchError).data;
+  const alert: { type: "success" | "error" | "warning"; message: string } = {
+    type: "error",
+    message: "",
+  };
 
-//     // Verify if status is unathorized try refresh jwt
-//     if ((result?.error as FetchBaseQueryError)?.status === 401) {
-//       const user = (api.getState() as RootState).currentUser.user;
-//       customError = (result.error as CustomFetchError).data;
+  if (customError) {
+    if (customError.Type === "Token") {
+      alert.type = "warning";
+      alert.message = "You are not logged in!";
 
-//       // Refresh jwt
-//       let resultOnRefresh = await baseQuery("application/json; charset=utf-8")(
-//         "/Auth/Refresh",
-//         api,
-//         extraOptions
-//       );
+      api.dispatch(logOut());
+      // window.location.assign("/login");
+    } else if (customError.StatusCode === 400) {
+      alert.message = customError.Message;
+    } else {
+      alert.message = "Something goes wrong, please try again laer";
+    }
+  } else {
+    if ((errorResp as FetchBaseQueryError).status === 401) {
+      alert.type = "warning";
+      alert.message = "You are not logged in!";
 
-//       // Set new credentials in case of successful refresh jwt
-//       if (resultOnRefresh?.data) {
-//         api.dispatch(
-//           setCredentials({
-//             ...(resultOnRefresh.data as { token: string }),
-//             user,
-//           })
-//         );
+      api.dispatch(logOut());
+    }
+  }
 
-//         result = await baseQuery(contentType)(args, api, extraOptions);
-//       } else {
-//         // Logout in case of refresh token expired
-//         console.log(user);
-//         api.dispatch(
-//           setAlert({
-//             type: "warning",
-//             message: "Your are not logged in",
-//           })
-//         );
-//         api.dispatch(logOut());
-//       }
-//     } else if (result?.error) {
-//       customError = (result.error as CustomFetchError).data;
-
-//       api.dispatch(
-//         setAlert({
-//           type: "error",
-//           message: customError?.Message,
-//         })
-//       );
-//     }
-
-//     return result;
-//   };
-
-// export default baseQueryWithAuthCheck;
+  api.dispatch(setAlert(alert));
+};

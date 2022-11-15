@@ -29,7 +29,7 @@ public class ReviewsController : ControllerBase
 
     [HttpPut("{id}")]
     [Authorize]
-    public async Task<ActionResult> UpdateReview(int id, [FromBody] UpdateReviewDto updateReviewDto)
+    public async Task<ActionResult<GetReviewDto>> UpdateReview(int id, [FromBody] UpdateReviewDto updateReviewDto)
     {
         var review = await _reviewService.UpdateReview(updateReviewDto, id);
         return review is null ? NotFound() : NoContent();
@@ -37,7 +37,7 @@ public class ReviewsController : ControllerBase
 
     [HttpDelete("{id}")]
     [Authorize]
-    public async Task<ActionResult> DeleteReview(int id)
+    public async Task<ActionResult<GetReviewDto>> DeleteReview(int id)
     {
         bool deleted = await _reviewService.DeleteReview(id);
         return deleted ? NoContent() : NotFound();

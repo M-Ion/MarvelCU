@@ -10,6 +10,16 @@ public class GetActorDto
 
     public string LastName { get; set; }
 
+    public string Name 
+    {
+        get 
+        {
+            return FirstName 
+                + (MiddleName != null ? $" {MiddleName}" : "") 
+                + (LastName != null ? $" {LastName}" : "");
+        }
+    }
+
     public string Blob { get; set; }
 }
 

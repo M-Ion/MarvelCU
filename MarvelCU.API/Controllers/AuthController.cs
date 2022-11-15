@@ -33,6 +33,12 @@ public class AuthController : ControllerBase
     public async Task<ActionResult<AuthResponseDto>> CheckUser()
     {
         AuthResponseDto responseDto = await _authService.CheckUserSession();
+
+        if (responseDto == null)
+        {
+            return BadRequest();
+        }
+
         return Ok(responseDto);
     }
 
@@ -86,7 +92,6 @@ public class AuthController : ControllerBase
         var authResponse = await _authService.RefreshToken();
 
         Response.SetCookie("jwt", authResponse.Token, DateTime.UtcNow.AddMonths(Convert.ToInt32(_configuration["JwtConfig:RefreshTokenDurationInMonths"])));
-        Response.SetCookie("refreshToken", authResponse.RefreshToken, DateTime.UtcNow.AddMonths(Convert.ToInt32(_configuration["JwtConfig:RefreshTokenDurationInMonths"])));
 
         return Ok(authResponse);
     }

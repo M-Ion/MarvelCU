@@ -17,7 +17,7 @@ import IProcessedRequest from "../types/processing/IProcessedRequest.model";
 import Op from "../types/processing/Op";
 import SearchBar from "../components/common/searchBar/searchBar.component";
 import usePagingReques from "../hooks/usePaging.hook";
-import HeroCard from "../components/heroRelated/heroCard/heroCard.component";
+import HeroCard from "../components/heroRelated/heroCard.component";
 
 const HeroesPage = () => {
   const theme = useTheme();

@@ -73,35 +73,30 @@ public class GenericRepository<T> : IRepository<T> where T : BaseEntity
         await _context.SaveChangesAsync();
     }
 
-    public async Task<T> UpdateCollection<TColl>(T entity, IList<int> ids, string prop, bool add = true) where TColl : BaseEntity
+    public async Task<T> UpdateCollection<TColl>(T entity, IList<int> ids, string prop, bool add = false) where TColl : BaseEntity
     {
         IList<TColl> entities = await _context.Set<TColl>().Where(e => ids.Contains(e.Id)).ToListAsync();
 
         PropertyInfo collProp = entity.GetType().GetProperty(prop);
 
-        if (entities.Any() && collProp is not null)
+        if (collProp is not null)
         {
             object coll = collProp.GetValue(entity, null);
 
-            if (coll is null || !add)
-            {
-                collProp.SetValue(entity, entities);
-
-                await _context.SaveChangesAsync();
-                return entity;
-            }
-
-            if (coll is IList<TColl> list)
-            {
-                foreach (TColl el in entities)
-                {
-                    list.Add(el);
-                }
-
-                collProp.SetValue(entity, list);
-            }
+            collProp.SetValue(entity, entities);
 
             await _context.SaveChangesAsync();
+            return entity;
+
+            //if (coll is ICollection<TColl> list)
+            //{
+            //    foreach (TColl el in entities)
+            //    {
+            //        list.Add(el);
+            //    }
+
+            //    collProp.SetValue(entity, list);
+            //}
         }
 
         return entity;

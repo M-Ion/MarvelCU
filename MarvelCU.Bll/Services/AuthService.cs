@@ -4,6 +4,7 @@ using MarvelCU.Common.Dtos.User;
 using MarvelCU.Dal.Interfaces;
 using MarvelCU.Domain;
 using Microsoft.AspNetCore.Identity;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace MarvelCU.Bll.Services;
 
@@ -110,7 +111,14 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponseDto> CheckUserSession()
     {
-        User user = await _userManager.FindByIdAsync(_currentUser.Id);
+        if (_currentCookies.Jwt is null) return null;
+
+        JwtSecurityToken jwt = _tokenManager.ReadJwt(_currentCookies.Jwt);
+        string uid = jwt.Claims.FirstOrDefault(c => c.Type == "uid")?.Value;
+
+        if (uid is null) return null;
+
+        User user = await _userManager.FindByIdAsync(uid);
         AuthResponseDto authResponseDto = new()
         {
             Token = _currentCookies.Jwt,
