@@ -11,5 +11,7 @@ public interface ICloudStorageManager
     Task<string> UploadBlob(string containerName, string blobName, IFormFile file);
 
     Task<MemoryStream> DownloadBlob(string containerName, string blobName);
+
+    Task<bool> ExistsBlob(string containerName, string blobName);
 }
 

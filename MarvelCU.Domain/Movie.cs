@@ -20,6 +20,9 @@ public class Movie : BaseEntity
 
     public string Blob { get; set; }
 
+    public string VideoBlob { get; set; }
+
+
     [MaxLength(150)]
     public string YouTubeTrailerId { get; set; }
 

@@ -80,6 +80,15 @@ public class CloudStorageManager : ICloudStorageManager
 
         return null;
     }
+
+    public async Task<bool> ExistsBlob(string containerName, string blobName)
+    {
+        BlobContainerClient containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
+
+        BlobClient blobClient = containerClient.GetBlobClient(blobName);
+
+        return await blobClient.ExistsAsync();
+    }
 }
 
 

@@ -4,6 +4,7 @@ using MarvelCU.Common.Constants;
 using MarvelCU.Common.Dtos.Blob;
 using MarvelCU.Dal.Interfaces;
 using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace MarvelCU.Bll.Services;
 
@@ -21,15 +22,16 @@ public class CloudStorageService : ICloudStorageService
     public async Task<bool> UploadBlob(UploadBlobDto uploadBlobDto, Func<int, string, Task> updateEntity)
     {    
         int entityId;
+
         string fileName = uploadBlobDto.File.FileName.Split('.').First();
 
         bool parsed = int.TryParse(fileName, out entityId);
 
-        if (!parsed) throw new Exception();
+        if (!parsed) throw new ValidationException("Invalid fileName format");
 
         string uri = await _cloudStorageManager.UploadBlob(uploadBlobDto.Container, uploadBlobDto.File.FileName, uploadBlobDto.File);
 
-        if (uri == null) throw new Exception();
+        if (uri == null) throw new Exception("Error on uploading");
 
         await updateEntity(entityId, uri);
 
@@ -41,6 +43,11 @@ public class CloudStorageService : ICloudStorageService
         MemoryStream stream = await _cloudStorageManager.DownloadBlob(requestBlobDto.Container, requestBlobDto.Blob);
         stream.Position = 0;
         return stream;
+    }
+
+    public async Task<bool> ExistsMovieBlobVideo(int id)
+    {
+        return await _cloudStorageManager.ExistsBlob("videos", $"{id}.mp4");
     }
 }
 

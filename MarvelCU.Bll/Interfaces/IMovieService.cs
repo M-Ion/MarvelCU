@@ -25,6 +25,8 @@ public interface IMovieService
 
     Task SetBlob(int id, string uri);
 
+    Task SetVideoBlob(int id, string uri);
+
     Task<ProcessedResult<GetMovieDto>> GetMovies(PagingRequest pagingRequest, SortingRequest sortingRequest, IList<Filter> filters);
 
     Task<IdDto> CreateMovie(CreateMovieDto createMovieDto);

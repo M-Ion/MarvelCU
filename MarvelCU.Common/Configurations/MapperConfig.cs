@@ -8,6 +8,7 @@ using MarvelCU.Common.Dtos.News;
 using MarvelCU.Common.Dtos.Review;
 using MarvelCU.Common.Dtos.User;
 using MarvelCU.Domain;
+using System.Data;
 
 namespace MarvelCU.Common.Configurations;
 
@@ -29,7 +30,11 @@ public class MapperConfig : Profile
             .ReverseMap()
             .ForAllMembers(opt => opt.Condition(IgnoreNullAndDefault));
 
-        CreateMap<Movie, MovieDto>().ReverseMap();
+        CreateMap<Movie, MovieDto>().ForMember(s => s.VideoBlob, opt => opt.MapFrom(
+            reader => reader.VideoBlob != null
+            ))
+            .ReverseMap();
+
         CreateMap<Movie, GetMovieDto>().ReverseMap();
         CreateMap<Movie, CreateMovieDto>()
             .ReverseMap();

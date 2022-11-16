@@ -26,6 +26,8 @@ public class MovieDto : BaseMovieDto
 
     public string Blob { get; set; }
 
+    public bool VideoBlob { get; set; }
+
     public List<GetActorDto> Actors { get; set; }
 
     public List<GetHeroDto> Heroes { get; set; }

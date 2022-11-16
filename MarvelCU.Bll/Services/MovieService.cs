@@ -143,5 +143,13 @@ public class MovieService : IMovieService
 
         await _movieRepository.UpdateAsync(movie);
     }
+
+    public async Task SetVideoBlob(int id, string uri)
+    {
+        Movie movie = await _movieRepository.Exists(id);
+        movie.VideoBlob = uri;
+
+        await _movieRepository.UpdateAsync(movie);
+    }
 }
 

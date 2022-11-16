@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using MarvelCU.Common.Constants;
+using MarvelCU.Common.Dtos;
+using MarvelCU.Common.Attributes;
 
 namespace MarvelCU.API.Controllers
 {
@@ -18,9 +20,9 @@ namespace MarvelCU.API.Controllers
         private readonly IActorService _actorService;
 
         public BlobsController(
-            ICloudStorageService cloudService, 
-            IMovieService movieService, 
-            IHeroService heroService, 
+            ICloudStorageService cloudService,
+            IMovieService movieService,
+            IHeroService heroService,
             IActorService actorService
             )
         {
@@ -32,13 +34,33 @@ namespace MarvelCU.API.Controllers
 
         [HttpPost("Movie")]
         [Consumes("multipart/form-data")]
-        [Authorize]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> UploadMovieBlob([FromForm] IFormFile file)
         {
             bool uploaded = await _cloudService.UploadBlob(
                 new UploadBlobDto() { Container = "movie-images", File = file },
                 _movieService.SetBlob
+                );
+
+            if (uploaded)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+
+        [HttpPost("Movie/Video")]
+        [Consumes("multipart/form-data")]
+        [Authorize(Roles = "Admin")]
+        [RequestSizeLimit(1000000000)] // 1Gb
+
+        public async Task<ActionResult> UploadMovieVideoBlob([FromForm] [AllowedFileExtensions(new string[] { ".mp4" })] IFormFile file)
+        {
+
+            bool uploaded = await _cloudService.UploadBlob(
+                new UploadBlobDto() { Container = "videos", File = file },
+                _movieService.SetVideoBlob
                 );
 
             if (uploaded)

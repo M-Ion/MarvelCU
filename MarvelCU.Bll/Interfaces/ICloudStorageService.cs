@@ -9,5 +9,7 @@ public interface ICloudStorageService
     public Task<bool> UploadBlob(UploadBlobDto uploadBlobDto, Func<int, string, Task> updateEntity);
 
     public Task<MemoryStream> DownloadBlob(GetBlobRequestDto requestBlobDto);
+
+    Task<bool> ExistsMovieBlobVideo(int id);
 }
 

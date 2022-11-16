@@ -21,11 +21,13 @@ public class MoviesController : ControllerBase
 {
     private readonly IMovieService _movieService;
     private readonly IPaymentService _paymentService;
+    private readonly ICloudStorageService _cloudStorageService;
 
-    public MoviesController(IMovieService movieService, IPaymentService paymentService)
+    public MoviesController(IMovieService movieService, IPaymentService paymentService, ICloudStorageService cloudStorageService)
     {
         _movieService = movieService;
         _paymentService = paymentService;
+        _cloudStorageService = cloudStorageService;
     }
 
     [HttpGet]
@@ -101,6 +103,11 @@ public class MoviesController : ControllerBase
     [Authorize]
     public async Task<ActionResult> Buy(int id, [FromBody] PaymentDto paymentDto)
     {
+        if (!(await _cloudStorageService.ExistsMovieBlobVideo(id)))
+        {
+            return BadRequest();
+        }
+
         var charged = await _paymentService.ProcessPayment(paymentDto);
         if (charged)
         {
