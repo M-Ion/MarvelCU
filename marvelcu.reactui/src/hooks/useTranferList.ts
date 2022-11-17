@@ -11,7 +11,7 @@ export default function useTransferList<T>(
   fetch: UseQuery<QueryDefinition<any, any, any, any>>,
   choosen: T[] = [],
   ...args: any
-) {
+): TranferListType<T> {
   const data = fetch(undefined).data as T[] | undefined;
 
   const [checked, setChecked] = useState<readonly T[]>([]);

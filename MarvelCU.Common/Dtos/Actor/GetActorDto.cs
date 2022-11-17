@@ -10,6 +10,8 @@ public class GetActorDto
 
     public string LastName { get; set; }
 
+    public string ImdbId { get; set; }
+
     public string Name 
     {
         get 

@@ -32,6 +32,7 @@ export type Values = {
   premiere: Date;
   price: number;
   youTubeTrailerId: string | null;
+  imdbId: string | null;
 };
 
 export interface IAddMovieFormProps {
@@ -40,6 +41,7 @@ export interface IAddMovieFormProps {
   heroesTranferList: TranferListType<IGetHero>;
   isLoading: boolean;
   imgState: [File | null, React.Dispatch<React.SetStateAction<File | null>>];
+  disableOnImdb?: boolean;
 }
 
 export default function MovieForm({
@@ -48,6 +50,7 @@ export default function MovieForm({
   heroesTranferList,
   isLoading,
   imgState,
+  disableOnImdb = false,
 }: IAddMovieFormProps) {
   const [img, setImg] = imgState;
   const [imgUrl, setImgUrl] = React.useState<string>("");
@@ -65,12 +68,10 @@ export default function MovieForm({
       const lastOne: File = files[files.length - 1];
 
       setImg(lastOne);
-      // setImgUrl(URL.createObjectURL(lastOne));
 
       return;
     }
     setImg(null);
-    // setImgUrl("");
   };
 
   return (
@@ -89,6 +90,7 @@ export default function MovieForm({
         prop={"name"}
         fullWidth
         margin="normal"
+        disabled={disableOnImdb}
       />
       <FormInput
         formik={formik}
@@ -178,7 +180,12 @@ export default function MovieForm({
         <TransferList transferList={heroesTranferList} />
       </Box>
 
-      <Button variant="contained" component="label" sx={{ margin: "8px" }}>
+      <Button
+        variant="contained"
+        component="label"
+        sx={{ margin: "8px" }}
+        disabled={disableOnImdb}
+      >
         Upload Image
         <input
           type="file"

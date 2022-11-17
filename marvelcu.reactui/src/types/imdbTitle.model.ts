@@ -1,4 +1,5 @@
 export default interface IimdbTitle {
+  id: string;
   base: {
     title: string;
     image: {
@@ -6,9 +7,11 @@ export default interface IimdbTitle {
     };
     year: number;
   };
+  cast: IimdbActor[];
 }
 
 export interface IimdbActor {
+  id: string;
   base: {
     image: {
       url: string;

@@ -69,6 +69,7 @@ const UpdateMovieForm: FC<Props> = ({
     premiere,
     price,
     youTubeTrailerId: youTubeTrailerId ?? "",
+    imdbId: null,
   };
 
   const handleSubmit = (values: Values) => {

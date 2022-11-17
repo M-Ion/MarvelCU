@@ -32,8 +32,8 @@ function App() {
     const cookies = await checkCookies().unwrap();
     if (cookies.token) {
       dispatch(setCredentials({ user: null, token: cookies.token }));
+      await checkCurrentUser();
     }
-    await checkCurrentUser();
   };
 
   useEffect(() => {

@@ -21,6 +21,8 @@ namespace MarvelCU.API.Models.Movie
         [Required]
         public Sagas McuSaga { get; set; }
 
+        public string ImdbId { get; set; }
+
         public string YouTubeTrailerId { get; set; }
 
         public IList<int> ActorsIds { get; set; }

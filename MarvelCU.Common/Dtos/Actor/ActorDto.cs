@@ -15,6 +15,8 @@ public class ActorDto
 
     public string Blob { get; set; }
 
+    public string ImdbId { get; set; }
+
     public IList<GetMovieDto> Movies { get; set; }
 
     public IList<GetHeroDto> Heroes { get; set; }

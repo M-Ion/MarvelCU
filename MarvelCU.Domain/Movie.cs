@@ -18,21 +18,11 @@ public class Movie : BaseEntity
     [MaxLength(600)]
     public string Description { get; set; }
 
-    public string Blob { get; set; }
-
-    public string VideoBlob { get; set; }
-
-
-    [MaxLength(150)]
-    public string YouTubeTrailerId { get; set; }
-
     [Column(TypeName = "date")]
     public DateTime Premiere { get; set; }
 
     [Required]
     public uint Price { get; set; } = 0;
-
-    public virtual IList<Actor> Actors { get; set; }
 
     [Range(1, 5)]
     public float Rating { get; set; } = 0;
@@ -42,6 +32,18 @@ public class Movie : BaseEntity
 
     [Required]
     public sbyte McuSaga { get; set; }
+
+    public string Blob { get; set; }
+
+    public string VideoBlob { get; set; }
+
+    [MaxLength(150)]
+    public string YouTubeTrailerId { get; set; }
+
+    [MaxLength(20)]
+    public string ImdbId { get; set; }
+
+    public virtual IList<Actor> Actors { get; set; }
 
     public virtual ICollection<Review> Reviews { get; set; }
 

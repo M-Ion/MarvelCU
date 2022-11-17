@@ -15,5 +15,6 @@ export default interface IMovie {
   price: number;
   rating: number;
   reviews: IGetReview[];
+  videoBlob: boolean;
   youTubeTrailerId: string | null;
 }

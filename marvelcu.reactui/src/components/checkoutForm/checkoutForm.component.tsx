@@ -1,4 +1,4 @@
-import { Checkbox, FormControlLabel, Grid, TextField } from "@mui/material";
+import { Grid, TextField } from "@mui/material";
 import { useFormik } from "formik";
 
 import checkoutSchema from "./checkoutForm.validation";
@@ -28,13 +28,12 @@ const CheckoutForm: FC<Props> = ({ movieId, amount }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [checkout, { isLoading, isSuccess }] =
-    movieService.useBuyMovieMutation();
+  const [checkout, { isLoading }] = movieService.useBuyMovieMutation();
 
   const handleSubmit = async (values: Values) => {
-    await checkout({ id: movieId, body: values });
+    const response = await checkout({ id: movieId, body: values }).unwrap();
 
-    if (isSuccess) {
+    if (!Boolean(response)) {
       dispatch(setAlert({ type: "success", message: "Payment successfully" }));
 
       setTimeout(() => {
@@ -45,7 +44,7 @@ const CheckoutForm: FC<Props> = ({ movieId, amount }) => {
 
   const formik = useFormik<Values>({
     initialValues: {
-      amount: amount * 100,
+      amount: 5 * 100,
       cardNumber: "4242424242424242",
       cvc: 121,
       expMonth: 12,

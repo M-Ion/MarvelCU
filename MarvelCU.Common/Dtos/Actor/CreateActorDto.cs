@@ -11,7 +11,7 @@ public class CreateActorDto
 
     public string LastName { get; set; }
 
-    public string BlobFilePath { get; set; }
+    public string ImdbId { get; set; }
 
     public IList<int> MoviesIds { get; set; }
 

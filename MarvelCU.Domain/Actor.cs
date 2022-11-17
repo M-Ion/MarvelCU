@@ -20,6 +20,9 @@ public class Actor : BaseEntity
 
     public string Blob { get; set; }
 
+    [MaxLength(20)]
+    public string ImdbId { get; set; }
+
     public virtual ICollection<Hero> Heroes { get; set; }
 
     public virtual ICollection<Movie> Movies { get; set; }

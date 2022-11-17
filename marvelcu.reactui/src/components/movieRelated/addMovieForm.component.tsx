@@ -4,7 +4,10 @@ import { useFormik } from "formik";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import useTransferList, { TranferListType } from "../../hooks/useTranferList";
+import useTransferList, {
+  not,
+  TranferListType,
+} from "../../hooks/useTranferList";
 import actorService from "../../services/actor.service";
 
 import blobService from "../../services/blob.services";
@@ -31,11 +34,13 @@ const initialValues: Values = {
   premiere: new Date(0),
   price: 0,
   youTubeTrailerId: "",
+  imdbId: null,
 };
 
 const AddMovieForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [fromImdb, setFromImdb] = React.useState<boolean>(false);
   const [imdbLink, setimdbLink] = React.useState<string>("");
   const [file, setFile] = React.useState<File | null>(null);
 
@@ -113,14 +118,30 @@ const AddMovieForm = () => {
         const imdbData = await getFullCredits(titleId).unwrap();
         const { image, title, year } = imdbData.base;
 
+        const cast = actorTranferList.data?.filter((el) =>
+          imdbData.cast.find((imdbEl) => imdbEl.id === el.imdbId + "/")
+        );
+
+        const [_, setRight] = actorTranferList.rightState;
+        const [left, setLeft] = actorTranferList.leftState;
+        if (cast) {
+          setRight(cast);
+          setLeft(not<IGetActor>(left as IGetActor[], cast));
+        }
+
+        ///name/nm0488953 ///name/nm0488953/
+
         formik.values.name = title;
         formik.values.premiere = new Date(year, 0);
+        formik.values.imdbId = imdbData.id;
 
         const imdbFile = await getImgFileByUrl(image.url, title);
 
         if (imdbFile) {
           setFile(imdbFile);
         }
+
+        setFromImdb(true);
       }
     }
   };
@@ -146,6 +167,7 @@ const AddMovieForm = () => {
         heroesTranferList={heroesTranferList as TranferListType<IGetHero>}
         imgState={[file, setFile]}
         isLoading={isLoadingMovie && isLoadingMovie}
+        disableOnImdb={fromImdb}
       />
     </>
   );

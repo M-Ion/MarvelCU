@@ -15,5 +15,7 @@ public class GetMovieDto : BaseMovieDto
     public Sagas McuSaga { get; set; }
 
     public string Blob { get; set; }
+
+    public string ImdbId { get; set; }
 }
 

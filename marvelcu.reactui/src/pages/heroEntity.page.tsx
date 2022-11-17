@@ -94,14 +94,11 @@ const HeroEntityPage: React.FunctionComponent<IHeroEntityPageProps> = (
         <ScrollableStack direction="row" title="Actors">
           {data &&
             data.actors.map((actor) => {
-              const { firstName, middleName, lastName } = actor;
-              let name: string = `${firstName} ${middleName} ${lastName}`;
-
               return (
                 <AvatarListItem
                   key={actor.id}
                   link={`/actors/${actor.id}`}
-                  title={name}
+                  title={actor.name}
                   blob={actor.blob}
                 />
               );

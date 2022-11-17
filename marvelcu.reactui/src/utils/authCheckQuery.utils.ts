@@ -33,6 +33,7 @@ const baseQuery = (contentType: string = "application/json; charset=utf-8") =>
 
       return headers;
     },
+
     credentials: "include",
   }) as BaseQueryFn<
     string | FetchArgs,

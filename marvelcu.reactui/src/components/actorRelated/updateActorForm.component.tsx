@@ -49,6 +49,7 @@ const UpdateActorForm: FC<Props> = ({
     firstName: firstName,
     middleName: middleName ?? "",
     lastName: lastName ?? "",
+    imdbId: null,
   };
 
   const [postActor] = actorService.useUpdateActorMutation();

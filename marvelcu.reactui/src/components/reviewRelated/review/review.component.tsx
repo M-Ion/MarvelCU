@@ -9,12 +9,12 @@ type Props = {
   review: IGetReview;
 };
 
-const Review: FC<Props> = ({ review: { opinion, rating } }) => {
+const Review: FC<Props> = ({ review: { opinion, rating, user } }) => {
   const currentUser = useSelector(selectCurrentUser);
   return (
     <Box>
       <Grid container alignItems="center" gap={2} m={2}>
-        <Avatar>{currentUser?.firstName[0]}</Avatar>
+        <Avatar>{user.firstName[0]}</Avatar>
         <Box textAlign="start">
           <Typography>{opinion}</Typography>
           <Rating value={rating} readOnly />

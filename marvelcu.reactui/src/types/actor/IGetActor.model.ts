@@ -5,4 +5,5 @@ export default interface IGetActor {
   lastName: string | null;
   middleName: string | null;
   name: string;
+  imdbId: string;
 }

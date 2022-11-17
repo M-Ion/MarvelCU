@@ -28,6 +28,8 @@ public class MovieDto : BaseMovieDto
 
     public bool VideoBlob { get; set; }
 
+    public string ImdbId { get; set; }
+
     public List<GetActorDto> Actors { get; set; }
 
     public List<GetHeroDto> Heroes { get; set; }

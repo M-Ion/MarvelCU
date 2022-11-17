@@ -13,6 +13,7 @@ export type Values = {
   firstName: string;
   middleName: string;
   lastName: string;
+  imdbId: string | null;
 };
 
 type Props = {
@@ -20,6 +21,7 @@ type Props = {
   moviesTransferList: TranferListType<IGetMovie>;
   heroesTransferList: TranferListType<IGetHero>;
   imgState: [File | null, React.Dispatch<React.SetStateAction<File | null>>];
+  disableOnImdb?: boolean;
 };
 
 const ActorForm: FC<Props> = ({
@@ -27,6 +29,7 @@ const ActorForm: FC<Props> = ({
   heroesTransferList,
   moviesTransferList,
   imgState,
+  disableOnImdb = false,
 }) => {
   const [img, setImg] = imgState;
   const [imgUrl, setImgUrl] = React.useState<string>("");
@@ -65,6 +68,7 @@ const ActorForm: FC<Props> = ({
         prop={"firstName"}
         fullWidth
         margin="normal"
+        disabled={disableOnImdb}
       />
       <FormInput
         formik={formik}
@@ -72,6 +76,7 @@ const ActorForm: FC<Props> = ({
         prop={"middleName"}
         fullWidth
         margin="normal"
+        disabled={disableOnImdb}
       />
       <FormInput
         formik={formik}
@@ -79,6 +84,7 @@ const ActorForm: FC<Props> = ({
         prop={"lastName"}
         fullWidth
         margin="normal"
+        disabled={disableOnImdb}
       />
 
       <Box sx={{ width: "100%", margin: "16px", textAlign: "start" }}>
@@ -91,7 +97,12 @@ const ActorForm: FC<Props> = ({
         <TransferList transferList={heroesTransferList} />
       </Box>
 
-      <Button variant="contained" component="label" sx={{ margin: "8px" }}>
+      <Button
+        variant="contained"
+        component="label"
+        sx={{ margin: "8px" }}
+        disabled={disableOnImdb}
+      >
         Upload Image
         <input
           type="file"

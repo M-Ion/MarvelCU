@@ -22,13 +22,16 @@ const initialValues: Values = {
   firstName: "",
   middleName: "",
   lastName: "",
+  imdbId: null,
 };
 
 const AddActorForm = () => {
-  const [file, setFile] = React.useState<File | null>(null);
-  const [imdbLink, setimdbLink] = React.useState<string>("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [fromImdb, setFromImdb] = React.useState<boolean>(false);
+  const [file, setFile] = React.useState<File | null>(null);
+  const [imdbLink, setimdbLink] = React.useState<string>("");
 
   const moviesTransferList = useTransferList<IGetMovie>(
     movieService.useFetchMoviesQuery,
@@ -97,6 +100,7 @@ const AddActorForm = () => {
       if (actorId) {
         const imdbData = await getActorFilmography(actorId).unwrap();
         const { image, name } = imdbData.base;
+        formik.values.imdbId = imdbData.id;
 
         const imdbFile = await getImgFileByUrl(image.url, image.url);
 
@@ -122,6 +126,8 @@ const AddActorForm = () => {
         if (imdbFile) {
           setFile(imdbFile);
         }
+
+        setFromImdb(true);
       }
     }
   };
@@ -150,6 +156,7 @@ const AddActorForm = () => {
         imgState={[file, setFile]}
         moviesTransferList={moviesTransferList as TranferListType<IGetMovie>}
         heroesTransferList={heroesTransferList as TranferListType<IGetHero>}
+        disableOnImdb={fromImdb}
       />
     </>
   );
