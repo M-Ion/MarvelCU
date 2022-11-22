@@ -9,6 +9,7 @@ type Props = {
 
 const Post: FC<Props> = ({ title, content, postedDate }) => {
   const theme = useTheme();
+  console.log(postedDate);
 
   const month: string = new Intl.DateTimeFormat("en-US", {
     month: "long",
