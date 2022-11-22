@@ -78,7 +78,7 @@ public class TokenManager : ITokenManager
             issuer: _configuration["JwtConfig:Issuer"],
             audience: _configuration["JwtConfig:Audience"],
             claims: claims,
-            expires: DateTime.UtcNow.AddMonths(Convert.ToInt32(_configuration["JwtConfig:DurationInMinutes"])),
+            expires: DateTime.UtcNow.AddMinutes(Convert.ToInt32(_configuration["JwtConfig:DurationInMinutes"])),
             signingCredentials: credentials
             );
 

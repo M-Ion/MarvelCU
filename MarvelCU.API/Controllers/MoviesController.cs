@@ -92,7 +92,7 @@ public class MoviesController : ControllerBase
     }
 
     [HttpDelete("Favourite/{id}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public async Task<ActionResult> RemoveMovieFromFavourites(int id)
     {
         await _movieService.RemoveFromFavourites(id);

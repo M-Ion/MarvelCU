@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MarvelCU.Bll.Interfaces;
 using MarvelCU.Common.Dtos.News;
+using MarvelCU.Common.Models.Processing;
 using MarvelCU.Dal.Interfaces;
 using MarvelCU.Domain;
 
@@ -20,6 +21,14 @@ public class NewsService : INewsService
     public async Task<List<News>> GetAllNews()
     {
         return await _repository.GetAllAsync();
+    }
+
+    public async Task<ProcessedResult<News>> GetAllNews(PagingRequest pagingRequest, SortingRequest sortingRequest, IList<Filter> filters)
+    {
+        ProcessedRequest request = new() { Paging = pagingRequest, Sorting = sortingRequest, Filters = filters };
+        ProcessedResult<News> result = await _repository.GetAllAsyncProcessed<News>(request, _mapper);
+       
+        return result;
     }
 
     public async Task CreateNews(CreateNewsDto createNewsDto)

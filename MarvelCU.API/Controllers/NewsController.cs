@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MarvelCU.Bll.Interfaces;
 using MarvelCU.Common.Dtos.News;
+using MarvelCU.Common.Models.Processing;
 using MarvelCU.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -23,6 +24,18 @@ public class NewsController : ControllerBase
     public async Task<ActionResult<List<News>>> GetNews()
     {
         var news = await _newsService.GetAllNews();
+        return Ok(news);
+    }
+
+    [HttpPost]
+    [Route("Filter")]
+    public async Task<ActionResult<List<News>>> GetNewsByFilters(
+        [FromQuery] PagingRequest paging,
+        [FromQuery] SortingRequest sorting,
+        [FromBody] IList<Filter> filters
+        )
+    {
+        var news = await _newsService.GetAllNews(paging, sorting, filters);
         return Ok(news);
     }
 

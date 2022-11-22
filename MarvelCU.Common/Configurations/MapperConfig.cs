@@ -44,6 +44,7 @@ public class MapperConfig : Profile
             .ForAllMembers(opt => opt.Condition(IgnoreNullAndDefault));
 
 
+        CreateMap<News, News>().ReverseMap();
         CreateMap<News, CreateNewsDto>().ReverseMap();
         CreateMap<News, UpdateNewsDto>()
             .ReverseMap()

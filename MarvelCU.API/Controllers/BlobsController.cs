@@ -35,6 +35,7 @@ namespace MarvelCU.API.Controllers
         [HttpPost("Movie")]
         [Consumes("multipart/form-data")]
         [Authorize(Roles = "Admin")]
+        [AllowedFileExtensions(new string[] { ".jpg", ".webp", ".jpeg", ".png" })]
         public async Task<ActionResult> UploadMovieBlob([FromForm] IFormFile file)
         {
             bool uploaded = await _cloudService.UploadBlob(
@@ -55,7 +56,7 @@ namespace MarvelCU.API.Controllers
         [Authorize(Roles = "Admin")]
         [RequestSizeLimit(1000000000)] // 1Gb
 
-        public async Task<ActionResult> UploadMovieVideoBlob([FromForm] [AllowedFileExtensions(new string[] { ".mp4" })] IFormFile file)
+        public async Task<ActionResult> UploadMovieVideoBlob([FromForm][AllowedFileExtensions(new string[] { ".mp4" })] IFormFile file)
         {
 
             bool uploaded = await _cloudService.UploadBlob(
@@ -73,6 +74,7 @@ namespace MarvelCU.API.Controllers
 
         [HttpPost("Hero")]
         [Authorize(Roles = "Admin")]
+        [AllowedFileExtensions(new string[] { ".jpg", ".webp", ".jpeg", ".png" })]
         public async Task<ActionResult> UploadHeroBlob([FromForm] IFormFile file)
         {
             bool uploaded = await _cloudService.UploadBlob(
@@ -90,6 +92,7 @@ namespace MarvelCU.API.Controllers
 
         [HttpPost("Actor")]
         [Authorize(Roles = "Admin")]
+        [AllowedFileExtensions(new string[] { ".jpg", ".webp", ".jpeg", ".png" })]
         public async Task<ActionResult> UploadActorBlob([FromForm] IFormFile file)
         {
             bool uploaded = await _cloudService.UploadBlob(
@@ -106,6 +109,7 @@ namespace MarvelCU.API.Controllers
         }
 
         [HttpGet("Download/Video/{id}")]
+        [Authorize]
         public async Task<ActionResult> DownloadBlob([FromRoute] string id)
         {
             MemoryStream stream = await _cloudService.DownloadBlob(new GetBlobRequestDto() { Container = AzureBlobContainers.Videos, Blob = $"{id}.mp4" });

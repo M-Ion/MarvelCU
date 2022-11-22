@@ -17,6 +17,16 @@ public class ActorDto
 
     public string ImdbId { get; set; }
 
+    public string Name
+    {
+        get
+        {
+            return FirstName
+                + (MiddleName != null ? $" {MiddleName}" : "")
+                + (LastName != null ? $" {LastName}" : "");
+        }
+    }
+
     public IList<GetMovieDto> Movies { get; set; }
 
     public IList<GetHeroDto> Heroes { get; set; }
